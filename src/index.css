@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+:root {
+  --bible-bg: 45 33% 96%;
+  --bible-text: 45 40% 12%;
+  --bible-gold: 44 65% 35%;
+  --bible-gold-light: 44 65% 50%;
+  --bible-muted: 45 15% 45%;
+  --bible-card-bg: 0 0% 100%;
+  --bible-border: 45 20% 90%;
+  --bible-overlay: 45 33% 96% / 0.6;
+}
+
+.dark {
+  --bible-bg: 220 15% 3%;
+  --bible-text: 45 30% 80%;
+  --bible-gold: 44 60% 55%;
+  --bible-gold-light: 44 60% 65%;
+  --bible-muted: 220 10% 50%;
+  --bible-card-bg: 220 15% 7%;
+  --bible-border: 220 15% 12%;
+  --bible-overlay: 220 15% 3% / 0.7;
+}
+
+@theme {
+  --color-bible-gold: hsl(var(--bible-gold));
+  --color-bible-gold-light: hsl(var(--bible-gold-light));
+  --color-bible-dark: hsl(var(--bible-bg));
+  --color-bible-text: hsl(var(--bible-text));
+  --color-bible-muted: hsl(var(--bible-muted));
+  --color-bible-card: hsl(var(--bible-card-bg));
+  --color-bible-border: hsl(var(--bible-border));
+
+  --font-serif: "EB Garamond", serif;
+  --font-cinzel: "Cinzel", serif;
+}
+
+@layer base {
+  body {
+    @apply bg-bible-dark text-bible-text transition-colors duration-500;
+    font-family: var(--font-serif);
+    -webkit-font-smoothing: antialiased;
+  }
+}

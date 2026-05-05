@@ -13,15 +13,21 @@ interface ModalState {
   openAddBook: (phaseId: string) => void;
   
   closeAllModals: () => void;
+  isAnyModalOpen: () => boolean;
 }
 
-export const useModalStore = create<ModalState>((set) => ({
+export const useModalStore = create<ModalState>((set, get) => ({
   isEditBookOpen: false,
   isAddPhaseOpen: false,
   isAddBookOpen: false,
   
   activeBookId: null,
   activePhaseId: null,
+  
+  isAnyModalOpen: () => {
+    const state = get();
+    return state.isEditBookOpen || state.isAddPhaseOpen || state.isAddBookOpen;
+  },
   
   openEditBook: (bookId, phaseId) =>
     set({ isEditBookOpen: true, activeBookId: bookId, activePhaseId: phaseId }),

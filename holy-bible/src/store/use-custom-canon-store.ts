@@ -1,12 +1,19 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Phase, Book, SavedVerse } from "../@types/bible";
+import type { Phase, Book, SavedVerse, ProfileType } from "../@types/bible";
 import { CANON_DATA as DEFAULT_CANON_DATA } from "../features/bible-custom/constants/canon-data";
 
 interface CustomCanonState {
-  phases: Phase[];
+  activeProfile: ProfileType | null;
+  personalPhases: Phase[];
+  suggestionPhases: Phase[];
+  
+  setProfile: (type: ProfileType) => void;
+  resetProfile: () => void;
+
   addPhase: (phase: Omit<Phase, "id" | "books">) => void;
   addPhaseWithBook: (phase: Omit<Phase, "id" | "books">, book: Omit<Book, "id">) => void;
+  addPhaseWithBooks: (phase: Omit<Phase, "id" | "books">, books: Omit<Book, "id">[]) => void;
   updatePhase: (id: string, updates: Partial<Phase>) => void;
   deletePhase: (id: string) => void;
   reorderPhases: (newOrder: Phase[]) => void;
@@ -15,8 +22,9 @@ interface CustomCanonState {
   updateBook: (phaseId: string, bookId: string, updates: Partial<Book>) => void;
   deleteBook: (phaseId: string, bookId: string) => void;
   reorderBooks: (phaseId: string, newBooks: Book[]) => void;
-  getAllSavedVerses: () => (SavedVerse & { bookTitle: string; phaseId: string; bookId: string })[];
 
+  getAllSavedVerses: () => (SavedVerse & { bookTitle: string; phaseId: string; bookId: string })[];
+  
   addVerse: (phaseId: string, bookId: string, verse: Omit<SavedVerse, "id" | "timestamp">) => void;
   updateVerse: (phaseId: string, bookId: string, verseId: string, updates: Partial<SavedVerse>) => void;
   deleteVerse: (phaseId: string, bookId: string, verseId: string) => void;
@@ -27,10 +35,121 @@ const generateId = () => Math.random().toString(36).substr(2, 9);
 export const useCustomCanonStore = create<CustomCanonState>()(
   persist(
     (set, get) => ({
-      phases: DEFAULT_CANON_DATA,
+      activeProfile: null,
+      personalPhases: [],
+      suggestionPhases: DEFAULT_CANON_DATA,
+
+      setProfile: (type) => set({ activeProfile: type }),
+      resetProfile: () => set({ activeProfile: null }),
       
+      addPhase: (phaseData) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: [...state[key], { ...phaseData, id: generateId(), books: [] }]
+        };
+      }),
+      
+      addPhaseWithBook: (phaseData, bookData) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: [...state[key], { 
+            ...phaseData, 
+            id: generateId(), 
+            books: [{ ...bookData, id: generateId() }] 
+          }]
+        };
+      }),
+
+      addPhaseWithBooks: (phaseData, booksData) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: [...state[key], { 
+            ...phaseData, 
+            id: generateId(), 
+            books: booksData.map(b => ({ ...b, id: generateId() }))
+          }]
+        };
+      }),
+      
+      updatePhase: (id, updates) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => p.id === id ? { ...p, ...updates } : p)
+        };
+      }),
+      
+      deletePhase: (id) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].filter(p => p.id !== id)
+        };
+      }),
+      
+      reorderPhases: (newOrder) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return { [key]: newOrder };
+      }),
+      
+      addBook: (phaseId, bookData) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return {
+                ...p,
+                books: [...p.books, { ...bookData, id: generateId() }]
+              };
+            }
+            return p;
+          })
+        };
+      }),
+      
+      updateBook: (phaseId, bookId, updates) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return {
+                ...p,
+                books: p.books.map(b => b.id === bookId ? { ...b, ...updates } : b)
+              };
+            }
+            return p;
+          })
+        };
+      }),
+      
+      deleteBook: (phaseId, bookId) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return {
+                ...p,
+                books: p.books.filter(b => b.id !== bookId)
+              };
+            }
+            return p;
+          })
+        };
+      }),
+      
+      reorderBooks: (phaseId, newBooks) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return { ...p, books: newBooks };
+            }
+            return p;
+          })
+        };
+      }),
+
       getAllSavedVerses: () => {
-        const phases = get().phases;
+        const state = get();
+        const phases = state.activeProfile === "suggestion" ? state.suggestionPhases : state.personalPhases;
         const all: (SavedVerse & { bookTitle: string; phaseId: string; bookId: string })[] = [];
         
         phases.forEach(p => {
@@ -46,141 +165,83 @@ export const useCustomCanonStore = create<CustomCanonState>()(
         return all.sort((a, b) => b.timestamp - a.timestamp);
       },
       
-      addPhase: (phaseData) => set((state) => ({
-        phases: [...state.phases, { ...phaseData, id: generateId(), books: [] }]
-      })),
-      
-      addPhaseWithBook: (phaseData, bookData) => set((state) => ({
-        phases: [...state.phases, { 
-          ...phaseData, 
-          id: generateId(), 
-          books: [{ ...bookData, id: generateId() }] 
-        }]
-      })),
-      
-      updatePhase: (id, updates) => set((state) => ({
-        phases: state.phases.map(p => p.id === id ? { ...p, ...updates } : p)
-      })),
-      
-      deletePhase: (id) => set((state) => ({
-        phases: state.phases.filter(p => p.id !== id)
-      })),
-      
-      reorderPhases: (newOrder) => set({ phases: newOrder }),
-      
-      addBook: (phaseId, bookData) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return {
-              ...p,
-              books: [...p.books, { ...bookData, id: generateId() }]
-            };
-          }
-          return p;
-        })
-      })),
-      
-      updateBook: (phaseId, bookId, updates) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return {
-              ...p,
-              books: p.books.map(b => b.id === bookId ? { ...b, ...updates } : b)
-            };
-          }
-          return p;
-        })
-      })),
-      
-      deleteBook: (phaseId, bookId) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return {
-              ...p,
-              books: p.books.filter(b => b.id !== bookId)
-            };
-          }
-          return p;
-        })
-      })),
-      
-      reorderBooks: (phaseId, newBooks) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return { ...p, books: newBooks };
-          }
-          return p;
-        })
-      })),
+      addVerse: (phaseId, bookId, verseData) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return {
+                ...p,
+                books: p.books.map(b => {
+                  if (b.id === bookId) {
+                    const savedVerses = b.savedVerses || [];
+                    const newVerse: SavedVerse = {
+                      ...verseData,
+                      id: generateId(),
+                      timestamp: Date.now(),
+                    };
+                    return {
+                      ...b,
+                      savedVerses: [...savedVerses, newVerse]
+                    };
+                  }
+                  return b;
+                })
+              };
+            }
+            return p;
+          })
+        };
+      }),
 
-      addVerse: (phaseId, bookId, verseData) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return {
-              ...p,
-              books: p.books.map(b => {
-                if (b.id === bookId) {
-                  const savedVerses = b.savedVerses || [];
-                  const newVerse: SavedVerse = {
-                    ...verseData,
-                    id: generateId(),
-                    timestamp: Date.now(),
-                  };
-                  return {
-                    ...b,
-                    savedVerses: [...savedVerses, newVerse]
-                  };
-                }
-                return b;
-              })
-            };
-          }
-          return p;
-        })
-      })),
+      updateVerse: (phaseId, bookId, verseId, updates) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return {
+                ...p,
+                books: p.books.map(b => {
+                  if (b.id === bookId) {
+                    return {
+                      ...b,
+                      savedVerses: b.savedVerses?.map(v => v.id === verseId ? { ...v, ...updates } : v)
+                    };
+                  }
+                  return b;
+                })
+              };
+            }
+            return p;
+          })
+        };
+      }),
 
-      updateVerse: (phaseId, bookId, verseId, updates) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return {
-              ...p,
-              books: p.books.map(b => {
-                if (b.id === bookId) {
-                  return {
-                    ...b,
-                    savedVerses: b.savedVerses?.map(v => v.id === verseId ? { ...v, ...updates } : v)
-                  };
-                }
-                return b;
-              })
-            };
-          }
-          return p;
-        })
-      })),
-
-      deleteVerse: (phaseId, bookId, verseId) => set((state) => ({
-        phases: state.phases.map(p => {
-          if (p.id === phaseId) {
-            return {
-              ...p,
-              books: p.books.map(b => {
-                if (b.id === bookId) {
-                  return {
-                    ...b,
-                    savedVerses: b.savedVerses?.filter(v => v.id !== verseId)
-                  };
-                }
-                return b;
-              })
-            };
-          }
-          return p;
-        })
-      })),
+      deleteVerse: (phaseId, bookId, verseId) => set((state) => {
+        const key = state.activeProfile === "suggestion" ? "suggestionPhases" : "personalPhases";
+        return {
+          [key]: state[key].map(p => {
+            if (p.id === phaseId) {
+              return {
+                ...p,
+                books: p.books.map(b => {
+                  if (b.id === bookId) {
+                    return {
+                      ...b,
+                      savedVerses: b.savedVerses?.filter(v => v.id !== verseId)
+                    };
+                  }
+                  return b;
+                })
+              };
+            }
+            return p;
+          })
+        };
+      }),
     }),
     {
-      name: "holy-bible-custom-canon",
+      name: "holy-bible-custom-canon-v2",
     }
   )
 );

@@ -1,19 +1,18 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useBibleStore } from "../../../store/use-bible-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
 import { X, Bookmark, Download, AlertCircle, Trash2, Quote } from "lucide-react";
 import { useTranslation } from "react-i18next";
+import { Book, Phase, SavedVerse } from "../../../@types/bible";
 
 export const EditBookModal = () => {
   const { isEditBookOpen, activeBookId, activePhaseId, closeAllModals } = useModalStore();
   const { setAcquisition, acquisitionStatus } = useBibleStore();
-  const phases = useCustomCanonStore((state) => state.phases);
-  const deleteBook = useCustomCanonStore((state) => state.deleteBook);
-  const updateBook = useCustomCanonStore((state) => state.updateBook);
-  const addVerse = useCustomCanonStore((state) => state.addVerse);
-  const deleteVerse = useCustomCanonStore((state) => state.deleteVerse);
+  const { activeProfile, personalPhases, suggestionPhases, deleteBook, updateBook, addVerse, deleteVerse } = useCustomCanonStore();
+  const phases = activeProfile === "suggestion" ? suggestionPhases : personalPhases;
+  
   const { t } = useTranslation();
   
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
@@ -21,9 +20,11 @@ export const EditBookModal = () => {
   const [newVerseRef, setNewVerseRef] = useState("");
 
   // Select the actual book from the store to ensure reactivity
-  const activeBook = activePhaseId && activeBookId 
-    ? phases.find(p => p.id === activePhaseId)?.books.find(b => b.id === activeBookId)
-    : null;
+  const activeBook = useMemo(() => {
+    return activeBookId && activePhaseId
+      ? phases.find((p: Phase) => p.id === activePhaseId)?.books.find((b: Book) => b.id === activeBookId)
+      : null;
+  }, [activeBookId, activePhaseId, phases]);
 
   if (!activeBook || !activePhaseId) return null;
 
@@ -128,7 +129,7 @@ export const EditBookModal = () => {
                   </h3>
 
                   <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-6 min-h-[200px]">
-                    {activeBook.savedVerses?.map((v) => (
+                    {activeBook.savedVerses?.map((v: SavedVerse) => (
                       <div key={v.id} className="group relative bg-bible-card/50 p-4 rounded-xl border border-bible-border hover:border-bible-gold/30 transition-all">
                         <p className="text-xs text-bible-gold font-cinzel mb-1">{activeBook.name} {v.chapter}:{v.verse}</p>
                         <p className="text-sm font-serif text-bible-text leading-relaxed">"{v.text}"</p>

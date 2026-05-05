@@ -19,7 +19,7 @@
   --bible-muted: 220 10% 50%;
   --bible-card-bg: 220 15% 7%;
   --bible-border: 220 15% 12%;
-  --bible-overlay: 220 15% 3% / 0.85;
+  --bible-overlay: 220 15% 3% / 0.7;
 }
 
 @theme {

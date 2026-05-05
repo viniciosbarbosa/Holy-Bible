@@ -2,7 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useBibleBooks } from "../api/use-bible-books";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Bookmark } from "lucide-react";
+import { BookOpen, Bookmark, Search } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FavoriteVerses } from "../components/FavoriteVerses";
 
@@ -11,6 +11,13 @@ export default function CommonBible() {
   const navigate = useNavigate();
   const { t } = useTranslation();
   const [activeTab, setActiveTab] = useState<"books" | "favorites">("books");
+  const [search, setSearch] = useState("");
+
+  const filteredBooks = books?.filter(
+    (b) =>
+      b.name.toLowerCase().includes(search.toLowerCase()) ||
+      b.abbrev.toLowerCase().includes(search.toLowerCase())
+  );
 
   if (isLoading)
     return (
@@ -37,35 +44,47 @@ export default function CommonBible() {
         </h2>
 
         {/* Tab Switcher */}
-        <div className="inline-flex p-1.5 bg-bible-card/50 backdrop-blur-md rounded-2xl border border-bible-border mb-12">
-          <button
-            onClick={() => setActiveTab("books")}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
-              activeTab === "books"
-                ? "bg-bible-gold text-white shadow-lg"
-                : "text-bible-muted hover:text-bible-gold"
-            }`}
-          >
-            <BookOpen size={14} /> Livros
-          </button>
-          <button
-            onClick={() => setActiveTab("favorites")}
-            className={`flex items-center gap-2 px-6 py-2.5 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
-              activeTab === "favorites"
-                ? "bg-bible-gold text-white shadow-lg"
-                : "text-bible-muted hover:text-bible-gold"
-            }`}
-          >
-            <Bookmark size={14} /> Favoritos
-          </button>
+        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12">
+          <div className="flex bg-bible-card/50 backdrop-blur-xl p-1.5 rounded-2xl border border-bible-gold/20 shadow-inner">
+            <button
+              onClick={() => setActiveTab("books")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
+                activeTab === "books" ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20" : "text-bible-muted hover:text-bible-gold"
+              }`}
+            >
+              <BookOpen size={14} /> Livros
+            </button>
+            <button
+              onClick={() => setActiveTab("favorites")}
+              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
+                activeTab === "favorites" ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20" : "text-bible-muted hover:text-bible-gold"
+              }`}
+            >
+              <Bookmark size={14} /> Favoritos
+            </button>
+          </div>
+
+          {/* Search Bar */}
+          {activeTab === "books" && (
+            <div className="relative w-full md:w-80 group">
+              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-bible-muted group-focus-within:text-bible-gold transition-colors" size={16} />
+              <input 
+                type="text"
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Pesquisar livros..."
+                className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-12 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
+              />
+            </div>
+          )}
         </div>
       </header>
 
       {activeTab === "favorites" ? (
         <FavoriteVerses />
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          {books?.map((book, index) => (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
+          {filteredBooks?.map((book, index) => (
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}

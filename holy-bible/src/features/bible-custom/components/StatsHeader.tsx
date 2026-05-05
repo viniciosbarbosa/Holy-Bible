@@ -6,7 +6,8 @@ import { useTranslation } from "react-i18next";
 
 export const StatsHeader = () => {
   const { readStatus } = useBibleStore();
-  const phases = useCustomCanonStore((state) => state.phases);
+  const { activeProfile, personalPhases, suggestionPhases } = useCustomCanonStore();
+  const phases = activeProfile === "suggestion" ? suggestionPhases : personalPhases;
   const { t } = useTranslation();
 
   const stats = useMemo(() => {

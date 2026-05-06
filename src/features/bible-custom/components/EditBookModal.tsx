@@ -126,13 +126,13 @@ export const EditBookModal = () => {
                       value={activeBook.name}
                       onChange={(e) => updateBook(activePhaseId, activeBook.id, { name: e.target.value })}
                       className="w-full bg-transparent text-4xl text-bible-text font-serif mt-2 border-b border-bible-border/30 focus:border-bible-gold outline-none pb-2 transition-all"
-                      placeholder="Nome do Livro"
+                      placeholder={t("modal.book_name")}
                     />
                     <textarea
                       value={activeBook.sub || ""}
                       onChange={(e) => updateBook(activePhaseId, activeBook.id, { sub: e.target.value })}
                       className="w-full bg-transparent text-sm font-serif italic text-bible-muted mt-4 outline-none resize-none border-l-2 border-bible-gold/20 pl-4 py-1"
-                      placeholder="Subtítulo ou descrição..."
+                      placeholder={t("modal.book_sub")}
                       rows={2}
                     />
                   </header>
@@ -336,7 +336,7 @@ export const EditBookModal = () => {
                 {t("common.delete")} {t("common.manuscript")}?
               </h3>
               <p className="text-bible-muted mb-10 font-serif italic text-sm">
-                Isso removerá permanentemente "{activeBook.name}" e todos os seus {activeBook.savedVerses?.length || 0} versículos.
+                {t("modal.delete_warning", { name: activeBook.name, count: activeBook.savedVerses?.length || 0 })}
               </p>
               <div className="grid grid-cols-2 gap-4">
                 <button 

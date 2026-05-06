@@ -153,17 +153,17 @@ export const AddPhaseModal = () => {
             <header className="mb-10">
               <div className="flex items-center gap-4 mb-4">
                 <span className="bg-bible-gold text-white px-3 py-1 rounded-lg font-cinzel text-[11px] font-bold tracking-widest shadow-lg shadow-bible-gold/20">
-                  FASE {nextPhaseNum}
+                  {t("common.phase_num", { num: nextPhaseNum })}
                 </span>
                 <div className="h-px flex-1 bg-bible-gold/20" />
               </div>
               <h2 className="font-cinzel text-2xl text-bible-gold tracking-widest uppercase">
-                {step === 1 ? "Nova Jornada" : "O Primeiro Registro"}
+                {step === 1 ? t("modal.new_journey") : t("modal.first_record")}
               </h2>
               <p className="text-bible-muted font-serif italic text-sm mt-1 opacity-60">
                 {step === 1
-                  ? "Defina o título e a atmosfera visual desta nova etapa."
-                  : "Adicione o manuscrito inicial para começar sua biblioteca."}
+                  ? t("modal.phase_step1_desc")
+                  : t("modal.phase_step2_desc")}
               </p>
             </header>
 
@@ -280,7 +280,7 @@ export const AddPhaseModal = () => {
                           type="text"
                           value={currentBookTitle}
                           onChange={(e) => setCurrentBookTitle(e.target.value)}
-                          placeholder="Ex: Gênesis, Atos..."
+                          placeholder={t("modal.book_placeholder")}
                           className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
                         />
                       </div>
@@ -292,7 +292,7 @@ export const AddPhaseModal = () => {
                           type="text"
                           value={currentBookSub}
                           onChange={(e) => setCurrentBookSub(e.target.value)}
-                          placeholder="A origem de todas as coisas..."
+                          placeholder={t("modal.book_sub_placeholder")}
                           className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
                         />
                       </div>

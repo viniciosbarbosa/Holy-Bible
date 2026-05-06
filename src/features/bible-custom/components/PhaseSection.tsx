@@ -68,15 +68,15 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
           onClick={handleToggle}
           className="relative z-20 p-5 md:p-6 cursor-pointer flex items-center justify-between group"
         >
-          <div className="flex items-center gap-4">
-            <div className="w-10 h-10 flex items-center justify-center bg-bible-gold text-white font-cinzel text-xs font-bold rounded-xl shadow-lg">
-              {phase.num.replace('Fase ', '')}
+          <div className="flex items-center gap-4 flex-1 min-w-0">
+            <div className="shrink-0 w-12 h-12 flex items-center justify-center bg-bible-gold text-white font-cinzel text-xs font-bold rounded-full shadow-lg shadow-bible-gold/10 border border-bible-gold/20">
+              {phase.num.replace('Fase ', '').padStart(2, '0')}
             </div>
-            <div>
-              <h2 className="font-cinzel text-lg md:text-xl tracking-wider text-bible-gold group-hover:text-bible-gold-light transition-colors">
+            <div className="flex-1 min-w-0 flex flex-col justify-center">
+              <h2 className="font-cinzel text-[15px] md:text-lg tracking-[0.1em] text-bible-gold group-hover:text-bible-gold-light transition-colors leading-tight mb-0.5">
                 {phase.title}
               </h2>
-              <p className="text-[10px] text-bible-muted font-cinzel uppercase tracking-[0.2em]">
+              <p className="text-[9px] text-bible-muted font-cinzel uppercase tracking-[0.15em] opacity-60">
                 {t("stats.books_in_journey", { count: phase.books.length })}
               </p>
             </div>

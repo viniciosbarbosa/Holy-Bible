@@ -16,6 +16,7 @@ const resources = {
         delete: "Delete",
         cancel: "Cancel",
         save: "Save",
+        save_verse: "Save Verse",
         search_placeholder: "Search books or phases...",
         none: "Acquired",
         missing: "Missing",
@@ -46,6 +47,7 @@ const resources = {
         back: "Back",
         opening_scrolls: "Opening the Scrolls...",
         verse_saved: "Verse Saved!",
+        phase_num: "PHASE {{num}}",
       },
       onboarding: {
         title: "Your Sacred Journey",
@@ -81,6 +83,13 @@ const resources = {
         suggested_tags: "Suggested Tags",
         new_tag: "New tag...",
         optional: "Optional",
+        new_journey: "New Journey",
+        first_record: "The First Record",
+        phase_step1_desc:
+          "Define the title and visual atmosphere of this new stage.",
+        phase_step2_desc: "Add the initial manuscript to start your library.",
+        book_placeholder: "Ex: Genesis, Acts...",
+        book_sub_placeholder: "The origin of all things...",
         delete_confirm: "Are you sure you want to delete this book?",
         delete_warning:
           'This will permanently remove "{{name}}" and all its {{count}} verses.',
@@ -107,6 +116,19 @@ const resources = {
         delete_phase: "Delete Phase?",
         delete_phase_warning:
           'This will permanently remove "{{title}}" and all its books.',
+      },
+      legend: {
+        missing_label: "MISSING",
+        click_to_change: "Click to change status",
+      },
+      tags: {
+        b201_desc: "201 Ethiopia Bible",
+        v1_desc: "Apocrypha Vol.1",
+        v2_desc: "Apocrypha Vol.2",
+        v3_desc: "Apocrypha Vol.3",
+        cnbb_desc: "CNBB Bible",
+        gnose_desc: "Gnostic Text",
+        ponte_desc: "Bridge to Islam",
       },
     },
   },
@@ -152,6 +174,7 @@ const resources = {
         back: "Voltar",
         opening_scrolls: "Abrindo os Pergaminhos...",
         verse_saved: "Versículo Salvo!",
+        phase_num: "FASE {{num}}",
       },
       onboarding: {
         title: "Sua Jornada Sagrada",
@@ -187,6 +210,14 @@ const resources = {
         suggested_tags: "Tags Sugeridas",
         new_tag: "Nova tag...",
         optional: "Opcional",
+        new_journey: "Nova Jornada",
+        first_record: "O Primeiro Registro",
+        phase_step1_desc:
+          "Defina o título e a atmosfera visual desta nova etapa.",
+        phase_step2_desc:
+          "Adicione o manuscrito inicial para começar sua biblioteca.",
+        book_placeholder: "Ex: Gênesis, Atos...",
+        book_sub_placeholder: "A origem de todas as coisas...",
         delete_confirm: "Deseja excluir este livro?",
         delete_warning:
           'Isso removerá permanentemente "{{name}}" e todos os seus {{count}} versículos.',
@@ -214,6 +245,19 @@ const resources = {
         delete_phase: "Excluir Fase?",
         delete_phase_warning:
           'Isso removerá permanentemente "{{title}}" e todos os seus livros.',
+      },
+      legend: {
+        missing_label: "FALTANDO",
+        click_to_change: "Clique para mudar",
+      },
+      tags: {
+        b201_desc: "Bíblia 201 Etiópia",
+        v1_desc: "Apócrifos Vol.1",
+        v2_desc: "Apócrifos Vol.2",
+        v3_desc: "Apócrifos Vol.3",
+        cnbb_desc: "Bíblia CNBB",
+        gnose_desc: "Texto Gnóstico",
+        ponte_desc: "Ponte para o Islã",
       },
     },
   },

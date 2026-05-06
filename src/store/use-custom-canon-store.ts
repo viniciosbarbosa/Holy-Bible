@@ -30,6 +30,9 @@ interface CustomCanonState {
   deleteVerse: (phaseId: string, bookId: string, verseId: string) => void;
 }
 
+// Exported so tests can import the type without circular deps
+export type CustomCanonStore = CustomCanonState;
+
 const generateId = () => Math.random().toString(36).substr(2, 9);
 
 export const useCustomCanonStore = create<CustomCanonState>()(

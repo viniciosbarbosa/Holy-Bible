@@ -16,7 +16,7 @@ export default function CommonBible() {
   const filteredBooks = books?.filter(
     (b) =>
       b.name.toLowerCase().includes(search.toLowerCase()) ||
-      b.abbrev.toLowerCase().includes(search.toLowerCase())
+      b.abbrev.toLowerCase().includes(search.toLowerCase()),
   );
 
   if (isLoading)
@@ -49,7 +49,9 @@ export default function CommonBible() {
             <button
               onClick={() => setActiveTab("books")}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
-                activeTab === "books" ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20" : "text-bible-muted hover:text-bible-gold"
+                activeTab === "books"
+                  ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20"
+                  : "text-bible-muted hover:text-bible-gold"
               }`}
             >
               <BookOpen size={14} /> Livros
@@ -57,7 +59,9 @@ export default function CommonBible() {
             <button
               onClick={() => setActiveTab("favorites")}
               className={`flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
-                activeTab === "favorites" ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20" : "text-bible-muted hover:text-bible-gold"
+                activeTab === "favorites"
+                  ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20"
+                  : "text-bible-muted hover:text-bible-gold"
               }`}
             >
               <Bookmark size={14} /> Favoritos
@@ -67,13 +71,18 @@ export default function CommonBible() {
           {/* Search Bar */}
           {activeTab === "books" && (
             <div className="relative w-full md:w-80 group">
-              <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-bible-muted group-focus-within:text-bible-gold transition-colors" size={16} />
-              <input 
+              <Search
+                className="absolute left-4 top-1/2 -translate-y-1/2 text-bible-muted group-focus-within:text-bible-gold transition-colors"
+                size={16}
+              />
+              <input
                 type="text"
+                data-testid="search-input"
+                aria-label="Search books"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
                 placeholder="Pesquisar livros..."
-                className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-12 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
+                className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-5 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
               />
             </div>
           )}
@@ -90,6 +99,7 @@ export default function CommonBible() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.02, duration: 0.4 }}
               key={book.abbrev}
+              data-testid="book-card"
               onClick={() => navigate(`/read/${book.abbrev}/1`)}
               className="group cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-bible-gold/50 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(201,168,76,0.2)]"
             >

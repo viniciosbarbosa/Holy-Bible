@@ -98,7 +98,7 @@ export default function CustomCanon() {
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder="Pesquisar livros ou fases..."
-                  className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-12 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
+                  className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-5 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
                 />
               </div>
             )}

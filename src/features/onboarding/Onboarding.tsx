@@ -14,6 +14,7 @@ export const Onboarding = () => {
           <motion.h1 
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
+            data-testid="onboarding-title"
             className="font-cinzel text-4xl md:text-6xl text-bible-gold tracking-[0.2em] mb-4 uppercase"
           >
             {t("onboarding.title")}
@@ -34,6 +35,7 @@ export const Onboarding = () => {
             initial={{ opacity: 0, x: -50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.3 }}
+            data-testid="profile-personal-btn"
             onClick={() => setProfile("personal")}
             className="group relative bg-bible-card border border-bible-border rounded-[3rem] p-10 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.1)]"
           >
@@ -56,6 +58,7 @@ export const Onboarding = () => {
             initial={{ opacity: 0, x: 50 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ delay: 0.4 }}
+            data-testid="profile-suggestion-btn"
             onClick={() => setProfile("suggestion")}
             className="group relative bg-bible-card border border-bible-border rounded-[3rem] p-10 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.1)]"
           >

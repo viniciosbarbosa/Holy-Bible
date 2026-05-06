@@ -95,6 +95,10 @@ export const AddPhaseModal = () => {
             initial={{ opacity: 0, scale: 0.9, y: 20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             exit={{ opacity: 0, scale: 0.9, y: 20 }}
+            role="dialog"
+            aria-modal="true"
+            aria-label="Add Phase"
+            data-testid="add-phase-modal"
             className="relative w-full max-w-lg bg-bible-card border border-bible-border rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
           >
             <button
@@ -137,6 +141,8 @@ export const AddPhaseModal = () => {
                     <input
                       autoFocus
                       type="text"
+                      id="phase-title"
+                      data-testid="phase-title-input"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                       placeholder="Ex: Profetas Maiores, O Novo Testamento..."
@@ -175,6 +181,7 @@ export const AddPhaseModal = () => {
 
                   <div className="pt-4">
                     <button
+                      data-testid="phase-next-btn"
                       onClick={() => setStep(2)}
                       disabled={!title}
                       className="w-full py-4 rounded-2xl bg-bible-gold text-white font-cinzel text-xs uppercase tracking-widest shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
@@ -245,6 +252,7 @@ export const AddPhaseModal = () => {
 
                   <div className="pt-4 flex flex-col gap-3">
                     <button
+                      data-testid="phase-finish-btn"
                       onClick={handleFinalSubmit}
                       className="w-full py-4 rounded-2xl bg-bible-gold text-white font-cinzel text-xs uppercase tracking-widest shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
                     >

@@ -195,30 +195,44 @@ export const AddPhaseModal = () => {
                     <label className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2">
                       {t("modal.choose_theme")}
                     </label>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {(
-                        [
-                          "genesis",
-                          "exodus",
-                          "prophets",
-                          "gospels",
-                        ] as BibleTheme[]
-                      ).map((tName) => (
+                    <div className="grid grid-cols-3 md:grid-cols-5 gap-2 max-h-48 overflow-y-auto p-2 border border-bible-border/30 rounded-2xl bg-bible-dark/20 scrollbar-thin scrollbar-thumb-bible-gold/20">
+                      {(Object.keys(DEFAULT_WALLPAPERS) as (keyof typeof DEFAULT_WALLPAPERS)[]).map((tName) => (
                         <button
                           key={tName}
                           type="button"
                           onClick={() => setTheme(tName)}
-                          className={`group relative h-20 rounded-2xl border transition-all overflow-hidden ${theme === tName ? "border-bible-gold ring-1 ring-bible-gold shadow-lg shadow-bible-gold/10" : "border-bible-border/30 hover:border-bible-gold/30"}`}
+                          className={`group relative h-16 rounded-xl border transition-all overflow-hidden ${theme === tName ? "border-bible-gold ring-1 ring-bible-gold shadow-lg shadow-bible-gold/10" : "border-bible-border/30 hover:border-bible-gold/30"}`}
                         >
                           <img
                             src={DEFAULT_WALLPAPERS[tName]}
                             className={`absolute inset-0 w-full h-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110 ${theme === tName ? "opacity-70 scale-110" : ""}`}
                           />
-                          <span className="relative z-10 font-cinzel text-[8px] uppercase tracking-widest text-white">
+                          <span className="absolute bottom-0 left-0 right-0 z-10 font-cinzel text-[6px] uppercase tracking-tighter text-white bg-black/60 py-0.5 px-1 truncate">
                             {tName.replace(/_/g, " ")}
                           </span>
                         </button>
                       ))}
+                    </div>
+
+                    {/* Custom URL Input */}
+                    <div className="mt-4 space-y-2">
+                      <label className="text-[9px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2 opacity-60">
+                        {t("modal.custom_url")}
+                      </label>
+                      <div className="flex gap-2">
+                        <input
+                          type="text"
+                          value={theme.startsWith('http') ? theme : ''}
+                          onChange={(e) => setTheme(e.target.value)}
+                          placeholder="https://suaimagem.com/foto.jpg"
+                          className="flex-1 bg-bible-dark/50 border border-bible-border/30 rounded-xl px-4 py-2 text-xs text-bible-text outline-none focus:border-bible-gold transition-all font-serif"
+                        />
+                        {theme.startsWith('http') && (
+                          <div className="w-10 h-10 rounded-lg border border-bible-gold overflow-hidden shrink-0">
+                            <img src={theme} className="w-full h-full object-cover" onError={(e) => (e.currentTarget.src = DEFAULT_WALLPAPERS.genesis)} />
+                          </div>
+                        )}
+                      </div>
                     </div>
                   </div>
 

@@ -23,9 +23,9 @@ export const useAppStore = create<AppState>()(
       setFontSize: (size) => set({ fontSize: Math.max(12, Math.min(size, 32)) }),
       
       currentBackground: DEFAULT_WALLPAPERS.genesis,
-      setBackgroundFromTheme: (theme) => {
-        const url = DEFAULT_WALLPAPERS[theme as keyof typeof DEFAULT_WALLPAPERS] || DEFAULT_WALLPAPERS.genesis;
-        set({ currentBackground: url });
+      setBackgroundFromTheme: (themeOrUrl) => {
+        const url = DEFAULT_WALLPAPERS[themeOrUrl as keyof typeof DEFAULT_WALLPAPERS] || themeOrUrl;
+        set({ currentBackground: url || DEFAULT_WALLPAPERS.genesis });
       },
     }),
     {

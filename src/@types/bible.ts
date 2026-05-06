@@ -28,9 +28,9 @@ export const DEFAULT_WALLPAPERS = {
   genesis:
     "https://santhatela.com.br/wp-content/uploads/2017/06/michelangelo-criacao-adao-d.jpg",
   patriarchs:
-    "https://images.unsplash.com/photo-1473448912268-2022ce9509d8?w=1600&auto=format&fit=crop&q=80",
+    "https://www.fulcrum-anglican.org.uk/wp-content/uploads/2013/11/patriarchs.jpg",
   exodus:
-    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?w=1600&auto=format&fit=crop&q=80",
+    "https://images.unsplash.com/photo-1678038592672-e63442537f52?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
   conquest_and_judges:
     "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=80",
   kingdom:
@@ -64,9 +64,11 @@ export const DEFAULT_WALLPAPERS = {
     "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
   islam:
     "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
+  koran:
+    "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
 } as const;
 
-export type BibleTheme = keyof typeof DEFAULT_WALLPAPERS;
+export type BibleTheme = keyof typeof DEFAULT_WALLPAPERS | string;
 
 export interface Phase {
   id: string;

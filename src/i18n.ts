@@ -91,6 +91,7 @@ const resources = {
         book_placeholder: "Ex: Genesis, Acts...",
         book_sub_placeholder: "The origin of all things...",
         delete_confirm: "Are you sure you want to delete this book?",
+        custom_url: "Custom Wallpaper URL",
         delete_warning:
           'This will permanently remove "{{name}}" and all its {{count}} verses.',
         status_acquisition: "Acquisition Status",
@@ -219,6 +220,7 @@ const resources = {
         book_placeholder: "Ex: Gênesis, Atos...",
         book_sub_placeholder: "A origem de todas as coisas...",
         delete_confirm: "Deseja excluir este livro?",
+        custom_url: "URL de Papel de Parede Personalizada",
         delete_warning:
           'Isso removerá permanentemente "{{name}}" e todos os seus {{count}} versículos.',
         status_acquisition: "Status de Aquisição",

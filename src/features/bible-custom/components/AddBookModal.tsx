@@ -1,11 +1,13 @@
 import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
 import { X, Plus, Book as BookIcon, Tags, Hash } from "lucide-react";
 import { BUILT_IN_TAGS } from "../constants/tags";
 
 export const AddBookModal = () => {
+  const { t } = useTranslation();
   const { isAddBookOpen, activePhaseId, closeAllModals } = useModalStore();
   const { addBook, personalPhases, suggestionPhases, activeProfile } = useCustomCanonStore();
   const phases = activeProfile === "suggestion" ? suggestionPhases : personalPhases;
@@ -84,113 +86,112 @@ export const AddBookModal = () => {
               <div className="w-14 h-14 bg-bible-gold/10 rounded-[1.25rem] flex items-center justify-center text-bible-gold mb-5 border border-bible-gold/20 shadow-lg shadow-bible-gold/5">
                 <BookIcon size={28} />
               </div>
-              <h2 className="font-cinzel text-2xl text-bible-gold tracking-[0.2em] uppercase">
-                Novo Manuscrito
+              <h2 className="font-cinzel text-3xl text-bible-gold tracking-[0.2em] uppercase">
+                {t("common.add_book")}
               </h2>
-              <p className="text-bible-muted font-serif italic text-sm mt-1 opacity-60">
-                Adicione um novo livro à sua jornada sagrada.
+              <p className="text-bible-muted font-serif italic text-sm opacity-60">
+                {t("modal.add_books")}
               </p>
             </header>
 
-            <form onSubmit={handleSubmit} className="space-y-6">
-              <div className="space-y-2">
-                <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                  <Hash size={10} /> Título do Livro
-                </label>
-                <input
-                  autoFocus
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Ex: Apocalipse, Gênesis..."
-                  className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
-                />
-              </div>
-
-              <div className="space-y-2">
-                <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-1">
-                  Subtítulo ou Breve Resumo
-                </label>
-                <input
-                  type="text"
-                  value={sub}
-                  onChange={(e) => setSub(e.target.value)}
-                  placeholder="A revelação de Jesus Cristo..."
-                  className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
-                />
-              </div>
-
-              <div className="space-y-4">
-                <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-1 flex items-center gap-2">
-                  <Tags size={12} /> Tags & Coleções
-                </label>
-                
-                <div className="bg-bible-dark/30 rounded-2xl p-5 border border-bible-border/30">
-                  <div className="flex flex-wrap gap-2 mb-5">
-                    {tags.map((tag) => (
-                      <motion.span 
-                        layout
-                        key={tag} 
-                        className="bg-bible-gold/10 text-bible-gold text-[10px] px-2.5 py-1 rounded-lg border border-bible-gold/20 flex items-center gap-1.5 font-cinzel"
-                      >
-                        {tag}
-                        <button type="button" onClick={() => setTags(tags.filter(t => t !== tag))} className="hover:text-red-500 transition-colors">
-                          <X size={10} />
-                        </button>
-                      </motion.span>
-                    ))}
-                    {tags.length === 0 && <span className="text-bible-muted/30 text-[10px] font-serif italic">Nenhuma tag selecionada</span>}
+            <form onSubmit={handleSubmit}>
+              <div className="grid grid-cols-1 lg:grid-cols-2 gap-10">
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <label className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2">
+                      {t("modal.book_name")}
+                    </label>
+                    <input
+                      type="text"
+                      value={name}
+                      onChange={(e) => setName(e.target.value)}
+                      className="w-full bg-bible-dark/50 border border-bible-border/30 rounded-2xl px-6 py-4 text-bible-text outline-none focus:border-bible-gold transition-all font-serif"
+                      placeholder="Ex: Evangelho de Tomé"
+                    />
                   </div>
 
                   <div className="space-y-4">
-                    <div className="flex gap-2">
-                      <input
-                        type="text"
-                        value={tagInput}
-                        onChange={(e) => setTagInput(e.target.value)}
-                        onKeyDown={(e) => e.key === 'Enter' && (e.preventDefault(), addTag())}
-                        placeholder="Nova tag..."
-                        className="flex-1 bg-bible-dark/50 border border-bible-border/50 rounded-xl px-4 py-3 text-bible-text focus:border-bible-gold outline-none transition-all text-sm placeholder:text-bible-muted/20"
-                      />
-                      <button
-                        type="button"
-                        onClick={addTag}
-                        className="p-3 rounded-xl bg-bible-gold/10 text-bible-gold border border-bible-gold/20 hover:bg-bible-gold hover:text-white transition-all shadow-lg shadow-bible-gold/5"
-                      >
-                        <Plus size={20} />
-                      </button>
-                    </div>
+                    <label className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2">
+                      {t("modal.book_sub")} <span className="opacity-40 italic">({t("modal.optional")})</span>
+                    </label>
+                    <textarea
+                      value={sub}
+                      onChange={(e) => setSub(e.target.value)}
+                      className="w-full bg-bible-dark/50 border border-bible-border/30 rounded-2xl px-6 py-4 text-bible-text outline-none focus:border-bible-gold transition-all font-serif italic resize-none"
+                      placeholder="Ex: Ensinamentos secretos..."
+                      rows={3}
+                    />
+                  </div>
+                </div>
 
-                    <div className="flex flex-wrap gap-1.5 pt-2">
-                      {allExistingTags.filter(t => !tags.includes(t)).slice(0, 10).map(t => (
-                        <button 
-                          key={t}
-                          type="button"
-                          onClick={() => toggleTag(t)}
-                          className="bg-white/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold border border-white/5 hover:border-bible-gold/20 px-2 py-1 rounded-lg text-[9px] font-cinzel transition-all"
-                        >
-                          + {t}
-                        </button>
-                      ))}
+                <div className="space-y-6">
+                  <div className="space-y-4">
+                    <label className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2 flex items-center gap-2">
+                      <Tags size={14} /> {t("common.tags")}
+                    </label>
+                    <div className="bg-bible-dark/30 rounded-2xl p-6 border border-bible-border/30">
+                      <div className="flex flex-wrap gap-2 mb-6">
+                        {tags.map((t) => (
+                          <span key={t} className="flex items-center gap-2 bg-bible-gold/10 text-bible-gold border border-bible-gold/20 px-3 py-1.5 rounded-xl text-[10px] font-cinzel">
+                            {t}
+                            <button type="button" onClick={() => toggleTag(t)} className="hover:text-red-500 transition-colors">
+                              <X size={12} />
+                            </button>
+                          </span>
+                        ))}
+                        <input 
+                          type="text"
+                          placeholder={t("modal.new_tag")}
+                          className="bg-transparent border-none outline-none text-[10px] font-cinzel text-bible-text w-24 ml-2"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              e.preventDefault();
+                              const val = (e.target as HTMLInputElement).value.trim();
+                              if (val) {
+                                toggleTag(val);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <p className="text-[9px] text-bible-muted font-cinzel uppercase tracking-widest opacity-40">
+                          {t("modal.suggested_tags")}
+                        </p>
+                        <div className="flex flex-wrap gap-2">
+                          {allExistingTags.filter(t => !tags.includes(t)).slice(0, 8).map(t => (
+                            <button 
+                              key={t}
+                              type="button"
+                              onClick={() => toggleTag(t)}
+                              className="bg-white/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold border border-white/5 hover:border-bible-gold/20 px-2 py-1 rounded-lg text-[9px] font-cinzel transition-all"
+                            >
+                              + {t}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
                   </div>
                 </div>
               </div>
 
-              <div className="pt-6 flex gap-4">
+              <div className="mt-12 flex flex-col md:flex-row gap-4">
                 <button
                   type="button"
                   onClick={closeAllModals}
-                  className="flex-1 py-4 rounded-2xl border border-bible-border text-bible-muted font-cinzel text-[10px] uppercase tracking-widest hover:bg-white/5 transition-all"
+                  className="flex-1 px-8 py-4 rounded-2xl border border-bible-border text-bible-muted font-cinzel text-xs uppercase tracking-[0.2em] hover:bg-white/5 transition-all"
                 >
-                  Cancelar
+                  {t("common.cancel")}
                 </button>
                 <button
                   type="submit"
                   disabled={!name}
-                  className="flex-[1.5] py-4 rounded-2xl bg-bible-gold text-white font-cinzel text-[11px] uppercase tracking-[0.2em] shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50"
+                  className="flex-[2] bg-bible-gold text-white px-8 py-4 rounded-2xl font-cinzel text-xs uppercase tracking-[0.2em] hover:scale-[1.02] active:scale-95 transition-all shadow-xl shadow-bible-gold/20 disabled:opacity-40"
                 >
-                  Adicionar ao Cânone
+                  {t("common.add_book")}
                 </button>
               </div>
             </form>

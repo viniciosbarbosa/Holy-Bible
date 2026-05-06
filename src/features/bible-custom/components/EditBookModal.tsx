@@ -139,7 +139,7 @@ export const EditBookModal = () => {
 
                   <div className="space-y-4">
                     <h3 className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2">
-                      Status de Aquisição
+                      {t("modal.status_acquisition")}
                     </h3>
                     <div className="grid grid-cols-2 gap-3">
                       {statusOptions.map((opt) => (
@@ -171,12 +171,12 @@ export const EditBookModal = () => {
                         {activeBook.tags.map((t) => (
                           <span key={t} className="flex items-center gap-1.5 bg-bible-gold/10 text-bible-gold border border-bible-gold/20 px-2 py-1 rounded-lg text-[9px] font-cinzel">
                             {t}
-                            <button onClick={() => toggleTag(t)} className="hover:text-red-500"><X size={10} /></button>
+                            <button onClick={() => toggleTag(t)} className="hover:text-red-500 transition-colors"><X size={10} /></button>
                           </span>
                         ))}
                       </div>
                       <div className="flex flex-wrap gap-1.5">
-                        {allExistingTags.filter(t => !activeBook.tags.includes(t)).map(t => (
+                        {allExistingTags.filter(t => !activeBook.tags.includes(t)).slice(0, 5).map(t => (
                           <button 
                             key={t}
                             onClick={() => toggleTag(t)}
@@ -187,7 +187,7 @@ export const EditBookModal = () => {
                         ))}
                         <input 
                           type="text"
-                          placeholder="Nova tag..."
+                          placeholder={t("modal.new_tag")}
                           className="bg-transparent border-none outline-none text-[9px] font-cinzel text-bible-text w-20 ml-2"
                           onKeyDown={(e) => {
                             if (e.key === 'Enter') {
@@ -207,17 +207,17 @@ export const EditBookModal = () => {
                     onClick={() => setShowConfirmDelete(true)}
                     className="w-full flex items-center justify-center gap-2 p-4 text-red-500/40 font-cinzel text-[10px] hover:text-red-500 hover:bg-red-500/10 rounded-2xl transition-all uppercase tracking-widest border border-transparent hover:border-red-500/30"
                   >
-                    <Trash2 size={12} /> {t("common.delete")} Livro
+                    <Trash2 size={12} /> {t("common.delete")} {t("common.books")}
                   </button>
                 </div>
 
                 {/* Column 2: Verses Management */}
-                <div className="bg-bible-dark/50 rounded-[2.5rem] p-8 border border-bible-border flex flex-col h-full shadow-inner">
+                <div className="bg-bible-dark/50 rounded-[2.5rem] p-6 md:p-8 border border-bible-border flex flex-col h-full shadow-inner">
                   <h3 className="text-[10px] text-bible-gold uppercase tracking-widest font-cinzel mb-8 flex items-center gap-2">
-                    <Quote size={14} /> Versículos Sagrados
+                    <Quote size={14} /> {t("common.sacred_verses")}
                   </h3>
 
-                  <div className="flex-1 overflow-y-auto space-y-6 pr-4 mb-8 min-h-[300px] scrollbar-thin scrollbar-thumb-bible-gold/20">
+                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 mb-8 min-h-[300px] scrollbar-thin scrollbar-thumb-bible-gold/20">
                     {activeBook.savedVerses?.map((v: SavedVerse) => (
                       <motion.div 
                         layout
@@ -254,9 +254,9 @@ export const EditBookModal = () => {
                               autoFocus
                             />
                             <div className="flex justify-end gap-2">
-                              <button onClick={() => setEditingVerseId(null)} className="text-[10px] font-cinzel text-bible-muted uppercase px-3 py-1 hover:text-white">Cancelar</button>
+                              <button onClick={() => setEditingVerseId(null)} className="text-[10px] font-cinzel text-bible-muted uppercase px-3 py-1 hover:text-white">{t("common.cancel")}</button>
                               <button onClick={() => handleSaveEditVerse(v.id)} className="text-[10px] font-cinzel text-bible-gold uppercase bg-bible-gold/10 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-bible-gold hover:text-white transition-all">
-                                <Check size={10} /> Salvar
+                                <Check size={10} /> {t("common.save")}
                               </button>
                             </div>
                           </div>
@@ -269,16 +269,16 @@ export const EditBookModal = () => {
                       <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
                         <Quote size={32} className="text-bible-muted/20" />
                         <p className="text-bible-muted/40 font-serif italic text-sm">
-                          Nenhum versículo sagrado foi guardado ainda.
+                          {t("empty.no_saved_verses")}
                         </p>
                       </div>
                     )}
                   </div>
 
                   <div className="space-y-4 pt-6 border-t border-bible-border/30">
-                    <div className="flex gap-4">
-                      <div className="w-1/3">
-                        <label className="text-[9px] font-cinzel text-bible-gold uppercase mb-1.5 block ml-1">Referência</label>
+                    <div className="flex flex-col md:flex-row gap-4">
+                      <div className="w-full md:w-1/3">
+                        <label className="text-[9px] font-cinzel text-bible-gold uppercase mb-1.5 block ml-1">{t("modal.reference")}</label>
                         <input
                           type="text"
                           placeholder="1.5"
@@ -287,13 +287,13 @@ export const EditBookModal = () => {
                           className="w-full bg-bible-dark/50 border border-bible-border rounded-xl px-4 py-3 text-xs font-cinzel outline-none focus:border-bible-gold transition-all"
                         />
                       </div>
-                      <div className="w-2/3">
-                        <label className="text-[9px] font-cinzel text-bible-gold uppercase mb-1.5 block ml-1">Conteúdo</label>
+                      <div className="w-full md:w-2/3">
+                        <label className="text-[9px] font-cinzel text-bible-gold uppercase mb-1.5 block ml-1">{t("modal.content")}</label>
                         <textarea
-                          placeholder="Digite as palavras sagradas..."
+                          placeholder={t("modal.verse_placeholder")}
                           value={newVerseText}
                           onChange={(e) => setNewVerseText(e.target.value)}
-                          className="w-full bg-bible-dark/50 border border-bible-border rounded-xl px-4 py-3 text-sm font-serif outline-none focus:border-bible-gold h-12 resize-none transition-all scrollbar-none"
+                          className="w-full bg-bible-dark/50 border border-bible-border rounded-xl px-4 py-3 text-sm font-serif outline-none focus:border-bible-gold h-12 md:h-12 resize-none transition-all scrollbar-none"
                         />
                       </div>
                     </div>
@@ -302,7 +302,7 @@ export const EditBookModal = () => {
                       disabled={!newVerseText || !newVerseRef}
                       className="w-full bg-bible-gold text-white py-4 rounded-2xl font-cinzel text-[11px] tracking-[0.2em] uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-bible-gold/20 disabled:opacity-40"
                     >
-                      Salvar Versículo
+                      {t("common.save_verse")}
                     </button>
                   </div>
                 </div>

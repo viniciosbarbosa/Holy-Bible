@@ -2,21 +2,23 @@ import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
 import { Trash2, Quote, Edit2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useModalStore } from "../../../store/use-modal-store";
+import { useTranslation } from "react-i18next";
 
 export const PersonalFavorites = () => {
   const getAllSavedVerses = useCustomCanonStore((state) => state.getAllSavedVerses);
   const deleteVerse = useCustomCanonStore((state) => state.deleteVerse);
   const { openEditBook } = useModalStore();
+  const { t } = useTranslation();
   
   const favoriteVerses = getAllSavedVerses();
 
   if (favoriteVerses.length === 0) {
     return (
-      <div className="py-20 text-center border-2 border-dashed border-bible-border rounded-[2.5rem] bg-bible-card/30">
+      <div className="py-20 text-center border-2 border-dashed border-bible-border rounded-[2.5rem] bg-bible-card/30 px-6">
         <Quote size={40} className="mx-auto text-bible-gold/20 mb-4" />
         <p className="text-bible-muted font-serif italic">
-          Sua coleção pessoal de versículos está vazia. <br />
-          Adicione versículos editando seus livros.
+          {t("empty.no_saved_verses")} <br />
+          <span className="text-xs opacity-60">{t("empty.add_verses_by_editing")}</span>
         </p>
       </div>
     );
@@ -52,7 +54,7 @@ export const PersonalFavorites = () => {
                 <button 
                   onClick={() => openEditBook(v.bookId, v.phaseId)}
                   className="p-2 text-bible-muted hover:text-bible-gold hover:bg-bible-gold/5 rounded-xl transition-all opacity-0 group-hover:opacity-100"
-                  title="Editar no Livro"
+                  title={t("common.edit")}
                 >
                   <Edit2 size={14} />
                 </button>

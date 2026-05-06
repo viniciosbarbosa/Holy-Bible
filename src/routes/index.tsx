@@ -5,6 +5,7 @@ import {
   Navigate,
 } from "react-router-dom";
 import { MainLayout } from "../layout/MainLayout";
+import { useCustomCanonStore } from "../store/use-custom-canon-store";
 
 /**
  * Lazy Loading:
@@ -21,13 +22,24 @@ const BibleReader = lazy(
   () => import("../features/bible-api/pages/BibleReader"),
 );
 
+const RootRedirect = () => {
+  const activeProfile = useCustomCanonStore((state) => state.activeProfile);
+  
+  if (!activeProfile) return null;
+  
+  if (activeProfile === "conventional") {
+    return <Navigate to="/default-bible" replace />;
+  }
+  
+  return <Navigate to="/my-personal-bible" replace />;
+};
+
 const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
     children: [
-      // Redireciona automaticamente para o seu cânone etíope ao abrir o app
-      { index: true, element: <Navigate to="/my-personal-bible" replace /> },
+      { index: true, element: <RootRedirect /> },
 
       {
         path: "my-personal-bible",

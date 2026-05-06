@@ -50,9 +50,10 @@ test.describe("Onboarding", () => {
     await expect(page.locator("[data-testid='onboarding-title']")).toBeVisible();
   });
 
-  test("both profile cards are rendered", async ({ page }) => {
+  test("all three profile cards are rendered", async ({ page }) => {
     await expect(page.locator("[data-testid='profile-personal-btn']")).toBeVisible();
     await expect(page.locator("[data-testid='profile-suggestion-btn']")).toBeVisible();
+    await expect(page.locator("[data-testid='profile-conventional-btn']")).toBeVisible();
   });
 
   test("choosing Personal hides the onboarding screen", async ({ page }) => {
@@ -62,6 +63,11 @@ test.describe("Onboarding", () => {
 
   test("choosing Suggestion hides the onboarding screen", async ({ page }) => {
     await page.locator("[data-testid='profile-suggestion-btn']").click();
+    await expect(page.locator("[data-testid='onboarding-title']")).not.toBeVisible({ timeout: 4000 });
+  });
+
+  test("choosing Conventional hides the onboarding screen", async ({ page }) => {
+    await page.locator("[data-testid='profile-conventional-btn']").click();
     await expect(page.locator("[data-testid='onboarding-title']")).not.toBeVisible({ timeout: 4000 });
   });
 });
@@ -100,9 +106,7 @@ test.describe("Personal Bible – Add Phase flow", () => {
   });
 
   test("opens the Add Phase modal when button is clicked", async ({ page }) => {
-    // Button contains 'Add Phase' (en) or 'Nova Fase' (pt) – use data-testid via aria
-    // The button calls openAddPhase from the store; it contains the t("common.add_phase") text
-    const addBtn = page.getByRole("button", { name: /add phase|nova fase/i });
+    const addBtn = page.locator("[data-testid='add-phase-btn']");
     await addBtn.waitFor({ state: "visible", timeout: 6000 });
     await addBtn.click();
     await expect(page.locator("[data-testid='add-phase-modal']")).toBeVisible({ timeout: 4000 });

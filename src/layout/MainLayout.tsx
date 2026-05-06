@@ -84,13 +84,13 @@ export const MainLayout = () => {
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
-            className="relative z-50 pt-12 pb-6 text-center"
+            className="relative z-50 pt-6 md:pt-12 pb-2 md:pb-4 text-center"
           >
             <div className="inline-block group cursor-default">
-              <h1 className="font-cinzel text-3xl md:text-5xl tracking-[0.3em] uppercase text-bible-gold drop-shadow-[0_2px_15px_rgba(201,168,76,0.3)] transition-all group-hover:tracking-[0.4em] duration-1000">
+              <h1 className="font-cinzel text-2xl md:text-5xl tracking-[0.3em] uppercase text-bible-gold drop-shadow-[0_2px_15px_rgba(201,168,76,0.3)] transition-all group-hover:tracking-[0.4em] duration-1000">
                 Holy Bible
               </h1>
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-bible-gold to-transparent mt-2 opacity-50 group-hover:opacity-100 transition-opacity" />
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-bible-gold to-transparent mt-1 md:mt-2 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
           </motion.header>
         )}

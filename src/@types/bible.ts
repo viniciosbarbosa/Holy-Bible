@@ -77,7 +77,7 @@ export interface Phase {
   books: Book[];
 }
 
-export type ProfileType = "personal" | "suggestion";
+export type ProfileType = "personal" | "suggestion" | "conventional";
 
 export interface ApiBook {
   abbrev: string;

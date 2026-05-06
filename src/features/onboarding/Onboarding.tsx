@@ -1,7 +1,7 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useCustomCanonStore } from "../../store/use-custom-canon-store";
-import { User, Sparkles, ArrowRight } from "lucide-react";
+import { User, Sparkles, ArrowRight, Library } from "lucide-react";
 
 export const Onboarding = () => {
   const { t } = useTranslation();
@@ -29,50 +29,73 @@ export const Onboarding = () => {
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Personal Journey */}
           <motion.button
-            initial={{ opacity: 0, x: -50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.3 }}
             data-testid="profile-personal-btn"
             onClick={() => setProfile("personal")}
-            className="group relative bg-bible-card border border-bible-border rounded-[3rem] p-10 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.1)]"
+            className="group relative bg-bible-card border border-bible-border rounded-[2.5rem] p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
           >
-            <div className="w-16 h-16 rounded-3xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-8 group-hover:scale-110 transition-transform duration-500">
-              <User size={32} />
+            <div className="w-12 h-12 rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-6 group-hover:scale-110 transition-transform">
+              <User size={24} />
             </div>
-            <h2 className="font-cinzel text-2xl text-bible-gold mb-4 uppercase tracking-widest">
+            <h2 className="font-cinzel text-xl text-bible-gold mb-3 uppercase tracking-widest leading-tight">
               {t("onboarding.personal_title")}
             </h2>
-            <p className="text-bible-muted font-serif leading-relaxed mb-10">
+            <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
               {t("onboarding.personal_desc")}
             </p>
-            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-              {t("onboarding.start")} <ArrowRight size={16} />
+            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+              {t("onboarding.start")} <ArrowRight size={14} />
             </div>
           </motion.button>
 
           {/* Suggestion Journey */}
           <motion.button
-            initial={{ opacity: 0, x: 50 }}
-            animate={{ opacity: 1, x: 0 }}
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.4 }}
             data-testid="profile-suggestion-btn"
             onClick={() => setProfile("suggestion")}
-            className="group relative bg-bible-card border border-bible-border rounded-[3rem] p-10 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.1)]"
+            className="group relative bg-bible-card border border-bible-border rounded-[2.5rem] p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
           >
-            <div className="w-16 h-16 rounded-3xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-8 group-hover:scale-110 transition-transform duration-500">
-              <Sparkles size={32} />
+            <div className="w-12 h-12 rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-6 group-hover:scale-110 transition-transform">
+              <Sparkles size={24} />
             </div>
-            <h2 className="font-cinzel text-2xl text-bible-gold mb-4 uppercase tracking-widest">
+            <h2 className="font-cinzel text-xl text-bible-gold mb-3 uppercase tracking-widest leading-tight">
               {t("onboarding.suggestion_title")}
             </h2>
-            <p className="text-bible-muted font-serif leading-relaxed mb-10">
+            <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
               {t("onboarding.suggestion_desc")}
             </p>
-            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-xs uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-              {t("onboarding.start")} <ArrowRight size={16} />
+            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+              {t("onboarding.start")} <ArrowRight size={14} />
+            </div>
+          </motion.button>
+
+          {/* Conventional Journey */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.5 }}
+            data-testid="profile-conventional-btn"
+            onClick={() => setProfile("conventional")}
+            className="group relative bg-bible-card border border-bible-border rounded-[2.5rem] p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-6 group-hover:scale-110 transition-transform">
+              <Library size={24} />
+            </div>
+            <h2 className="font-cinzel text-xl text-bible-gold mb-3 uppercase tracking-widest leading-tight">
+              {t("onboarding.conventional_title")}
+            </h2>
+            <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
+              {t("onboarding.conventional_desc")}
+            </p>
+            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+              {t("onboarding.start")} <ArrowRight size={14} />
             </div>
           </motion.button>
         </div>

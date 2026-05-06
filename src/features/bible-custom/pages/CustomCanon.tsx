@@ -87,49 +87,55 @@ export default function CustomCanon() {
     <div className="relative">
       <StatsHeader />
 
-      <header className="mb-12 text-center mt-12">
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 px-4">
-          <div className="flex bg-bible-card/50 backdrop-blur-xl p-1.5 rounded-2xl border border-bible-gold/20 shadow-inner">
+      <header className="mb-16">
+        <div className=" mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4">
+          {/* Action Tabs */}
+          <div className="flex items-center p-1.5 bg-bible-card/60 backdrop-blur-md border border-bible-border/30 rounded-[1.25rem] shadow-xl">
             <button
               onClick={() => setActiveTab("books")}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-2 px-8 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${
                 activeTab === "books"
-                  ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20"
+                  ? "bg-bible-gold text-white shadow-[0_4px_20px_rgba(201,168,76,0.3)]"
                   : "text-bible-muted hover:text-bible-gold"
               }`}
             >
-              <Library size={14} /> Cânone
+              <Library size={14} /> {t("common.canon")}
             </button>
             <button
               onClick={() => setActiveTab("favorites")}
-              className={`flex items-center gap-2 px-6 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-widest transition-all ${
+              className={`flex items-center gap-2 px-8 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${
                 activeTab === "favorites"
-                  ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20"
+                  ? "bg-bible-gold text-white shadow-[0_4px_20px_rgba(201,168,76,0.3)]"
                   : "text-bible-muted hover:text-bible-gold"
               }`}
             >
-              <Bookmark size={14} /> Favoritos
+              <Bookmark size={14} /> {t("common.favorites")}
             </button>
           </div>
 
-          {/* Search Bar */}
+          {/* Centered Search Bar */}
           {activeTab === "books" && (
-            <div className="relative w-full md:w-80 group">
-              <input
-                type="text"
-                value={search}
-                onChange={(e) => setSearch(e.target.value)}
-                placeholder={t("common.search_placeholder")}
-                className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-5 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
-              />
+            <div className="flex-1 max-w-xl w-full">
+              <div className="relative group">
+                <input
+                  type="text"
+                  value={search}
+                  onChange={(e) => setSearch(e.target.value)}
+                  placeholder={t("common.search_placeholder")}
+                  className="w-full bg-bible-card/60 backdrop-blur-2xl border border-bible-border/30 rounded-[1.25rem] py-4 px-10 text-bible-text text-sm focus:border-bible-gold/50 outline-none transition-all placeholder:text-bible-muted/40 shadow-2xl"
+                />
+                <div className="absolute inset-0 rounded-[1.25rem] bg-bible-gold/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
+              </div>
             </div>
           )}
 
+          {/* Add Phase Button */}
           <button
             onClick={openAddPhase}
-            className="flex items-center gap-2 bg-bible-gold text-white px-6 py-3 rounded-2xl transition-all font-cinzel text-xs uppercase tracking-widest shadow-xl shadow-bible-gold/20 hover:scale-105 active:scale-95"
+            data-testid="add-phase-btn"
+            className="flex items-center gap-3 bg-bible-gold text-white px-10 py-4 rounded-[1.25rem] transition-all font-cinzel text-[10px] uppercase tracking-[0.3em] shadow-[0_8px_25px_rgba(201,168,76,0.25)] hover:scale-[1.02] active:scale-95 whitespace-nowrap"
           >
-            <PlusCircle size={16} /> {t("common.add_phase")}
+            <PlusCircle size={18} /> {t("common.add_phase")}
           </button>
         </div>
       </header>
@@ -169,16 +175,17 @@ export default function CustomCanon() {
                 <motion.div
                   initial={{ opacity: 0 }}
                   animate={{ opacity: 1 }}
-                  className="text-center py-32 border-2 border-dashed border-bible-border rounded-[3rem] bg-bible-card backdrop-blur-sm"
+                  className="text-center py-32 border-2 border-dashed border-bible-border rounded-[3rem] bg-bible-card backdrop-blur-sm px-8"
                 >
                   <PlusCircle
                     size={48}
                     className="mx-auto text-bible-gold/30 mb-4"
                   />
-                  <p className="text-bible-muted font-serif text-lg">
-                    Sua jornada ainda não começou. <br />
-                    Crie sua primeira fase e comece a organizar sua
-                    biblioteca.
+                  <p className="text-bible-muted font-serif text-lg leading-relaxed">
+                    {t("empty.journey_not_started")} <br />
+                    <span className="text-sm opacity-60">
+                      {t("empty.create_first_phase")}
+                    </span>
                   </p>
                 </motion.div>
               )}
@@ -188,7 +195,7 @@ export default function CustomCanon() {
       </div>
 
       <footer className="mt-32 mb-12 text-center text-bible-muted font-cinzel text-[10px] uppercase tracking-[0.5em] opacity-30">
-        In Principio Erat Verbum
+        {t("common.footer")}
       </footer>
 
       <EditBookModal />

@@ -4,17 +4,25 @@ import { CheckCircle2, Bookmark, Download, AlertCircle, Settings } from "lucide-
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import type { Book } from "../../../@types/bible";
+import { normalizeString } from "../../../lib/utils";
 
 export const BookItem = ({
   book,
   phaseId,
+  searchQuery,
 }: {
   book: Book;
   phaseId: string;
+  searchQuery?: string;
 }) => {
   const { readStatus, acquisitionStatus, toggleRead } = useBibleStore();
   const { openEditBook } = useModalStore();
   const { t } = useTranslation();
+
+  const isHighlighted = searchQuery && (
+    normalizeString(book.name).includes(normalizeString(searchQuery)) ||
+    (book.sub && normalizeString(book.sub).includes(normalizeString(searchQuery)))
+  );
 
   const isRead = readStatus[book.id];
   const currentStatus = acquisitionStatus[book.id] || "none";
@@ -28,10 +36,9 @@ export const BookItem = ({
     <motion.div 
       whileHover={{ y: -5 }}
       className={`group relative flex flex-col justify-between rounded-3xl border p-7 transition-all duration-500 overflow-hidden cursor-pointer
-        ${isRead 
-          ? "bg-bible-card border-bible-border opacity-60" 
-          : "bg-bible-card border-bible-border/50 hover:border-bible-gold shadow-[0_4px_25px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)]"
-        }
+        ${isHighlighted ? "border-bible-gold shadow-[0_0_15px_rgba(201,168,76,0.2)] bg-bible-gold/[0.03]" : "border-bible-border/50"}
+        ${isRead ? "opacity-60" : "hover:border-bible-gold shadow-[0_4px_25px_rgba(0,0,0,0.03)] hover:shadow-[0_15px_40px_rgba(0,0,0,0.1)]"}
+        ${isRead && !isHighlighted ? "bg-bible-card" : "bg-bible-card"}
       `}
       onClick={() => toggleRead(book.id)}
     >

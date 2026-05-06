@@ -1,22 +1,30 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, PlusCircle, Trash2 } from "lucide-react";
 import type { Phase } from "../../../@types/bible";
 import { BookItem } from "./BookItem";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
+import { useModalStore } from "../../../store/use-modal-store";
+import { normalizeString } from "../../../lib/utils";
 
 interface Props {
   phase: Phase;
   onOpen?: () => void;
+  forceOpen?: boolean;
+  searchQuery?: string;
 }
 
-import { useModalStore } from "../../../store/use-modal-store";
-
-export const PhaseSection = ({ phase, onOpen }: Props) => {
+export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const deletePhase = useCustomCanonStore((state) => state.deletePhase);
   const { openAddBook } = useModalStore();
+
+  useEffect(() => {
+    if (forceOpen) {
+      setIsOpen(true);
+    }
+  }, [forceOpen]);
 
   const handleToggle = () => {
     const newState = !isOpen;
@@ -44,7 +52,11 @@ export const PhaseSection = ({ phase, onOpen }: Props) => {
     <>
       <motion.section
         layout
-        className="relative mb-6 overflow-hidden rounded-3xl border border-bible-border bg-bible-card shadow-xl transition-all duration-500"
+        className={`relative mb-6 overflow-hidden rounded-3xl border bg-bible-card shadow-xl transition-all duration-500 ${
+          searchQuery && normalizeString(phase.title).includes(normalizeString(searchQuery))
+            ? "border-bible-gold shadow-[0_0_15px_rgba(201,168,76,0.2)]"
+            : "border-bible-border"
+        }`}
       >
         {/* Header */}
         <motion.header
@@ -113,7 +125,12 @@ export const PhaseSection = ({ phase, onOpen }: Props) => {
             >
               <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3 pt-4 border-t border-bible-border">
                 {phase.books.map((book) => (
-                  <BookItem key={book.id} book={book} phaseId={phase.id} />
+                  <BookItem
+                    key={book.id}
+                    book={book}
+                    phaseId={phase.id}
+                    searchQuery={searchQuery}
+                  />
                 ))}
                 {phase.books.length === 0 && (
                   <div className="col-span-full py-12 text-center text-bible-muted font-serif italic border border-dashed border-bible-border rounded-2xl">

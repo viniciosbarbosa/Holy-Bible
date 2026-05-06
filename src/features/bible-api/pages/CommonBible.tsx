@@ -2,9 +2,10 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { useBibleBooks } from "../api/use-bible-books";
 import { useNavigate } from "react-router-dom";
-import { BookOpen, Bookmark, Search } from "lucide-react";
+import { BookOpen, Bookmark } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { FavoriteVerses } from "../components/FavoriteVerses";
+import { normalizeString } from "../../../lib/utils";
 
 export default function CommonBible() {
   const { data: books, isLoading, error } = useBibleBooks();
@@ -13,11 +14,13 @@ export default function CommonBible() {
   const [activeTab, setActiveTab] = useState<"books" | "favorites">("books");
   const [search, setSearch] = useState("");
 
-  const filteredBooks = books?.filter(
-    (b) =>
-      b.name.toLowerCase().includes(search.toLowerCase()) ||
-      b.abbrev.toLowerCase().includes(search.toLowerCase()),
-  );
+  const filteredBooks = books?.filter((b) => {
+    const s = normalizeString(search);
+    return (
+      normalizeString(b.name).includes(s) ||
+      normalizeString(b.abbrev).includes(s)
+    );
+  });
 
   if (isLoading)
     return (
@@ -71,17 +74,13 @@ export default function CommonBible() {
           {/* Search Bar */}
           {activeTab === "books" && (
             <div className="relative w-full md:w-80 group">
-              <Search
-                className="absolute left-4 top-1/2 -translate-y-1/2 text-bible-muted group-focus-within:text-bible-gold transition-colors"
-                size={16}
-              />
               <input
                 type="text"
                 data-testid="search-input"
                 aria-label="Search books"
                 value={search}
                 onChange={(e) => setSearch(e.target.value)}
-                placeholder="Pesquisar livros..."
+                placeholder={t("common.search_placeholder")}
                 className="w-full bg-bible-card/50 backdrop-blur-xl border border-bible-gold/10 rounded-2xl py-3 pl-5 pr-4 text-bible-text text-sm focus:border-bible-gold outline-none transition-all"
               />
             </div>

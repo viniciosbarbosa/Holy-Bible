@@ -1,18 +1,23 @@
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
-import { X, ArrowRight, ArrowLeft, PlusCircle } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, PlusCircle, Hash, Tags } from "lucide-react";
 import { BibleTheme, DEFAULT_WALLPAPERS, Book } from "../../../@types/bible";
-import { useTranslation } from "react-i18next";
+import { BUILT_IN_TAGS } from "../constants/tags";
 
 export const AddPhaseModal = () => {
-  const { t } = useTranslation();
   const { isAddPhaseOpen, closeAllModals } = useModalStore();
   const { personalPhases, suggestionPhases, activeProfile, addPhase, addPhaseWithBooks } = useCustomCanonStore();
   
   const phases = activeProfile === "suggestion" ? suggestionPhases : personalPhases;
-  const nextPhaseNum = Math.max(...phases.map(p => parseInt(p.num, 10) || 0), 0) + 1;
+  const nextPhaseNum = useMemo(() => {
+    const nums = phases.map(p => {
+      const match = p.num.match(/\d+/);
+      return match ? parseInt(match[0], 10) : 0;
+    });
+    return (nums.length > 0 ? Math.max(...nums) : 0) + 1;
+  }, [phases]);
   
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -23,6 +28,14 @@ export const AddPhaseModal = () => {
   const [books, setBooks] = useState<Omit<Book, "id">[]>([]);
   const [currentBookTitle, setCurrentBookTitle] = useState("");
   const [currentBookSub, setCurrentBookSub] = useState("");
+  const [currentTags, setCurrentTags] = useState<string[]>([]);
+
+  const allExistingTags = useMemo(() => {
+    const tagsSet = new Set<string>();
+    Object.values(BUILT_IN_TAGS).forEach(t => tagsSet.add(t.lbl));
+    phases.forEach(p => p.books.forEach(b => b.tags.forEach(t => tagsSet.add(t))));
+    return Array.from(tagsSet).sort();
+  }, [phases]);
 
   const reset = () => {
     setTitle("");
@@ -30,6 +43,7 @@ export const AddPhaseModal = () => {
     setBooks([]);
     setCurrentBookTitle("");
     setCurrentBookSub("");
+    setCurrentTags([]);
     setStep(1);
     setIsSubmitting(false);
   };
@@ -40,11 +54,20 @@ export const AddPhaseModal = () => {
       num: String(books.length + 1), 
       name: currentBookTitle, 
       sub: currentBookSub, 
-      tags: [], 
+      tags: currentTags, 
       savedVerses: [] 
     }]);
     setCurrentBookTitle("");
     setCurrentBookSub("");
+    setCurrentTags([]);
+  };
+
+  const toggleTag = (tag: string) => {
+    if (currentTags.includes(tag)) {
+      setCurrentTags(currentTags.filter(t => t !== tag));
+    } else {
+      setCurrentTags([...currentTags, tag]);
+    }
   };
 
   const handleFinalSubmit = () => {
@@ -57,14 +80,13 @@ export const AddPhaseModal = () => {
       theme,
     };
 
-    // Include the book currently being typed if any
     const finalBooks = [...books];
     if (currentBookTitle) {
       finalBooks.push({
         num: String(books.length + 1),
         name: currentBookTitle,
         sub: currentBookSub,
-        tags: [],
+        tags: currentTags,
         savedVerses: [],
       });
     }
@@ -99,29 +121,29 @@ export const AddPhaseModal = () => {
             aria-modal="true"
             aria-label="Add Phase"
             data-testid="add-phase-modal"
-            className="relative w-full max-w-lg bg-bible-card border border-bible-border rounded-[2.5rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
+            className="relative w-full max-w-xl bg-bible-card border border-bible-border rounded-[2.5rem] p-10 shadow-2xl overflow-y-auto max-h-[90vh]"
           >
             <button
               onClick={() => { reset(); closeAllModals(); }}
-              className="absolute top-6 right-6 text-bible-muted hover:text-bible-gold transition-colors"
+              className="absolute top-8 right-8 text-bible-muted hover:text-bible-gold transition-colors"
             >
               <X size={24} />
             </button>
 
-            <header className="mb-8">
-              <div className="flex items-center gap-3 mb-2">
-                <span className="bg-bible-gold text-white px-2 py-0.5 rounded-md font-cinzel text-[10px] font-bold">
+            <header className="mb-10">
+              <div className="flex items-center gap-4 mb-4">
+                <span className="bg-bible-gold text-white px-3 py-1 rounded-lg font-cinzel text-[11px] font-bold tracking-widest shadow-lg shadow-bible-gold/20">
                   FASE {nextPhaseNum}
                 </span>
-                <div className="h-px flex-1 bg-bible-border opacity-30" />
+                <div className="h-px flex-1 bg-bible-gold/20" />
               </div>
               <h2 className="font-cinzel text-2xl text-bible-gold tracking-widest uppercase">
-                {step === 1 ? "Nova Fase" : "Primeiro Livro"}
+                {step === 1 ? "Nova Jornada" : "O Primeiro Registro"}
               </h2>
-              <p className="text-bible-muted font-serif italic text-sm">
+              <p className="text-bible-muted font-serif italic text-sm mt-1 opacity-60">
                 {step === 1 
-                  ? "Defina o título e a atmosfera desta nova etapa." 
-                  : "Adicione o primeiro livro para iniciar esta fase agora mesmo."}
+                  ? "Defina o título e a atmosfera visual desta nova etapa." 
+                  : "Adicione o manuscrito inicial para começar sua biblioteca."}
               </p>
             </header>
 
@@ -132,11 +154,11 @@ export const AddPhaseModal = () => {
                   initial={{ opacity: 0, x: -20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: 20 }}
-                  className="space-y-6"
+                  className="space-y-8"
                 >
                   <div className="space-y-2">
-                    <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2">
-                      Título da Fase
+                    <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
+                      <Hash size={10} /> Título da Fase
                     </label>
                     <input
                       autoFocus
@@ -145,32 +167,32 @@ export const AddPhaseModal = () => {
                       data-testid="phase-title-input"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
-                      placeholder="Ex: Profetas Maiores, O Novo Testamento..."
-                      className="w-full bg-bible-dark/50 border border-bible-border rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/50"
+                      placeholder="Ex: Profetas Maiores, O Alvorecer..."
+                      className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
                     />
                   </div>
 
                   <div className="space-y-4">
                     <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2">
-                      Ambiente (Tema)
+                      Atmosfera (Tema Visual)
                     </label>
-                    <div className="grid grid-cols-4 gap-2">
+                    <div className="grid grid-cols-4 gap-3">
                       {Object.keys(DEFAULT_WALLPAPERS).map((t) => (
                         <button
                           key={t}
                           type="button"
                           onClick={() => setTheme(t as BibleTheme)}
-                          className={`relative aspect-square rounded-xl overflow-hidden border-2 transition-all ${
-                            theme === t ? "border-bible-gold scale-105 shadow-lg shadow-bible-gold/20" : "border-transparent opacity-50 hover:opacity-100"
+                          className={`relative aspect-square rounded-2xl overflow-hidden border-2 transition-all group ${
+                            theme === t ? "border-bible-gold scale-105 shadow-xl shadow-bible-gold/20" : "border-transparent opacity-40 hover:opacity-100"
                           }`}
                         >
                           <img 
                             src={DEFAULT_WALLPAPERS[t as BibleTheme]} 
-                            className="w-full h-full object-cover" 
+                            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500" 
                             alt={t}
                           />
-                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center">
-                            <span className="text-[6px] font-cinzel text-white uppercase text-center p-1 leading-tight">
+                          <div className="absolute inset-0 bg-black/40 flex items-center justify-center backdrop-blur-[1px]">
+                            <span className="text-[7px] font-cinzel text-white uppercase text-center p-1 leading-tight tracking-tighter">
                               {t.replace(/_/g, ' ')}
                             </span>
                           </div>
@@ -179,14 +201,14 @@ export const AddPhaseModal = () => {
                     </div>
                   </div>
 
-                  <div className="pt-4">
+                  <div className="pt-6">
                     <button
                       data-testid="phase-next-btn"
                       onClick={() => setStep(2)}
                       disabled={!title}
-                      className="w-full py-4 rounded-2xl bg-bible-gold text-white font-cinzel text-xs uppercase tracking-widest shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
+                      className="w-full py-4 rounded-2xl bg-bible-gold text-white font-cinzel text-xs uppercase tracking-[0.3em] shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all disabled:opacity-50 flex items-center justify-center gap-2"
                     >
-                      Próximo Passo <ArrowRight size={16} />
+                      Continuar <ArrowRight size={16} />
                     </button>
                   </div>
                 </motion.div>
@@ -196,17 +218,17 @@ export const AddPhaseModal = () => {
                   initial={{ opacity: 0, x: 20 }}
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -20 }}
-                  className="space-y-6"
+                  className="space-y-8"
                 >
                   {books.length > 0 && (
-                    <div className="space-y-2 max-h-32 overflow-y-auto pr-2">
+                    <div className="space-y-2 max-h-32 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-bible-gold/20">
                       {books.map((b, i) => (
-                        <div key={i} className="flex items-center justify-between bg-bible-gold/10 p-3 rounded-xl border border-bible-gold/20">
+                        <div key={i} className="flex items-center justify-between bg-bible-gold/5 p-4 rounded-xl border border-bible-gold/10">
                           <div className="flex flex-col">
-                            <span className="font-cinzel text-[10px] text-bible-gold uppercase">{b.name}</span>
-                            <span className="text-[8px] text-bible-muted italic">{b.sub}</span>
+                            <span className="font-cinzel text-[10px] text-bible-gold uppercase tracking-widest">{b.name}</span>
+                            <span className="text-[9px] text-bible-muted italic font-serif">{b.sub}</span>
                           </div>
-                          <button onClick={() => setBooks(books.filter((_, idx) => idx !== i))} className="text-red-500/50 hover:text-red-500">
+                          <button onClick={() => setBooks(books.filter((_, idx) => idx !== i))} className="text-red-500/30 hover:text-red-500 transition-colors">
                             <X size={14} />
                           </button>
                         </div>
@@ -214,56 +236,80 @@ export const AddPhaseModal = () => {
                     </div>
                   )}
 
-                  <div className="space-y-4">
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2">
-                        {t("modal.book_name")}
-                      </label>
-                      <input
-                        autoFocus
-                        type="text"
-                        value={currentBookTitle}
-                        onChange={(e) => setCurrentBookTitle(e.target.value)}
-                        placeholder="Ex: Isaías, Gênesis..."
-                        className="w-full bg-bible-dark/50 border border-bible-border rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/50"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2">
-                        {t("modal.book_sub")}
-                      </label>
-                      <input
-                        type="text"
-                        value={currentBookSub}
-                        onChange={(e) => setCurrentBookSub(e.target.value)}
-                        placeholder="Ex: O Profeta Messiânico..."
-                        className="w-full bg-bible-dark/50 border border-bible-border rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/50"
-                      />
+                  <div className="space-y-6">
+                    <div className="space-y-4">
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2">
+                          Título do Livro
+                        </label>
+                        <input
+                          autoFocus
+                          type="text"
+                          value={currentBookTitle}
+                          onChange={(e) => setCurrentBookTitle(e.target.value)}
+                          placeholder="Ex: Gênesis, Atos..."
+                          className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
+                        />
+                      </div>
+                      <div className="space-y-2">
+                        <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2">
+                          Descrição
+                        </label>
+                        <input
+                          type="text"
+                          value={currentBookSub}
+                          onChange={(e) => setCurrentBookSub(e.target.value)}
+                          placeholder="A origem de todas as coisas..."
+                          className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
+                        />
+                      </div>
+                      
+                      <div className="space-y-3">
+                        <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
+                          <Tags size={12} /> Tags Sugeridas
+                        </label>
+                        <div className="flex flex-wrap gap-1.5 p-4 bg-bible-dark/30 rounded-2xl border border-bible-border/30">
+                          {currentTags.map(t => (
+                            <span key={t} className="bg-bible-gold/20 text-bible-gold px-2 py-1 rounded-lg text-[9px] font-cinzel border border-bible-gold/30 flex items-center gap-1">
+                              {t} <button onClick={() => toggleTag(t)}><X size={10}/></button>
+                            </span>
+                          ))}
+                          {allExistingTags.filter(t => !currentTags.includes(t)).slice(0, 8).map(t => (
+                            <button 
+                              key={t}
+                              onClick={() => toggleTag(t)}
+                              className="bg-white/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold px-2 py-1 rounded-lg text-[9px] font-cinzel transition-all border border-transparent hover:border-bible-gold/20"
+                            >
+                              + {t}
+                            </button>
+                          ))}
+                        </div>
+                      </div>
                     </div>
 
                     <button
                       onClick={handleAddCurrentBook}
                       disabled={!currentBookTitle}
-                      className="w-full py-3 rounded-xl border border-dashed border-bible-gold/30 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest hover:bg-bible-gold/5 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-4 rounded-2xl border border-dashed border-bible-gold/30 text-bible-gold font-cinzel text-[10px] uppercase tracking-[0.3em] hover:bg-bible-gold/5 transition-all flex items-center justify-center gap-2"
                     >
-                      <PlusCircle size={14} /> {t("modal.add_another")}
+                      <PlusCircle size={16} /> Adicionar outro Livro
                     </button>
                   </div>
 
-                  <div className="pt-4 flex flex-col gap-3">
+                  <div className="pt-6 flex flex-col gap-4">
                     <button
                       data-testid="phase-finish-btn"
                       onClick={handleFinalSubmit}
-                      className="w-full py-4 rounded-2xl bg-bible-gold text-white font-cinzel text-xs uppercase tracking-widest shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
+                      className="w-full py-5 rounded-2xl bg-bible-gold text-white font-cinzel text-xs uppercase tracking-[0.3em] shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2"
                     >
-                      {t("modal.finish")}
+                      Concluir Criação
                     </button>
                     <button
                       type="button"
                       onClick={() => setStep(1)}
-                      className="w-full py-3 text-bible-muted font-cinzel text-[10px] uppercase tracking-widest hover:text-bible-gold transition-all flex items-center justify-center gap-2"
+                      className="w-full py-3 text-bible-muted font-cinzel text-[10px] uppercase tracking-widest hover:text-bible-gold transition-all flex items-center justify-center gap-2 opacity-50"
                     >
-                      <ArrowLeft size={14} /> Voltar para Fase
+                      <ArrowLeft size={14} /> Voltar aos detalhes
                     </button>
                   </div>
                 </motion.div>

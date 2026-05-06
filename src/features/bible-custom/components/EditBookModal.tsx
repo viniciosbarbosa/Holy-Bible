@@ -3,14 +3,15 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useBibleStore } from "../../../store/use-bible-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
-import { X, Bookmark, Download, AlertCircle, Trash2, Quote } from "lucide-react";
+import { X, Bookmark, Download, AlertCircle, Trash2, Quote, Edit2, Check, Hash, Tags } from "lucide-react";
 import { useTranslation } from "react-i18next";
 import { Book, Phase, SavedVerse } from "../../../@types/bible";
+import { BUILT_IN_TAGS } from "../constants/tags";
 
 export const EditBookModal = () => {
   const { isEditBookOpen, activeBookId, activePhaseId, closeAllModals } = useModalStore();
   const { setAcquisition, acquisitionStatus } = useBibleStore();
-  const { activeProfile, personalPhases, suggestionPhases, deleteBook, updateBook, addVerse, deleteVerse } = useCustomCanonStore();
+  const { activeProfile, personalPhases, suggestionPhases, deleteBook, updateBook, addVerse, updateVerse, deleteVerse } = useCustomCanonStore();
   const phases = activeProfile === "suggestion" ? suggestionPhases : personalPhases;
   
   const { t } = useTranslation();
@@ -18,6 +19,8 @@ export const EditBookModal = () => {
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const [newVerseText, setNewVerseText] = useState("");
   const [newVerseRef, setNewVerseRef] = useState("");
+  const [editingVerseId, setEditingVerseId] = useState<string | null>(null);
+  const [editVerseText, setEditVerseText] = useState("");
 
   // Select the actual book from the store to ensure reactivity
   const activeBook = useMemo(() => {
@@ -25,6 +28,16 @@ export const EditBookModal = () => {
       ? phases.find((p: Phase) => p.id === activePhaseId)?.books.find((b: Book) => b.id === activeBookId)
       : null;
   }, [activeBookId, activePhaseId, phases]);
+
+  // Extract all unique tags from all books to provide as suggestions
+  const allExistingTags = useMemo(() => {
+    const tagsSet = new Set<string>();
+    // Add built-in tags labels
+    Object.values(BUILT_IN_TAGS).forEach(t => tagsSet.add(t.lbl));
+    // Add tags from all phases
+    phases.forEach(p => p.books.forEach(b => b.tags.forEach(t => tagsSet.add(t))));
+    return Array.from(tagsSet).sort();
+  }, [phases]);
 
   if (!activeBook || !activePhaseId) return null;
 
@@ -43,11 +56,30 @@ export const EditBookModal = () => {
     setNewVerseRef("");
   };
 
+  const handleStartEditVerse = (v: SavedVerse) => {
+    setEditingVerseId(v.id);
+    setEditVerseText(v.text);
+  };
+
+  const handleSaveEditVerse = (verseId: string) => {
+    updateVerse(activePhaseId, activeBook.id, verseId, { text: editVerseText });
+    setEditingVerseId(null);
+  };
+
+  const toggleTag = (tag: string) => {
+    const currentTags = activeBook.tags || [];
+    if (currentTags.includes(tag)) {
+      updateBook(activePhaseId, activeBook.id, { tags: currentTags.filter(t => t !== tag) });
+    } else {
+      updateBook(activePhaseId, activeBook.id, { tags: [...currentTags, tag] });
+    }
+  };
+
   const statusOptions = [
-    { id: "none", label: "Tenho", icon: Bookmark, color: "text-bible-gold" },
-    { id: "missing", label: "Faltando", icon: AlertCircle, color: "text-red-500" },
-    { id: "acquired", label: "Comprado", icon: Bookmark, color: "text-green-500" },
-    { id: "downloaded", label: "Baixado", icon: Download, color: "text-blue-500" },
+    { id: "none", label: "Tenho", icon: Check, color: "text-[#c9a84c]", bg: "bg-[#c9a84c]/10", border: "border-[#c9a84c]/20" },
+    { id: "missing", label: "Faltando", icon: AlertCircle, color: "text-red-400", bg: "bg-red-400/10", border: "border-red-400/20" },
+    { id: "acquired", label: "Comprado", icon: Bookmark, color: "text-emerald-400", bg: "bg-emerald-400/10", border: "border-emerald-400/20" },
+    { id: "downloaded", label: "Baixado", icon: Download, color: "text-sky-400", bg: "bg-sky-400/10", border: "border-sky-400/20" },
   ] as const;
 
   const confirmDelete = () => {
@@ -58,7 +90,7 @@ export const EditBookModal = () => {
 
   return (
     <>
-      <AnimatePresence>
+      <AnimatePresence mode="wait">
         {isEditBookOpen && !showConfirmDelete && (
           <div className="fixed inset-0 z-[1000] flex items-center justify-center p-4">
             <motion.div
@@ -66,105 +98,209 @@ export const EditBookModal = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={closeAllModals}
-              className="absolute inset-0 bg-black/90 backdrop-blur-md"
+              className="absolute inset-0 bg-black/95 backdrop-blur-md"
             />
 
             <motion.div
               initial={{ opacity: 0, scale: 0.95, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.95, y: 20 }}
-              className="relative w-full max-w-2xl bg-bible-card border border-bible-border rounded-[3rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
+              className="relative w-full max-w-4xl bg-bible-card border border-bible-border rounded-[3rem] p-8 shadow-2xl overflow-y-auto max-h-[90vh]"
             >
               <button
                 onClick={closeAllModals}
-                className="absolute top-6 right-6 text-bible-muted hover:text-bible-gold transition-colors"
+                className="absolute top-6 right-6 text-bible-muted hover:text-bible-gold transition-colors z-30"
               >
                 <X size={24} />
               </button>
 
-              <div className="grid md:grid-cols-2 gap-8">
+              <div className="grid lg:grid-cols-[1fr_1.2fr] gap-12">
                 {/* Column 1: Config & Status */}
                 <div className="space-y-8">
-                  <header>
-                    <span className="text-bible-gold font-cinzel text-[10px] uppercase tracking-[0.3em] opacity-60">
-                      Manuscrito ID: {activeBook.num}
+                  <header className="relative">
+                    <span className="text-bible-gold font-cinzel text-[10px] uppercase tracking-[0.3em] opacity-60 flex items-center gap-2">
+                      <Hash size={10} /> {t("common.manuscript")} ID: {activeBook.num}
                     </span>
                     <input
                       type="text"
                       value={activeBook.name}
                       onChange={(e) => updateBook(activePhaseId, activeBook.id, { name: e.target.value })}
-                      className="w-full bg-transparent text-3xl text-bible-text font-serif mt-1 border-b border-bible-border focus:border-bible-gold outline-none pb-2 transition-colors"
+                      className="w-full bg-transparent text-4xl text-bible-text font-serif mt-2 border-b border-bible-border/30 focus:border-bible-gold outline-none pb-2 transition-all"
+                      placeholder="Nome do Livro"
+                    />
+                    <textarea
+                      value={activeBook.sub || ""}
+                      onChange={(e) => updateBook(activePhaseId, activeBook.id, { sub: e.target.value })}
+                      className="w-full bg-transparent text-sm font-serif italic text-bible-muted mt-4 outline-none resize-none border-l-2 border-bible-gold/20 pl-4 py-1"
+                      placeholder="Subtítulo ou descrição..."
+                      rows={2}
                     />
                   </header>
 
                   <div className="space-y-4">
-                    <h3 className="text-[10px] text-bible-muted uppercase tracking-widest font-cinzel">Status de Aquisição</h3>
-                    <div className="grid grid-cols-2 gap-2">
+                    <h3 className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2">
+                      Status de Aquisição
+                    </h3>
+                    <div className="grid grid-cols-2 gap-3">
                       {statusOptions.map((opt) => (
                         <button
                           key={opt.id}
                           onClick={() => setAcquisition(activeBook.id, opt.id as any)}
-                          className={`flex flex-col items-center justify-center p-4 rounded-2xl border transition-all
-                            ${currentStatus === opt.id ? "border-bible-gold bg-bible-gold/5 text-bible-gold" : "border-bible-border bg-bible-dark/30 text-bible-muted hover:border-bible-gold/30"}`}
+                          className={`flex items-center gap-3 p-4 rounded-2xl border transition-all group
+                            ${currentStatus === opt.id 
+                              ? `${opt.border} ${opt.bg} ${opt.color} shadow-lg shadow-black/20` 
+                              : "border-bible-border bg-bible-dark/30 text-bible-muted hover:border-bible-gold/30 hover:bg-bible-dark/50"}`}
                         >
-                          <opt.icon size={20} className="mb-2" />
-                          <span className="text-[10px] font-cinzel uppercase tracking-tighter">{opt.label}</span>
+                          <div className={`p-2 rounded-lg transition-colors ${currentStatus === opt.id ? opt.bg : "bg-white/5 group-hover:bg-white/10"}`}>
+                            <opt.icon size={18} />
+                          </div>
+                          <span className="text-[11px] font-cinzel uppercase tracking-widest">
+                            {t(`common.${opt.id}`)}
+                          </span>
                         </button>
                       ))}
                     </div>
                   </div>
 
+                  <div className="space-y-4">
+                    <h3 className="text-[10px] text-bible-gold uppercase tracking-[0.2em] font-cinzel ml-2 flex items-center gap-2">
+                      <Tags size={12} /> {t("common.tags")}
+                    </h3>
+                    <div className="bg-bible-dark/30 rounded-2xl p-4 border border-bible-border/30">
+                      <div className="flex flex-wrap gap-2 mb-4">
+                        {activeBook.tags.map((t) => (
+                          <span key={t} className="flex items-center gap-1.5 bg-bible-gold/10 text-bible-gold border border-bible-gold/20 px-2 py-1 rounded-lg text-[9px] font-cinzel">
+                            {t}
+                            <button onClick={() => toggleTag(t)} className="hover:text-red-500"><X size={10} /></button>
+                          </span>
+                        ))}
+                      </div>
+                      <div className="flex flex-wrap gap-1.5">
+                        {allExistingTags.filter(t => !activeBook.tags.includes(t)).map(t => (
+                          <button 
+                            key={t}
+                            onClick={() => toggleTag(t)}
+                            className="bg-white/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold border border-white/5 hover:border-bible-gold/20 px-2 py-1 rounded-lg text-[9px] font-cinzel transition-all"
+                          >
+                            + {t}
+                          </button>
+                        ))}
+                        <input 
+                          type="text"
+                          placeholder="Nova tag..."
+                          className="bg-transparent border-none outline-none text-[9px] font-cinzel text-bible-text w-20 ml-2"
+                          onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                              const val = (e.target as HTMLInputElement).value.trim();
+                              if (val) {
+                                toggleTag(val);
+                                (e.target as HTMLInputElement).value = '';
+                              }
+                            }
+                          }}
+                        />
+                      </div>
+                    </div>
+                  </div>
+
                   <button 
                     onClick={() => setShowConfirmDelete(true)}
-                    className="w-full flex items-center justify-center gap-2 p-4 text-red-900/40 font-cinzel text-[10px] hover:text-red-500 hover:bg-red-500/10 rounded-2xl transition-all uppercase tracking-widest border border-transparent hover:border-red-500/30"
+                    className="w-full flex items-center justify-center gap-2 p-4 text-red-500/40 font-cinzel text-[10px] hover:text-red-500 hover:bg-red-500/10 rounded-2xl transition-all uppercase tracking-widest border border-transparent hover:border-red-500/30"
                   >
-                    <Trash2 size={12} /> {t("common.delete")}
+                    <Trash2 size={12} /> {t("common.delete")} Livro
                   </button>
                 </div>
 
                 {/* Column 2: Verses Management */}
-                <div className="bg-bible-dark/50 rounded-[2rem] p-6 border border-bible-border flex flex-col h-full">
-                  <h3 className="text-[10px] text-bible-gold uppercase tracking-widest font-cinzel mb-6 flex items-center gap-2">
+                <div className="bg-bible-dark/50 rounded-[2.5rem] p-8 border border-bible-border flex flex-col h-full shadow-inner">
+                  <h3 className="text-[10px] text-bible-gold uppercase tracking-widest font-cinzel mb-8 flex items-center gap-2">
                     <Quote size={14} /> Versículos Sagrados
                   </h3>
 
-                  <div className="flex-1 overflow-y-auto space-y-4 pr-2 mb-6 min-h-[200px]">
+                  <div className="flex-1 overflow-y-auto space-y-6 pr-4 mb-8 min-h-[300px] scrollbar-thin scrollbar-thumb-bible-gold/20">
                     {activeBook.savedVerses?.map((v: SavedVerse) => (
-                      <div key={v.id} className="group relative bg-bible-card/50 p-4 rounded-xl border border-bible-border hover:border-bible-gold/30 transition-all">
-                        <p className="text-xs text-bible-gold font-cinzel mb-1">{activeBook.name} {v.chapter}:{v.verse}</p>
-                        <p className="text-sm font-serif text-bible-text leading-relaxed">"{v.text}"</p>
-                        <button 
-                          onClick={() => deleteVerse(activePhaseId, activeBook.id, v.id)}
-                          className="absolute top-2 right-2 p-1 text-bible-muted hover:text-red-500 opacity-0 group-hover:opacity-100 transition-all"
-                        >
-                          <X size={12} />
-                        </button>
-                      </div>
+                      <motion.div 
+                        layout
+                        key={v.id} 
+                        className="group relative bg-bible-card border border-bible-border/50 p-5 rounded-2xl hover:border-bible-gold/40 transition-all shadow-sm"
+                      >
+                        <div className="flex justify-between items-start mb-2">
+                          <span className="text-[10px] text-bible-gold font-cinzel uppercase tracking-widest bg-bible-gold/5 px-2 py-0.5 rounded-md">
+                            {activeBook.name} {v.chapter}:{v.verse}
+                          </span>
+                          <div className="flex items-center gap-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button 
+                              onClick={() => handleStartEditVerse(v)}
+                              className="p-1.5 text-bible-muted hover:text-bible-gold transition-colors"
+                            >
+                              <Edit2 size={12} />
+                            </button>
+                            <button 
+                              onClick={() => deleteVerse(activePhaseId, activeBook.id, v.id)}
+                              className="p-1.5 text-bible-muted hover:text-red-500 transition-colors"
+                            >
+                              <Trash2 size={12} />
+                            </button>
+                          </div>
+                        </div>
+
+                        {editingVerseId === v.id ? (
+                          <div className="space-y-3">
+                            <textarea 
+                              value={editVerseText}
+                              onChange={(e) => setEditVerseText(e.target.value)}
+                              className="w-full bg-bible-dark/50 border border-bible-gold/30 rounded-xl p-3 text-sm font-serif text-bible-text focus:border-bible-gold outline-none resize-none"
+                              rows={3}
+                              autoFocus
+                            />
+                            <div className="flex justify-end gap-2">
+                              <button onClick={() => setEditingVerseId(null)} className="text-[10px] font-cinzel text-bible-muted uppercase px-3 py-1 hover:text-white">Cancelar</button>
+                              <button onClick={() => handleSaveEditVerse(v.id)} className="text-[10px] font-cinzel text-bible-gold uppercase bg-bible-gold/10 px-3 py-1 rounded-lg flex items-center gap-1 hover:bg-bible-gold hover:text-white transition-all">
+                                <Check size={10} /> Salvar
+                              </button>
+                            </div>
+                          </div>
+                        ) : (
+                          <p className="text-sm font-serif text-bible-text/90 leading-relaxed italic italic-font italic-style">"{v.text}"</p>
+                        )}
+                      </motion.div>
                     ))}
                     {(!activeBook.savedVerses || activeBook.savedVerses.length === 0) && (
-                      <p className="text-bible-muted/30 font-serif italic text-center py-10 text-sm">
-                        Nenhum versículo salvo para este livro.
-                      </p>
+                      <div className="flex flex-col items-center justify-center py-20 text-center space-y-4">
+                        <Quote size={32} className="text-bible-muted/20" />
+                        <p className="text-bible-muted/40 font-serif italic text-sm">
+                          Nenhum versículo sagrado foi guardado ainda.
+                        </p>
+                      </div>
                     )}
                   </div>
 
-                  <div className="space-y-3 pt-4 border-t border-bible-border">
-                    <input
-                      type="text"
-                      placeholder="Ref (ex: 1.5)"
-                      value={newVerseRef}
-                      onChange={(e) => setNewVerseRef(e.target.value)}
-                      className="w-full bg-bible-card border border-bible-border rounded-xl px-4 py-2 text-xs font-cinzel outline-none focus:border-bible-gold"
-                    />
-                    <textarea
-                      placeholder="Texto do versículo..."
-                      value={newVerseText}
-                      onChange={(e) => setNewVerseText(e.target.value)}
-                      className="w-full bg-bible-card border border-bible-border rounded-xl px-4 py-2 text-sm font-serif outline-none focus:border-bible-gold h-20 resize-none"
-                    />
+                  <div className="space-y-4 pt-6 border-t border-bible-border/30">
+                    <div className="flex gap-4">
+                      <div className="w-1/3">
+                        <label className="text-[9px] font-cinzel text-bible-gold uppercase mb-1.5 block ml-1">Referência</label>
+                        <input
+                          type="text"
+                          placeholder="1.5"
+                          value={newVerseRef}
+                          onChange={(e) => setNewVerseRef(e.target.value)}
+                          className="w-full bg-bible-dark/50 border border-bible-border rounded-xl px-4 py-3 text-xs font-cinzel outline-none focus:border-bible-gold transition-all"
+                        />
+                      </div>
+                      <div className="w-2/3">
+                        <label className="text-[9px] font-cinzel text-bible-gold uppercase mb-1.5 block ml-1">Conteúdo</label>
+                        <textarea
+                          placeholder="Digite as palavras sagradas..."
+                          value={newVerseText}
+                          onChange={(e) => setNewVerseText(e.target.value)}
+                          className="w-full bg-bible-dark/50 border border-bible-border rounded-xl px-4 py-3 text-sm font-serif outline-none focus:border-bible-gold h-12 resize-none transition-all scrollbar-none"
+                        />
+                      </div>
+                    </div>
                     <button 
                       onClick={handleAddVerse}
-                      className="w-full bg-bible-gold text-white py-3 rounded-xl font-cinzel text-[10px] tracking-widest uppercase hover:scale-[1.02] transition-all"
+                      disabled={!newVerseText || !newVerseRef}
+                      className="w-full bg-bible-gold text-white py-4 rounded-2xl font-cinzel text-[11px] tracking-[0.2em] uppercase hover:scale-[1.02] active:scale-95 transition-all shadow-lg shadow-bible-gold/20 disabled:opacity-40"
                     >
                       Salvar Versículo
                     </button>
@@ -185,31 +321,35 @@ export const EditBookModal = () => {
               animate={{ opacity: 1 }}
               exit={{ opacity: 0 }}
               onClick={() => setShowConfirmDelete(false)}
-              className="absolute inset-0 bg-black/90 backdrop-blur-sm"
+              className="absolute inset-0 bg-black/95 backdrop-blur-sm"
             />
             <motion.div
               initial={{ opacity: 0, scale: 0.9, y: 20 }}
               animate={{ opacity: 1, scale: 1, y: 0 }}
               exit={{ opacity: 0, scale: 0.9, y: 20 }}
-              className="relative w-full max-w-sm bg-bible-dark border border-red-500/20 rounded-[2.5rem] p-8 shadow-2xl text-center"
+              className="relative w-full max-w-sm bg-bible-card border border-red-500/20 rounded-[2.5rem] p-10 shadow-2xl text-center"
             >
-              <Trash2 size={48} className="mx-auto text-red-500 mb-6" />
-              <h3 className="font-cinzel text-xl text-bible-text mb-2">Excluir Livro?</h3>
-              <p className="text-bible-muted mb-8 font-serif">
-                Isso removerá todos os dados e versículos de "{activeBook.name}".
+              <div className="w-20 h-20 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-6 border border-red-500/20">
+                <Trash2 size={32} className="text-red-500" />
+              </div>
+              <h3 className="font-cinzel text-2xl text-bible-text mb-2 tracking-wide">
+                {t("common.delete")} {t("common.manuscript")}?
+              </h3>
+              <p className="text-bible-muted mb-10 font-serif italic text-sm">
+                Isso removerá permanentemente "{activeBook.name}" e todos os seus {activeBook.savedVerses?.length || 0} versículos.
               </p>
-              <div className="flex gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <button 
                   onClick={() => setShowConfirmDelete(false)}
-                  className="flex-1 py-3 px-4 rounded-xl border border-bible-border hover:bg-white/5 text-bible-text font-cinzel text-[10px]"
+                  className="py-4 px-4 rounded-2xl border border-bible-border hover:bg-white/5 text-bible-muted font-cinzel text-[10px] uppercase tracking-widest transition-all"
                 >
-                  Cancelar
+                  {t("common.cancel")}
                 </button>
                 <button 
                   onClick={confirmDelete}
-                  className="flex-1 py-3 px-4 rounded-xl bg-red-500 text-white font-cinzel text-[10px] shadow-lg shadow-red-500/20"
+                  className="py-4 px-4 rounded-2xl bg-red-500 text-white font-cinzel text-[10px] uppercase tracking-widest shadow-xl shadow-red-500/30 hover:bg-red-600 transition-all"
                 >
-                  Excluir
+                  {t("common.delete")}
                 </button>
               </div>
             </motion.div>

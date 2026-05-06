@@ -2,17 +2,19 @@ import { useBibleStore } from "../../../store/use-bible-store";
 import { Trash2, Quote, ArrowRight } from "lucide-react";
 import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
+import { useTranslation } from "react-i18next";
 
 export const FavoriteVerses = () => {
   const { favoriteVerses, removeFavoriteVerse } = useBibleStore();
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   if (favoriteVerses.length === 0) {
     return (
       <div className="py-20 text-center border-2 border-dashed border-bible-border rounded-[2.5rem] bg-bible-card/30">
         <Quote size={40} className="mx-auto text-bible-gold/20 mb-4" />
         <p className="text-bible-muted font-serif italic">
-          Você ainda não salvou nenhum versículo favorito.
+          {t("common.no_favorites_yet")}
         </p>
       </div>
     );
@@ -55,7 +57,7 @@ export const FavoriteVerses = () => {
               onClick={() => navigate(`/read/${v.bookAbbrev}/${v.chapter}`)}
               className="flex items-center gap-2 font-cinzel text-[10px] uppercase tracking-[0.2em] text-bible-gold hover:text-bible-gold-light transition-colors"
             >
-              Ir para o Capítulo <ArrowRight size={12} />
+              {t("common.go_to_chapter")} <ArrowRight size={12} />
             </button>
           </motion.div>
         ))}

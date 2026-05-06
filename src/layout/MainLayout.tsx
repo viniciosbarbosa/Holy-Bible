@@ -64,16 +64,16 @@ export const MainLayout = () => {
                 src={currentBackground}
                 onError={handleImageError}
                 initial={{ opacity: 0, scale: 1.1 }}
-                animate={{ opacity: 0.6, scale: 1 }}
+                animate={{ opacity: 0.8, scale: 1 }}
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 1.5, ease: "easeOut" }}
-                className="absolute inset-0 w-full h-full object-cover contrast-125 transition-all duration-1000"
+                className="absolute inset-0 w-full h-full object-cover contrast-110 transition-all duration-1000"
                 alt="Plano de fundo geral"
               />
             </AnimatePresence>
           </div>
         </div>
-        <div className="absolute inset-0 bg-[hsl(var(--bible-overlay))] opacity-60" />
+        <div className="absolute inset-0 bg-[hsl(var(--bible-overlay))] opacity-40" />
         <div className="absolute inset-0 bg-bible-gold/5 mix-blend-soft-light" />
       </div>
 
@@ -86,11 +86,11 @@ export const MainLayout = () => {
             exit={{ y: -100, opacity: 0 }}
             className="relative z-50 pt-12 pb-6 text-center"
           >
-            <div className="inline-block">
-              <h1 className="font-cinzel text-3xl md:text-5xl tracking-[0.3em] uppercase text-bible-gold drop-shadow-[0_2px_15px_rgba(201,168,76,0.3)]">
+            <div className="inline-block group cursor-default">
+              <h1 className="font-cinzel text-3xl md:text-5xl tracking-[0.3em] uppercase text-bible-gold drop-shadow-[0_2px_15px_rgba(201,168,76,0.3)] transition-all group-hover:tracking-[0.4em] duration-1000">
                 Holy Bible
               </h1>
-              <div className="h-px w-full bg-gradient-to-r from-transparent via-bible-gold to-transparent mt-2 opacity-50" />
+              <div className="h-px w-full bg-gradient-to-r from-transparent via-bible-gold to-transparent mt-2 opacity-50 group-hover:opacity-100 transition-opacity" />
             </div>
           </motion.header>
         )}
@@ -98,13 +98,13 @@ export const MainLayout = () => {
 
       {/* Main Content Area */}
       <main className="relative z-10 pb-32 max-w-7xl mx-auto px-4 md:px-8">
-        <AnimatePresence mode="wait">
+        <AnimatePresence mode="popLayout">
           <motion.div
             key={location.pathname}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.4 }}
           >
             <Outlet />
           </motion.div>

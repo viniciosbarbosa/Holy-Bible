@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import { MainLayout } from "../layout/MainLayout";
 import { useCustomCanonStore } from "../store/use-custom-canon-store";
+import i18n from "../i18n";
 
 /**
  * Lazy Loading:
@@ -20,6 +21,9 @@ const CommonBible = lazy(
 );
 const BibleReader = lazy(
   () => import("../features/bible-api/pages/BibleReader"),
+);
+const ChapterSelector = lazy(
+  () => import("../features/bible-api/pages/ChapterSelector"),
 );
 
 const RootRedirect = () => {
@@ -67,6 +71,20 @@ const router = createBrowserRouter([
             }
           >
             <CommonBible />
+          </Suspense>
+        ),
+      },
+      {
+        path: "chapters/:bookId",
+        element: (
+          <Suspense
+            fallback={
+              <div className="flex h-64 items-center justify-center font-cinzel text-bible-gold animate-pulse">
+                {i18n.t("common.opening_scrolls")}
+              </div>
+            }
+          >
+            <ChapterSelector />
           </Suspense>
         ),
       },

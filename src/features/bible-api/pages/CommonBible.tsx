@@ -47,11 +47,11 @@ export default function CommonBible() {
         </h2>
 
         {/* Tab Switcher */}
-        <div className="flex flex-col md:flex-row items-center justify-start gap-6 mb-12 px-4">
-          <div className="flex bg-bible-card/50 backdrop-blur-xl p-1.5 rounded-2xl border border-bible-gold/20 shadow-inner w-full md:w-auto">
+        <div className="grid grid-cols-1 md:grid-cols-10 items-center gap-6 mb-12 px-4">
+          <div className="md:col-span-3 flex bg-bible-card/50 backdrop-blur-xl p-1.5 rounded-2xl border border-bible-gold/20 shadow-inner">
             <button
               onClick={() => setActiveTab("books")}
-              className={`flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-cinzel text-xs uppercase tracking-widest transition-all ${
+              className={`flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-cinzel text-xs uppercase tracking-widest transition-all ${
                 activeTab === "books"
                   ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20"
                   : "text-bible-muted hover:text-bible-gold"
@@ -61,7 +61,7 @@ export default function CommonBible() {
             </button>
             <button
               onClick={() => setActiveTab("favorites")}
-              className={`flex-1 md:flex-none flex items-center justify-center gap-3 px-8 py-4 rounded-xl font-cinzel text-xs uppercase tracking-widest transition-all ${
+              className={`flex-1 flex items-center justify-center gap-3 px-6 py-4 rounded-xl font-cinzel text-xs uppercase tracking-widest transition-all ${
                 activeTab === "favorites"
                   ? "bg-bible-gold text-white shadow-lg shadow-bible-gold/20"
                   : "text-bible-muted hover:text-bible-gold"
@@ -73,7 +73,7 @@ export default function CommonBible() {
 
           {/* Search Bar */}
           {activeTab === "books" && (
-            <div className="relative w-full md:w-80 group">
+            <div className="md:col-span-7 relative group">
               <input
                 type="text"
                 data-testid="search-input"
@@ -92,47 +92,68 @@ export default function CommonBible() {
         <FavoriteVerses />
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 px-4">
-          {filteredBooks?.map((book, index) => (
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: index * 0.02, duration: 0.4 }}
-              key={book.abbrev}
-              data-testid="book-card"
-              onClick={() => navigate(`/read/${book.abbrev}/1`)}
-              className="group cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-bible-gold/50 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(201,168,76,0.2)]"
-            >
-              {/* Efeito de hover */}
-              <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-bible-gold/10 blur-3xl transition-all duration-500 group-hover:bg-bible-gold/30 pointer-events-none" />
-
-              <div className="relative z-10">
-                <div className="mb-4 flex items-start justify-between">
-                  <span className="font-cinzel text-[9px] bg-bible-gold/10 px-2 py-0.5 rounded-md text-bible-gold uppercase tracking-widest border border-bible-gold/20">
-                    {book.abbrev}
-                  </span>
-                  <span className="font-cinzel text-[10px] uppercase text-bible-muted bg-white/5 px-2 py-1 rounded border border-white/5">
-                    {book.testament === "VT"
-                      ? t("common.old_testament")
-                      : t("common.new_testament")}
-                  </span>
-                </div>
-
-                <h3 className="mb-2 font-serif text-2xl font-bold text-bible-parchment transition-colors group-hover:text-bible-gold-light">
-                  {book.name}
+          {filteredBooks?.length === 0 ? (
+            <div className="col-span-full py-20 text-center">
+              <motion.div
+                initial={{ opacity: 0, scale: 0.9 }}
+                animate={{ opacity: 1, scale: 1 }}
+                className="inline-block p-12 rounded-[2.5rem] bg-bible-card/40 border border-bible-gold/10 backdrop-blur-xl max-w-md w-full shadow-2xl"
+              >
+                <BookOpen
+                  size={48}
+                  className="mx-auto text-bible-gold/20 mb-6"
+                />
+                <h3 className="font-serif text-2xl text-bible-parchment mb-3">
+                  {t("common.no_results")}
                 </h3>
+                <p className="text-bible-muted text-xs font-cinzel tracking-[0.2em] uppercase opacity-60">
+                  {t("common.try_other_terms")}
+                </p>
+              </motion.div>
+            </div>
+          ) : (
+            filteredBooks?.map((book, index) => (
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ delay: index * 0.02, duration: 0.4 }}
+                key={book.abbrev}
+                data-testid="book-card"
+                onClick={() => navigate(`/chapters/${book.abbrev}`)}
+                className="group cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-bible-gold/50 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(201,168,76,0.2)]"
+              >
+                {/* Efeito de hover */}
+                <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-bible-gold/10 blur-3xl transition-all duration-500 group-hover:bg-bible-gold/30 pointer-events-none" />
 
-                <div className="flex items-center justify-between mt-6 text-sm text-bible-muted/80 pt-4 border-t border-white/5">
-                  <span className="font-cinzel uppercase text-[10px] tracking-widest">
-                    {book.chapters} {t("common.chapters")}
-                  </span>
+                <div className="relative z-10">
+                  <div className="mb-4 flex items-start justify-between">
+                    <span className="font-cinzel text-[9px] bg-bible-gold/10 px-2 py-0.5 rounded-md text-bible-gold uppercase tracking-widest border border-bible-gold/20">
+                      {book.abbrev}
+                    </span>
+                    <span className="font-cinzel text-[10px] uppercase text-bible-muted bg-white/5 px-2 py-1 rounded border border-white/5">
+                      {book.testament === "VT"
+                        ? t("common.old_testament")
+                        : t("common.new_testament")}
+                    </span>
+                  </div>
 
-                  <span className="flex items-center gap-1.5 text-bible-gold opacity-0 group-hover:opacity-100 transition-opacity font-cinzel text-[10px] tracking-widest uppercase">
-                    <BookOpen size={12} /> {t("common.read")}
-                  </span>
+                  <h3 className="mb-2 font-serif text-2xl font-bold text-bible-parchment transition-colors group-hover:text-bible-gold-light">
+                    {book.name}
+                  </h3>
+
+                  <div className="flex items-center justify-between mt-6 text-sm text-bible-muted/80 pt-4 border-t border-white/5">
+                    <span className="font-cinzel uppercase text-[10px] tracking-widest">
+                      {book.chapters} {t("common.chapters")}
+                    </span>
+
+                    <span className="flex items-center gap-1.5 text-bible-gold opacity-0 group-hover:opacity-100 transition-opacity font-cinzel text-[10px] tracking-widest uppercase">
+                      <BookOpen size={12} /> {t("common.read")}
+                    </span>
+                  </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            ))
+          )}
         </div>
       )}
     </div>

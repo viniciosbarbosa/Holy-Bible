@@ -154,21 +154,40 @@ export default function CustomCanon() {
           ) : (
             <motion.div key="books" className="space-y-6">
               <AnimatePresence mode="popLayout">
-                {displayedPhases.map((phase, idx) => (
+                {search && filteredPhases.length === 0 ? (
                   <motion.div
-                    key={phase.id}
-                    initial={{ opacity: 0, y: 30 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: idx * 0.05 }}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    className="text-center py-32 border-2 border-dashed border-bible-border rounded-[3rem] bg-bible-card backdrop-blur-sm px-8"
                   >
-                    <PhaseSection
-                      phase={phase}
-                      forceOpen={phasesToExpand.includes(phase.id)}
-                      searchQuery={search}
-                      onOpen={() => setBackgroundFromTheme(phase.theme)}
+                    <Library
+                      size={48}
+                      className="mx-auto text-bible-gold/20 mb-4"
                     />
+                    <h3 className="font-serif text-2xl text-bible-parchment mb-3">
+                      {t("common.no_results")}
+                    </h3>
+                    <p className="text-bible-muted text-xs font-cinzel tracking-[0.2em] uppercase opacity-60">
+                      {t("common.try_other_terms")}
+                    </p>
                   </motion.div>
-                ))}
+                ) : (
+                  displayedPhases.map((phase, idx) => (
+                    <motion.div
+                      key={phase.id}
+                      initial={{ opacity: 0, y: 30 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: idx * 0.05 }}
+                    >
+                      <PhaseSection
+                        phase={phase}
+                        forceOpen={phasesToExpand.includes(phase.id)}
+                        searchQuery={search}
+                        onOpen={() => setBackgroundFromTheme(phase.theme)}
+                      />
+                    </motion.div>
+                  ))
+                )}
               </AnimatePresence>
 
               {allPhases.length === 0 && (

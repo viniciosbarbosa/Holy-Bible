@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
-import { X, Plus, Book as BookIcon, Tags } from "lucide-react";
+import { X, Book as BookIcon, Tags } from "lucide-react";
 import { BUILT_IN_TAGS } from "../constants/tags";
 
 export const AddBookModal = () => {
@@ -15,7 +15,6 @@ export const AddBookModal = () => {
   const [name, setName] = useState("");
   const [sub, setSub] = useState("");
   const [tags, setTags] = useState<string[]>([]);
-  const [tagInput, setTagInput] = useState("");
 
   const allExistingTags = useMemo(() => {
     const tagsSet = new Set<string>();
@@ -42,7 +41,6 @@ export const AddBookModal = () => {
     setName("");
     setSub("");
     setTags([]);
-    setTagInput("");
     closeAllModals();
   };
 
@@ -54,12 +52,6 @@ export const AddBookModal = () => {
     }
   };
 
-  const handleAddCustomTag = () => {
-    if (tagInput && !tags.includes(tagInput)) {
-      setTags([...tags, tagInput]);
-      setTagInput("");
-    }
-  };
 
   return (
     <AnimatePresence>

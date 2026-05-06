@@ -1,6 +1,8 @@
 import { useParams, useNavigate } from "react-router-dom";
+import { useState } from "react";
 import { useBibleChapter } from "../api/use-bible-chapter";
-import { motion } from "framer-motion";
+import { useBibleBooks } from "../api/use-bible-books";
+import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import {
   ArrowLeft,
@@ -19,6 +21,7 @@ export default function BibleReader() {
   const { t } = useTranslation();
 
   const { addFavoriteVerse, removeFavoriteVerse, favoriteVerses } = useBibleStore();
+  const [showSavedFeedback, setShowSavedFeedback] = useState(false);
 
   const chapterNumber = parseInt(chapter || "1", 10);
   const translation = "por_onbv";
@@ -28,6 +31,8 @@ export default function BibleReader() {
     bookId || "",
     chapterNumber,
   );
+  
+  const { data: books } = useBibleBooks();
 
   const fontSize = useAppStore((state) => state.fontSize);
   const setFontSize = useAppStore((state) => state.setFontSize);
@@ -56,9 +61,50 @@ export default function BibleReader() {
         </button>
       </div>
     );
+    
+  const handlePrevious = () => {
+    if (chapterNumber > 1) {
+      navigate(`/read/${bookId}/${chapterNumber - 1}`);
+    } else if (books) {
+      const currentIndex = books.findIndex(b => b.abbrev === bookId);
+      if (currentIndex > 0) {
+        const prevBook = books[currentIndex - 1];
+        navigate(`/read/${prevBook.abbrev}/${prevBook.chapters}`);
+      }
+    }
+  };
+
+  const handleNext = () => {
+    if (data && chapterNumber < data.book.numberOfChapters) {
+      navigate(`/read/${bookId}/${chapterNumber + 1}`);
+    } else if (books) {
+      const currentIndex = books.findIndex(b => b.abbrev === bookId);
+      if (currentIndex < books.length - 1) {
+        const nextBook = books[currentIndex + 1];
+        navigate(`/read/${nextBook.abbrev}/1`);
+      }
+    }
+  };
+
+  const hasPrevious = chapterNumber > 1 || (books?.findIndex(b => b.abbrev === bookId) ?? -1) > 0;
+  const hasNext = (data && chapterNumber < data.book.numberOfChapters) || (books && (books.findIndex(b => b.abbrev === bookId) < books.length - 1));
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-32">
+      <AnimatePresence>
+        {showSavedFeedback && (
+          <motion.div
+            initial={{ opacity: 0, y: -50 }}
+            animate={{ opacity: 1, y: 20 }}
+            exit={{ opacity: 0, y: -50 }}
+            className="fixed top-4 left-1/2 -translate-x-1/2 z-[100] bg-bible-gold text-white px-6 py-3 rounded-full font-cinzel text-[10px] uppercase tracking-widest shadow-2xl flex items-center gap-2"
+          >
+            <Bookmark size={14} fill="white" />
+            {t("common.verse_saved")}
+          </motion.div>
+        )}
+      </AnimatePresence>
+
       {/* Immersive Header */}
       <header className="relative mb-12 p-8 md:p-12 rounded-[3rem] bg-bible-card/40 backdrop-blur-xl border border-bible-border shadow-2xl overflow-hidden text-center">
         <button
@@ -140,6 +186,8 @@ export default function BibleReader() {
                         verse: verse.number,
                         text: verse.content.join(" "),
                       });
+                      setShowSavedFeedback(true);
+                      setTimeout(() => setShowSavedFeedback(false), 2000);
                     }
                   }}
                   className={`absolute right-2 top-3 p-1.5 rounded-lg transition-all opacity-0 group-hover:opacity-100 
@@ -163,8 +211,8 @@ export default function BibleReader() {
       {/* Navigation */}
       <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0 px-4">
         <button
-          disabled={!data.previousChapterApiLink}
-          onClick={() => navigate(`/read/${bookId}/${chapterNumber - 1}`)}
+          disabled={!hasPrevious}
+          onClick={handlePrevious}
           className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl border border-bible-border text-bible-muted hover:text-bible-gold hover:border-bible-gold/30 transition-all font-cinzel text-xs uppercase tracking-widest disabled:opacity-20"
         >
           <ChevronLeft size={18} /> {t("common.previous")}
@@ -189,8 +237,8 @@ export default function BibleReader() {
         </div>
 
         <button
-          disabled={!data.nextChapterApiLink}
-          onClick={() => navigate(`/read/${bookId}/${chapterNumber + 1}`)}
+          disabled={!hasNext}
+          onClick={handleNext}
           className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-4 rounded-2xl bg-bible-gold text-white shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all font-cinzel text-xs uppercase tracking-widest disabled:opacity-20"
         >
           {t("common.next")} <ChevronRight size={18} />

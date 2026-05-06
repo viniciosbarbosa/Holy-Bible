@@ -41,6 +41,11 @@ const resources = {
         chapter: "Chapter",
         footer: "In Principio Erat Verbum",
         book_num: "Book {{num}}",
+        no_results: "No results found",
+        try_other_terms: "Try other sacred terms",
+        back: "Back",
+        opening_scrolls: "Opening the Scrolls...",
+        verse_saved: "Verse Saved!",
       },
       onboarding: {
         title: "Your Sacred Journey",
@@ -142,6 +147,11 @@ const resources = {
         chapter: "Capítulo",
         footer: "In Principio Erat Verbum",
         book_num: "Livro {{num}}",
+        no_results: "Exemplo não encontrado",
+        try_other_terms: "Tente outros termos sagrados",
+        back: "Voltar",
+        opening_scrolls: "Abrindo os Pergaminhos...",
+        verse_saved: "Versículo Salvo!",
       },
       onboarding: {
         title: "Sua Jornada Sagrada",

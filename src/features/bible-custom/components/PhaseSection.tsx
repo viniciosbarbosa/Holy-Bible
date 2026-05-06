@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useTranslation } from "react-i18next";
 import { motion, AnimatePresence } from "framer-motion";
 import { ChevronDown, PlusCircle, Trash2 } from "lucide-react";
 import type { Phase } from "../../../@types/bible";
@@ -17,14 +18,17 @@ interface Props {
 export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) => {
   const [isOpen, setIsOpen] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
+  const { t } = useTranslation();
   const deletePhase = useCustomCanonStore((state) => state.deletePhase);
   const { openAddBook } = useModalStore();
 
   useEffect(() => {
     if (forceOpen) {
       setIsOpen(true);
+    } else if (!searchQuery) {
+      setIsOpen(false);
     }
-  }, [forceOpen]);
+  }, [forceOpen, searchQuery]);
 
   const handleToggle = () => {
     const newState = !isOpen;
@@ -73,7 +77,7 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
                 {phase.title}
               </h2>
               <p className="text-[10px] text-bible-muted font-cinzel uppercase tracking-[0.2em]">
-                {phase.books.length} Livros na Jornada
+                {t("stats.books_in_journey", { count: phase.books.length })}
               </p>
             </div>
           </div>
@@ -90,14 +94,14 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
                   <button
                     onClick={handleAddBook}
                     className="p-2 text-bible-gold hover:bg-bible-gold/10 rounded-xl transition-all border border-bible-gold/20"
-                    title="Adicionar Livro"
+                    title={t("common.add_book")}
                   >
                     <PlusCircle size={16} />
                   </button>
                   <button
                     onClick={handleDeletePhase}
                     className="p-2 text-red-500/70 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all border border-red-500/20"
-                    title="Excluir Fase"
+                    title={t("common.delete")}
                   >
                     <Trash2 size={16} />
                   </button>
@@ -134,7 +138,7 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
                 ))}
                 {phase.books.length === 0 && (
                   <div className="col-span-full py-12 text-center text-bible-muted font-serif italic border border-dashed border-bible-border rounded-2xl">
-                    Sua biblioteca está vazia nesta fase. Comece a adicionar livros!
+                    {t("empty.phase_empty")}
                   </div>
                 )}
               </div>
@@ -163,22 +167,22 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
               <div className="w-16 h-16 bg-red-500/10 rounded-full flex items-center justify-center mx-auto mb-4 border border-red-500/20">
                 <Trash2 size={24} className="text-red-500" />
               </div>
-              <h3 className="font-cinzel text-lg text-bible-text mb-2">Excluir Fase?</h3>
+              <h3 className="font-cinzel text-lg text-bible-text mb-2">{t("confirm.delete_phase")}</h3>
               <p className="text-bible-muted text-sm mb-8 font-serif">
-                Isso removerá "{phase.title}" e todos os seus livros permanentemente.
+                {t("confirm.delete_phase_warning", { title: phase.title })}
               </p>
               <div className="flex gap-3">
                 <button 
                   onClick={() => setShowConfirmDelete(false)}
                   className="flex-1 py-3 px-4 rounded-xl border border-bible-border hover:bg-bible-gold/5 text-bible-muted transition-colors text-sm font-cinzel uppercase"
                 >
-                  Cancelar
+                  {t("common.cancel")}
                 </button>
                 <button 
                   onClick={confirmDelete}
                   className="flex-1 py-3 px-4 rounded-xl bg-red-500 text-white hover:bg-red-600 transition-all text-sm font-cinzel uppercase shadow-lg shadow-red-500/20"
                 >
-                  Excluir
+                  {t("common.delete")}
                 </button>
               </div>
             </motion.div>

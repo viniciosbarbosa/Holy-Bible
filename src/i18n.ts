@@ -40,17 +40,21 @@ const resources = {
         previous: "Previous",
         chapter: "Chapter",
         footer: "In Principio Erat Verbum",
+        book_num: "Book {{num}}",
       },
       onboarding: {
         title: "Your Sacred Journey",
         subtitle: "Choose how you want to organize your library",
         personal_title: "My Own Journey",
-        personal_desc: "Create everything from scratch. Add your own books, phases, and themes.",
+        personal_desc:
+          "Create everything from scratch. Add your own books, phases, and themes.",
         suggestion_title: "Guided Suggestion",
-        suggestion_desc: "Start with our curated canon of 250+ books across 19 historical phases.",
+        suggestion_desc:
+          "Start with our curated canon of 250+ books across 19 historical phases.",
         conventional_title: "Conventional Canon",
-        conventional_desc: "Access the traditional Bible with the standard 66 books and study tools.",
-        start: "Start Journey"
+        conventional_desc:
+          "Access the traditional Bible with the standard 66 books and study tools.",
+        start: "Start Journey",
       },
       modal: {
         add_books: "Add Books",
@@ -73,7 +77,8 @@ const resources = {
         new_tag: "New tag...",
         optional: "Optional",
         delete_confirm: "Are you sure you want to delete this book?",
-        delete_warning: "This will permanently remove \"{{name}}\" and all its {{count}} verses.",
+        delete_warning:
+          'This will permanently remove "{{name}}" and all its {{count}} verses.',
         status_acquisition: "Acquisition Status",
         reference: "Reference",
         content: "Content",
@@ -83,13 +88,21 @@ const resources = {
         progress: "Sacred Canon",
         completed: "of the journey completed",
         books_count: "{{read}} of {{total}} Books",
+        books_in_journey: "{{count}} Books in the Journey",
       },
       empty: {
         journey_not_started: "Your journey hasn't started yet.",
-        create_first_phase: "Create your first phase and start organizing your library.",
+        create_first_phase:
+          "Create your first phase and start organizing your library.",
         no_saved_verses: "Your sacred verse collection is empty.",
         add_verses_by_editing: "Add verses by editing your books.",
-      }
+        phase_empty: "Your library is empty in this phase. Start adding books!",
+      },
+      confirm: {
+        delete_phase: "Delete Phase?",
+        delete_phase_warning:
+          'This will permanently remove "{{title}}" and all its books.',
+      },
     },
   },
   pt: {
@@ -128,17 +141,21 @@ const resources = {
         previous: "Anterior",
         chapter: "Capítulo",
         footer: "In Principio Erat Verbum",
+        book_num: "Livro {{num}}",
       },
       onboarding: {
         title: "Sua Jornada Sagrada",
         subtitle: "Escolha como deseja organizar sua biblioteca",
         personal_title: "Minha Própria Jornada",
-        personal_desc: "Crie tudo do zero. Adicione seus próprios livros, fases e temas.",
+        personal_desc:
+          "Crie tudo do zero. Adicione seus próprios livros, fases e temas.",
         suggestion_title: "Sugestão Guiada",
-        suggestion_desc: "Comece com nosso cânone curado de 250+ livros em 19 fases históricas.",
+        suggestion_desc:
+          "Comece com nosso cânone curado de 250+ livros em 19 fases históricas.",
         conventional_title: "Cânone Convencional",
-        conventional_desc: "Acesse a Bíblia tradicional com os 66 livros padrões e ferramentas de estudo.",
-        start: "Iniciar Jornada"
+        conventional_desc:
+          "Acesse a Bíblia tradicional com os 66 livros padrões e ferramentas de estudo.",
+        start: "Iniciar Jornada",
       },
       modal: {
         add_books: "Adicionar Livros",
@@ -161,7 +178,8 @@ const resources = {
         new_tag: "Nova tag...",
         optional: "Opcional",
         delete_confirm: "Deseja excluir este livro?",
-        delete_warning: "Isso removerá permanentemente \"{{name}}\" e todos os seus {{count}} versículos.",
+        delete_warning:
+          'Isso removerá permanentemente "{{name}}" e todos os seus {{count}} versículos.',
         status_acquisition: "Status de Aquisição",
         reference: "Referência",
         content: "Conteúdo",
@@ -171,13 +189,22 @@ const resources = {
         progress: "Cânone Sagrado",
         completed: "da jornada concluída",
         books_count: "{{read}} de {{total}} Livros",
+        books_in_journey: "{{count}} Livros na Jornada",
       },
       empty: {
         journey_not_started: "Sua jornada ainda não começou.",
-        create_first_phase: "Crie sua primeira fase e comece a organizar sua biblioteca.",
+        create_first_phase:
+          "Crie sua primeira fase e comece a organizar sua biblioteca.",
         no_saved_verses: "Sua coleção de versículos está vazia.",
         add_verses_by_editing: "Adicione versículos editando seus livros.",
-      }
+        phase_empty:
+          "Sua biblioteca está vazia nesta fase. Comece a adicionar livros!",
+      },
+      confirm: {
+        delete_phase: "Excluir Fase?",
+        delete_phase_warning:
+          'Isso removerá permanentemente "{{title}}" e todos os seus livros.',
+      },
     },
   },
 };
@@ -194,7 +221,7 @@ i18n
     detection: {
       order: ["querystring", "cookie", "localStorage", "navigator", "htmlTag"],
       caches: ["localStorage", "cookie"],
-    }
+    },
   });
 
 export default i18n;

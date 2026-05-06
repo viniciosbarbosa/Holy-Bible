@@ -3,29 +3,36 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
-import { X, ArrowRight, ArrowLeft, PlusCircle, Hash, Tags } from "lucide-react";
+import { X, ArrowRight, ArrowLeft, PlusCircle, Tags } from "lucide-react";
 import { BibleTheme, DEFAULT_WALLPAPERS, Book } from "../../../@types/bible";
 import { BUILT_IN_TAGS } from "../constants/tags";
 
 export const AddPhaseModal = () => {
   const { t } = useTranslation();
   const { isAddPhaseOpen, closeAllModals } = useModalStore();
-  const { personalPhases, suggestionPhases, activeProfile, addPhase, addPhaseWithBooks } = useCustomCanonStore();
-  
-  const phases = activeProfile === "suggestion" ? suggestionPhases : personalPhases;
+  const {
+    personalPhases,
+    suggestionPhases,
+    activeProfile,
+    addPhase,
+    addPhaseWithBooks,
+  } = useCustomCanonStore();
+
+  const phases =
+    activeProfile === "suggestion" ? suggestionPhases : personalPhases;
   const nextPhaseNum = useMemo(() => {
-    const nums = phases.map(p => {
+    const nums = phases.map((p) => {
       const match = p.num.match(/\d+/);
       return match ? parseInt(match[0], 10) : 0;
     });
     return (nums.length > 0 ? Math.max(...nums) : 0) + 1;
   }, [phases]);
-  
+
   const [step, setStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [title, setTitle] = useState("");
   const [theme, setTheme] = useState<BibleTheme>("genesis");
-  
+
   // Book fields for Step 2
   const [books, setBooks] = useState<Omit<Book, "id">[]>([]);
   const [currentBookTitle, setCurrentBookTitle] = useState("");
@@ -34,8 +41,10 @@ export const AddPhaseModal = () => {
 
   const allExistingTags = useMemo(() => {
     const tagsSet = new Set<string>();
-    Object.values(BUILT_IN_TAGS).forEach(t => tagsSet.add(t.lbl));
-    phases.forEach(p => p.books.forEach(b => b.tags.forEach(t => tagsSet.add(t))));
+    Object.values(BUILT_IN_TAGS).forEach((t) => tagsSet.add(t.lbl));
+    phases.forEach((p) =>
+      p.books.forEach((b) => b.tags.forEach((t) => tagsSet.add(t))),
+    );
     return Array.from(tagsSet).sort();
   }, [phases]);
 
@@ -52,13 +61,16 @@ export const AddPhaseModal = () => {
 
   const handleAddCurrentBook = () => {
     if (!currentBookTitle) return;
-    setBooks([...books, { 
-      num: String(books.length + 1), 
-      name: currentBookTitle, 
-      sub: currentBookSub, 
-      tags: currentTags, 
-      savedVerses: [] 
-    }]);
+    setBooks([
+      ...books,
+      {
+        num: String(books.length + 1),
+        name: currentBookTitle,
+        sub: currentBookSub,
+        tags: currentTags,
+        savedVerses: [],
+      },
+    ]);
     setCurrentBookTitle("");
     setCurrentBookSub("");
     setCurrentTags([]);
@@ -66,7 +78,7 @@ export const AddPhaseModal = () => {
 
   const toggleTag = (tag: string) => {
     if (currentTags.includes(tag)) {
-      setCurrentTags(currentTags.filter(t => t !== tag));
+      setCurrentTags(currentTags.filter((t) => t !== tag));
     } else {
       setCurrentTags([...currentTags, tag]);
     }
@@ -75,7 +87,7 @@ export const AddPhaseModal = () => {
   const handleFinalSubmit = () => {
     if (!title || isSubmitting) return;
     setIsSubmitting(true);
-    
+
     const phaseData = {
       num: String(nextPhaseNum),
       title,
@@ -98,7 +110,7 @@ export const AddPhaseModal = () => {
     } else {
       addPhase(phaseData);
     }
-    
+
     reset();
     closeAllModals();
   };
@@ -111,7 +123,10 @@ export const AddPhaseModal = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0 }}
-            onClick={() => { reset(); closeAllModals(); }}
+            onClick={() => {
+              reset();
+              closeAllModals();
+            }}
             className="absolute inset-0 bg-black/95 backdrop-blur-md"
           />
 
@@ -126,7 +141,10 @@ export const AddPhaseModal = () => {
             className="relative w-full max-w-xl bg-bible-card border border-bible-border rounded-[2.5rem] p-10 shadow-2xl overflow-y-auto max-h-[90vh]"
           >
             <button
-              onClick={() => { reset(); closeAllModals(); }}
+              onClick={() => {
+                reset();
+                closeAllModals();
+              }}
               className="absolute top-8 right-8 text-bible-muted hover:text-bible-gold transition-colors"
             >
               <X size={24} />
@@ -143,8 +161,8 @@ export const AddPhaseModal = () => {
                 {step === 1 ? "Nova Jornada" : "O Primeiro Registro"}
               </h2>
               <p className="text-bible-muted font-serif italic text-sm mt-1 opacity-60">
-                {step === 1 
-                  ? "Defina o título e a atmosfera visual desta nova etapa." 
+                {step === 1
+                  ? "Defina o título e a atmosfera visual desta nova etapa."
                   : "Adicione o manuscrito inicial para começar sua biblioteca."}
               </p>
             </header>
@@ -178,15 +196,27 @@ export const AddPhaseModal = () => {
                       {t("modal.choose_theme")}
                     </label>
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {(["genesis", "exodus", "prophets", "gospels"] as BibleTheme[]).map((tName) => (
+                      {(
+                        [
+                          "genesis",
+                          "exodus",
+                          "prophets",
+                          "gospels",
+                        ] as BibleTheme[]
+                      ).map((tName) => (
                         <button
                           key={tName}
                           type="button"
                           onClick={() => setTheme(tName)}
                           className={`group relative h-20 rounded-2xl border transition-all overflow-hidden ${theme === tName ? "border-bible-gold ring-1 ring-bible-gold shadow-lg shadow-bible-gold/10" : "border-bible-border/30 hover:border-bible-gold/30"}`}
                         >
-                          <img src={DEFAULT_WALLPAPERS[tName]} className={`absolute inset-0 w-full h-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110 ${theme === tName ? "opacity-70 scale-110" : ""}`} />
-                          <span className="relative z-10 font-cinzel text-[8px] uppercase tracking-widest text-white">{tName.replace(/_/g, ' ')}</span>
+                          <img
+                            src={DEFAULT_WALLPAPERS[tName]}
+                            className={`absolute inset-0 w-full h-full object-cover opacity-40 transition-transform duration-700 group-hover:scale-110 ${theme === tName ? "opacity-70 scale-110" : ""}`}
+                          />
+                          <span className="relative z-10 font-cinzel text-[8px] uppercase tracking-widest text-white">
+                            {tName.replace(/_/g, " ")}
+                          </span>
                         </button>
                       ))}
                     </div>
@@ -214,12 +244,24 @@ export const AddPhaseModal = () => {
                   {books.length > 0 && (
                     <div className="space-y-2 max-h-32 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-bible-gold/20">
                       {books.map((b, i) => (
-                        <div key={i} className="flex items-center justify-between bg-bible-gold/5 p-4 rounded-xl border border-bible-gold/10">
+                        <div
+                          key={i}
+                          className="flex items-center justify-between bg-bible-gold/5 p-4 rounded-xl border border-bible-gold/10"
+                        >
                           <div className="flex flex-col">
-                            <span className="font-cinzel text-[10px] text-bible-gold uppercase tracking-widest">{b.name}</span>
-                            <span className="text-[9px] text-bible-muted italic font-serif">{b.sub}</span>
+                            <span className="font-cinzel text-[10px] text-bible-gold uppercase tracking-widest">
+                              {b.name}
+                            </span>
+                            <span className="text-[9px] text-bible-muted italic font-serif">
+                              {b.sub}
+                            </span>
                           </div>
-                          <button onClick={() => setBooks(books.filter((_, idx) => idx !== i))} className="text-red-500/30 hover:text-red-500 transition-colors">
+                          <button
+                            onClick={() =>
+                              setBooks(books.filter((_, idx) => idx !== i))
+                            }
+                            className="text-red-500/30 hover:text-red-500 transition-colors"
+                          >
                             <X size={14} />
                           </button>
                         </div>
@@ -254,26 +296,35 @@ export const AddPhaseModal = () => {
                           className="w-full bg-bible-dark/50 border border-bible-border/50 rounded-2xl p-4 text-bible-text focus:border-bible-gold outline-none transition-all placeholder:text-bible-muted/20"
                         />
                       </div>
-                      
+
                       <div className="space-y-3">
                         <label className="text-[10px] font-cinzel text-bible-gold uppercase tracking-[0.2em] ml-2 flex items-center gap-2">
                           <Tags size={12} /> {t("common.tags")}
                         </label>
                         <div className="flex flex-wrap gap-1.5 p-4 bg-bible-dark/30 rounded-2xl border border-bible-border/30">
-                          {currentTags.map(t => (
-                            <span key={t} className="bg-bible-gold/20 text-bible-gold px-2 py-1 rounded-lg text-[9px] font-cinzel border border-bible-gold/30 flex items-center gap-1">
-                              {t} <button onClick={() => toggleTag(t)}><X size={10}/></button>
+                          {currentTags.map((t) => (
+                            <span
+                              key={t}
+                              className="bg-bible-gold/20 text-bible-gold px-2 py-1 rounded-lg text-[9px] font-cinzel border border-bible-gold/30 flex items-center gap-1"
+                            >
+                              {t}{" "}
+                              <button onClick={() => toggleTag(t)}>
+                                <X size={10} />
+                              </button>
                             </span>
                           ))}
-                          {allExistingTags.filter(t => !currentTags.includes(t)).slice(0, 8).map(t => (
-                            <button 
-                              key={t}
-                              onClick={() => toggleTag(t)}
-                              className="bg-white/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold px-2 py-1 rounded-lg text-[9px] font-cinzel transition-all border border-transparent hover:border-bible-gold/20"
-                            >
-                              + {t}
-                            </button>
-                          ))}
+                          {allExistingTags
+                            .filter((t) => !currentTags.includes(t))
+                            .slice(0, 8)
+                            .map((t) => (
+                              <button
+                                key={t}
+                                onClick={() => toggleTag(t)}
+                                className="bg-white/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold px-2 py-1 rounded-lg text-[9px] font-cinzel transition-all border border-transparent hover:border-bible-gold/20"
+                              >
+                                + {t}
+                              </button>
+                            ))}
                         </div>
                       </div>
                     </div>
@@ -283,7 +334,7 @@ export const AddPhaseModal = () => {
                       disabled={!currentBookTitle}
                       className="w-full py-4 rounded-2xl border border-dashed border-bible-gold/30 text-bible-gold font-cinzel text-[10px] uppercase tracking-[0.3em] hover:bg-bible-gold/5 transition-all flex items-center justify-center gap-2"
                     >
-                      <PlusCircle size={16} /> {t("modal.add_another_book")}
+                      <PlusCircle size={16} /> {t("modal.add_books")}
                     </button>
                   </div>
 

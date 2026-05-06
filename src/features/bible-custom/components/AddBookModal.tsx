@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useModalStore } from "../../../store/use-modal-store";
 import { useCustomCanonStore } from "../../../store/use-custom-canon-store";
-import { X, Plus, Book as BookIcon, Tags, Hash } from "lucide-react";
+import { X, Plus, Book as BookIcon, Tags } from "lucide-react";
 import { BUILT_IN_TAGS } from "../constants/tags";
 
 export const AddBookModal = () => {
@@ -35,9 +35,14 @@ export const AddBookModal = () => {
       tags,
     });
     
+    reset();
+  };
+
+  const reset = () => {
     setName("");
     setSub("");
     setTags([]);
+    setTagInput("");
     closeAllModals();
   };
 
@@ -49,10 +54,9 @@ export const AddBookModal = () => {
     }
   };
 
-  const addTag = () => {
-    const val = tagInput.trim();
-    if (val && !tags.includes(val)) {
-      setTags([...tags, val]);
+  const handleAddCustomTag = () => {
+    if (tagInput && !tags.includes(tagInput)) {
+      setTags([...tags, tagInput]);
       setTagInput("");
     }
   };

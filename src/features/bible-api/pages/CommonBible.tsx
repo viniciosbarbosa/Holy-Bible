@@ -47,7 +47,7 @@ export default function CommonBible() {
         </h2>
 
         {/* Tab Switcher */}
-        <div className="flex flex-col md:flex-row items-center justify-center gap-6 mb-12 px-4">
+        <div className="flex flex-col md:flex-row items-center justify-start gap-6 mb-12 px-4">
           <div className="flex bg-bible-card/50 backdrop-blur-xl p-1.5 rounded-2xl border border-bible-gold/20 shadow-inner w-full md:w-auto">
             <button
               onClick={() => setActiveTab("books")}
@@ -111,7 +111,9 @@ export default function CommonBible() {
                     {book.abbrev}
                   </span>
                   <span className="font-cinzel text-[10px] uppercase text-bible-muted bg-white/5 px-2 py-1 rounded border border-white/5">
-                    {book.testament === "VT" ? t("common.old_testament") : t("common.new_testament")}
+                    {book.testament === "VT"
+                      ? t("common.old_testament")
+                      : t("common.new_testament")}
                   </span>
                 </div>
 

@@ -59,7 +59,7 @@ export const BookItem = ({
       {/* Header */}
       <div className="flex justify-between items-start mb-4 relative z-10">
         <span className="font-cinzel text-[9px] bg-bible-gold/10 px-2 py-0.5 rounded-md text-bible-gold uppercase tracking-widest border border-bible-gold/20">
-          Livro {book.num}
+          {t("common.book_num", { num: book.num })}
         </span>
 
         <div className="flex gap-1.5">

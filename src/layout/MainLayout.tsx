@@ -17,9 +17,11 @@ export const MainLayout = () => {
   const { theme, setTheme } = useTheme();
   const isAnyModalOpen = useModalStore((state) => state.isAnyModalOpen());
   const activeProfile = useCustomCanonStore((state) => state.activeProfile);
-  
+
   const currentBackground = useAppStore((state) => state.currentBackground);
-  const setBackgroundFromTheme = useAppStore((state) => state.setBackgroundFromTheme);
+  const setBackgroundFromTheme = useAppStore(
+    (state) => state.setBackgroundFromTheme,
+  );
 
   const { t } = useTranslation();
 
@@ -41,7 +43,9 @@ export const MainLayout = () => {
     }
   }, []);
 
-  const handleImageError = (e: React.SyntheticEvent<HTMLImageElement, Event>) => {
+  const handleImageError = (
+    e: React.SyntheticEvent<HTMLImageElement, Event>,
+  ) => {
     const target = e.target as HTMLImageElement;
     if (target.src !== DEFAULT_WALLPAPERS.genesis) {
       target.src = DEFAULT_WALLPAPERS.genesis;
@@ -50,10 +54,8 @@ export const MainLayout = () => {
 
   return (
     <div className="min-h-screen relative overflow-x-hidden transition-colors duration-700 bg-bible-dark text-bible-text font-serif">
-      <AnimatePresence>
-        {!activeProfile && <Onboarding />}
-      </AnimatePresence>
-      
+      <AnimatePresence>{!activeProfile && <Onboarding />}</AnimatePresence>
+
       {/* Background Master Parallax */}
       <div className="fixed inset-0 z-0 overflow-hidden pointer-events-none">
         <div ref={sceneRef} className="absolute -inset-[10%] w-[120%] h-[120%]">
@@ -80,7 +82,7 @@ export const MainLayout = () => {
       {/* App Header / Logo */}
       <AnimatePresence>
         {!isAnyModalOpen && (
-          <motion.header 
+          <motion.header
             initial={{ y: -100, opacity: 0 }}
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: -100, opacity: 0 }}
@@ -97,7 +99,7 @@ export const MainLayout = () => {
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <main className="relative z-10 pb-32 max-w-7xl mx-auto px-4 md:px-8">
+      <main className="relative z-10 pb-32 max-w-6xl mx-auto px-4 md:px-8">
         <AnimatePresence mode="popLayout">
           <motion.div
             key={location.pathname}
@@ -114,7 +116,7 @@ export const MainLayout = () => {
       {/* Floating Dock Navigation */}
       <AnimatePresence>
         {!isAnyModalOpen && (
-          <motion.nav 
+          <motion.nav
             initial={{ y: 100, x: "-50%", opacity: 0 }}
             animate={{ y: 0, x: "-50%", opacity: 1 }}
             exit={{ y: 100, x: "-50%", opacity: 0 }}
@@ -128,11 +130,15 @@ export const MainLayout = () => {
                     key={item.path}
                     to={item.path}
                     onClick={() => {
-                      if (item.path === '/default-bible') setBackgroundFromTheme('prophets');
-                      if (item.path === '/my-personal-bible') setBackgroundFromTheme('genesis');
+                      if (item.path === "/default-bible")
+                        setBackgroundFromTheme("prophets");
+                      if (item.path === "/my-personal-bible")
+                        setBackgroundFromTheme("genesis");
                     }}
                     className={`relative flex flex-col items-center justify-center min-w-[80px] h-14 md:h-16 px-3 rounded-xl transition-all duration-300 ${
-                      isActive ? "bg-bible-gold text-white shadow-[0_0_15px_rgba(201,168,76,0.5)]" : "text-bible-muted hover:text-bible-gold hover:bg-white/5"
+                      isActive
+                        ? "bg-bible-gold text-white shadow-[0_0_15px_rgba(201,168,76,0.5)]"
+                        : "text-bible-muted hover:text-bible-gold hover:bg-white/5"
                     }`}
                   >
                     <item.icon size={isActive ? 22 : 20} />
@@ -143,13 +149,17 @@ export const MainLayout = () => {
                       <motion.div
                         layoutId="dock-active"
                         className="absolute inset-0 rounded-xl bg-bible-gold -z-10"
-                        transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
+                        transition={{
+                          type: "spring",
+                          bounce: 0.2,
+                          duration: 0.6,
+                        }}
                       />
                     )}
                   </Link>
                 );
               })}
-              
+
               <div className="w-px h-8 bg-white/10 mx-2" />
 
               <button

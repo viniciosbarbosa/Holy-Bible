@@ -22,3 +22,15 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Test & coverage outputs
+playwright-report/
+test-results/
+coverage/
+.playwright-report
+.coverage
+.vitest_report
+.vitest_ui_report
+.vite_debug_log
+.vite_debug_log_*.txt
+.temp_*

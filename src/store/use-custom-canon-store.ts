@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
 import type { Phase, Book, SavedVerse, ProfileType } from "../@types/bible";
-import { CANON_DATA as DEFAULT_CANON_DATA } from "../features/bible-custom/constants/canon-data";
+import { CANON_DATA, CANON_DATA_ENGLISH } from "../features/bible-custom/constants/canon-data";
+import i18n from "../i18n";
 
 interface CustomCanonState {
   activeProfile: ProfileType | null;
@@ -28,6 +29,8 @@ interface CustomCanonState {
   addVerse: (phaseId: string, bookId: string, verse: Omit<SavedVerse, "id" | "timestamp">) => void;
   updateVerse: (phaseId: string, bookId: string, verseId: string, updates: Partial<SavedVerse>) => void;
   deleteVerse: (phaseId: string, bookId: string, verseId: string) => void;
+  
+  syncLanguage: (lang: string) => void;
 }
 
 // Exported so tests can import the type without circular deps
@@ -40,7 +43,9 @@ export const useCustomCanonStore = create<CustomCanonState>()(
     (set, get) => ({
       activeProfile: null,
       personalPhases: [],
-      suggestionPhases: DEFAULT_CANON_DATA,
+      suggestionPhases: (typeof window !== 'undefined' && (window.navigator.language.startsWith('pt') || i18n.language?.startsWith('pt'))) 
+        ? CANON_DATA 
+        : CANON_DATA_ENGLISH,
 
       setProfile: (type) => set({ activeProfile: type }),
       resetProfile: () => set({ activeProfile: null }),
@@ -241,6 +246,22 @@ export const useCustomCanonStore = create<CustomCanonState>()(
             return p;
           })
         };
+      }),
+
+      syncLanguage: (lang) => set((state) => {
+        // Only auto-sync if the user hasn't made any edits to the suggestion phases
+        // To keep it simple and performant, we check if it's identical to one of the defaults
+        const isDefaultPT = JSON.stringify(state.suggestionPhases) === JSON.stringify(CANON_DATA);
+        const isDefaultEN = JSON.stringify(state.suggestionPhases) === JSON.stringify(CANON_DATA_ENGLISH);
+        
+        if (isDefaultPT || isDefaultEN) {
+          const newCanon = lang.startsWith('pt') ? CANON_DATA : CANON_DATA_ENGLISH;
+          // Only update if it's actually different from current
+          if (JSON.stringify(state.suggestionPhases) !== JSON.stringify(newCanon)) {
+            return { suggestionPhases: newCanon };
+          }
+        }
+        return state;
       }),
     }),
     {

@@ -23,7 +23,12 @@ export const MainLayout = () => {
     (state) => state.setBackgroundFromTheme,
   );
 
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const syncLanguage = useCustomCanonStore((state) => state.syncLanguage);
+
+  useEffect(() => {
+    syncLanguage(i18n.language);
+  }, [i18n.language, syncLanguage]);
 
   const navItems = [
     { path: "/my-personal-bible", label: t("nav.my_bible"), icon: Library },

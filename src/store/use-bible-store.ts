@@ -6,9 +6,9 @@ export interface FavoriteVerse {
   id: string;
   bookName: string;
   bookAbbrev: string;
-  chapter: number;
-  verse: number;
-  text: string;
+  chapter: string;
+  verse: string;
+  text: string | any[];
   timestamp: number;
 }
 

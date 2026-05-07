@@ -21,6 +21,7 @@ export const EditBookModal = () => {
   const [newVerseRef, setNewVerseRef] = useState("");
   const [editingVerseId, setEditingVerseId] = useState<string | null>(null);
   const [editVerseText, setEditVerseText] = useState("");
+  const [editVerseRef, setEditVerseRef] = useState("");
 
   // Select the actual book from the store to ensure reactivity
   const activeBook = useMemo(() => {
@@ -45,11 +46,13 @@ export const EditBookModal = () => {
 
   const handleAddVerse = () => {
     if (!newVerseText || !newVerseRef) return;
-    const [chapter, verse] = newVerseRef.split(/[.: ]+/).map(Number);
+    const parts = newVerseRef.trim().split(/[:\s]+/);
+    const chapter = parts[0] || "1";
+    const verse = parts.slice(1).join(":") || "1";
     
     addVerse(activePhaseId, activeBook.id, {
-      chapter: chapter || 1,
-      verse: verse || 1,
+      chapter: chapter,
+      verse: verse,
       text: newVerseText,
     });
     setNewVerseText("");
@@ -59,10 +62,19 @@ export const EditBookModal = () => {
   const handleStartEditVerse = (v: SavedVerse) => {
     setEditingVerseId(v.id);
     setEditVerseText(v.text);
+    setEditVerseRef(`${v.chapter}:${v.verse}`);
   };
 
   const handleSaveEditVerse = (verseId: string) => {
-    updateVerse(activePhaseId, activeBook.id, verseId, { text: editVerseText });
+    const parts = editVerseRef.trim().split(/[:\s]+/);
+    const chapter = parts[0] || "1";
+    const verse = parts.slice(1).join(":") || "1";
+
+    updateVerse(activePhaseId, activeBook.id, verseId, { 
+      text: editVerseText,
+      chapter: chapter,
+      verse: verse
+    });
     setEditingVerseId(null);
   };
 
@@ -244,8 +256,17 @@ export const EditBookModal = () => {
                           </div>
                         </div>
 
-                        {editingVerseId === v.id ? (
+                         {editingVerseId === v.id ? (
                           <div className="space-y-3">
+                            <div className="flex gap-2">
+                              <input 
+                                type="text"
+                                value={editVerseRef}
+                                onChange={(e) => setEditVerseRef(e.target.value)}
+                                className="w-1/3 bg-bible-dark/50 border border-bible-gold/30 rounded-xl p-2 text-[10px] font-cinzel text-bible-gold focus:border-bible-gold outline-none"
+                                placeholder="1:5"
+                              />
+                            </div>
                             <textarea 
                               value={editVerseText}
                               onChange={(e) => setEditVerseText(e.target.value)}

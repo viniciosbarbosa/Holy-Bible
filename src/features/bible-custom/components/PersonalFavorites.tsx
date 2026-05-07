@@ -68,7 +68,26 @@ export const PersonalFavorites = () => {
             </div>
 
             <p className="font-serif text-lg text-bible-text leading-relaxed italic">
-              "{v.text}"
+              "
+              {Array.isArray(v.text)
+                ? v.text.map((item, index) => {
+                    if (typeof item === "string") {
+                      return <span key={index}>{item}</span>;
+                    }
+                    if (typeof item === "object" && item?.noteId) {
+                      return (
+                        <sup
+                          key={index}
+                          className="text-[10px] text-bible-gold ml-0.5 opacity-60"
+                        >
+                          {item.noteId}
+                        </sup>
+                      );
+                    }
+                    return null;
+                  })
+                : v.text.replace(/\[object Object\]/g, "")}
+              "
             </p>
           </motion.div>
         ))}

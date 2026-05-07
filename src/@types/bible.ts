@@ -8,9 +8,9 @@ export interface Tag {
 
 export interface SavedVerse {
   id: string;
-  chapter: number;
-  verse: number;
-  text: string;
+  chapter: string;
+  verse: string;
+  text: string | any[];
   timestamp: number;
 }
 

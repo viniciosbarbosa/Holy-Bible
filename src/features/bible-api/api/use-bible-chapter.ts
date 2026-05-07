@@ -4,7 +4,7 @@ import axios from "axios";
 export interface Verse {
   type: string;
   number: number;
-  content: string[];
+  content: (string | any)[];
 }
 
 export interface ChapterData {

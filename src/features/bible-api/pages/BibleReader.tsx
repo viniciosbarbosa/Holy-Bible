@@ -10,7 +10,7 @@ import {
   ChevronRight,
   Type,
   Bookmark,
-  Share2
+  Share2,
 } from "lucide-react";
 import { useAppStore } from "../../../store/use-app-store";
 import { useBibleStore } from "../../../store/use-bible-store";
@@ -20,7 +20,8 @@ export default function BibleReader() {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
-  const { addFavoriteVerse, removeFavoriteVerse, favoriteVerses } = useBibleStore();
+  const { addFavoriteVerse, removeFavoriteVerse, favoriteVerses } =
+    useBibleStore();
   const [showSavedFeedback, setShowSavedFeedback] = useState(false);
 
   const chapterNumber = parseInt(chapter || "1", 10);
@@ -31,7 +32,7 @@ export default function BibleReader() {
     bookId || "",
     chapterNumber,
   );
-  
+
   const { data: books } = useBibleBooks();
 
   const fontSize = useAppStore((state) => state.fontSize);
@@ -61,12 +62,12 @@ export default function BibleReader() {
         </button>
       </div>
     );
-    
+
   const handlePrevious = () => {
     if (chapterNumber > 1) {
       navigate(`/read/${bookId}/${chapterNumber - 1}`);
     } else if (books) {
-      const currentIndex = books.findIndex(b => b.abbrev === bookId);
+      const currentIndex = books.findIndex((b) => b.abbrev === bookId);
       if (currentIndex > 0) {
         const prevBook = books[currentIndex - 1];
         navigate(`/read/${prevBook.abbrev}/${prevBook.chapters}`);
@@ -78,7 +79,7 @@ export default function BibleReader() {
     if (data && chapterNumber < data.book.numberOfChapters) {
       navigate(`/read/${bookId}/${chapterNumber + 1}`);
     } else if (books) {
-      const currentIndex = books.findIndex(b => b.abbrev === bookId);
+      const currentIndex = books.findIndex((b) => b.abbrev === bookId);
       if (currentIndex < books.length - 1) {
         const nextBook = books[currentIndex + 1];
         navigate(`/read/${nextBook.abbrev}/1`);
@@ -86,8 +87,12 @@ export default function BibleReader() {
     }
   };
 
-  const hasPrevious = chapterNumber > 1 || (books?.findIndex(b => b.abbrev === bookId) ?? -1) > 0;
-  const hasNext = (data && chapterNumber < data.book.numberOfChapters) || (books && (books.findIndex(b => b.abbrev === bookId) < books.length - 1));
+  const hasPrevious =
+    chapterNumber > 1 ||
+    (books?.findIndex((b) => b.abbrev === bookId) ?? -1) > 0;
+  const hasNext =
+    (data && chapterNumber < data.book.numberOfChapters) ||
+    (books && books.findIndex((b) => b.abbrev === bookId) < books.length - 1);
 
   return (
     <div className="max-w-4xl mx-auto px-4 pb-32">
@@ -150,7 +155,7 @@ export default function BibleReader() {
         {/* Parchment effect */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/papyros.png')]" />
 
-        <div 
+        <div
           className="relative z-10 space-y-8 font-serif leading-[1.8] text-bible-text"
           style={{ fontSize: `${fontSize}px` }}
         >
@@ -158,12 +163,15 @@ export default function BibleReader() {
             const isFavorited = favoriteVerses.some(
               (v) =>
                 v.bookAbbrev === bookId &&
-                v.chapter === chapterNumber &&
-                v.verse === verse.number,
+                v.chapter === String(chapterNumber) &&
+                v.verse === String(verse.number),
             );
 
             return (
-              <div key={idx} className="group relative pl-10 md:pl-14 transition-all hover:bg-bible-gold/5 -mx-4 px-4 py-2 rounded-xl">
+              <div
+                key={idx}
+                className="group relative pl-10 md:pl-14 transition-all hover:bg-bible-gold/5 -mx-4 px-10 py-2 rounded-xl"
+              >
                 <span className="absolute left-2 md:left-4 top-3 text-[10px] md:text-xs font-cinzel text-bible-gold/30 group-hover:text-bible-gold/60 transition-colors">
                   {verse.number}
                 </span>
@@ -174,17 +182,17 @@ export default function BibleReader() {
                       const fav = favoriteVerses.find(
                         (v) =>
                           v.bookAbbrev === bookId &&
-                          v.chapter === chapterNumber &&
-                          v.verse === verse.number,
+                          v.chapter === String(chapterNumber) &&
+                          v.verse === String(verse.number),
                       );
                       if (fav) removeFavoriteVerse(fav.id);
                     } else {
                       addFavoriteVerse({
                         bookName: data.book.name,
                         bookAbbrev: bookId || "",
-                        chapter: chapterNumber,
-                        verse: verse.number,
-                        text: verse.content.join(" "),
+                        chapter: String(chapterNumber),
+                        verse: String(verse.number),
+                        text: verse.content,
                       });
                       setShowSavedFeedback(true);
                       setTimeout(() => setShowSavedFeedback(false), 2000);
@@ -201,6 +209,7 @@ export default function BibleReader() {
 
                 <p className="selection:bg-bible-gold/30">
                   {verse.content.join(" ")}
+                  <br />
                 </p>
               </div>
             );

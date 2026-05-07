@@ -48,6 +48,8 @@ const resources = {
         opening_scrolls: "Opening the Scrolls...",
         verse_saved: "Verse Saved!",
         phase_num: "PHASE {{num}}",
+        restart_journey: "Restart Journey",
+        theme: "Toggle Theme",
       },
       onboarding: {
         title: "Your Sacred Journey",
@@ -117,6 +119,7 @@ const resources = {
         delete_phase: "Delete Phase?",
         delete_phase_warning:
           'This will permanently remove "{{title}}" and all its books.',
+        restart_confirm: "Are you sure you want to restart your journey? All your personal phases and saved verses will be lost.",
       },
       legend: {
         missing_label: "MISSING",
@@ -176,6 +179,8 @@ const resources = {
         opening_scrolls: "Abrindo os Pergaminhos...",
         verse_saved: "Versículo Salvo!",
         phase_num: "FASE {{num}}",
+        restart_journey: "Recomeçar Jornada",
+        theme: "Alternar Tema",
       },
       onboarding: {
         title: "Sua Jornada Sagrada",
@@ -247,6 +252,7 @@ const resources = {
         delete_phase: "Excluir Fase?",
         delete_phase_warning:
           'Isso removerá permanentemente "{{title}}" e todos os seus livros.',
+        restart_confirm: "Tem certeza que deseja recomeçar sua jornada? Todas as suas fases personalizadas e versículos salvos serão perdidos.",
       },
       legend: {
         missing_label: "FALTANDO",

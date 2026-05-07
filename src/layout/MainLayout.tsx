@@ -9,7 +9,7 @@ import { useModalStore } from "../store/use-modal-store";
 import { useCustomCanonStore } from "../store/use-custom-canon-store";
 import { Onboarding } from "../features/onboarding/Onboarding";
 import { DEFAULT_WALLPAPERS } from "../@types/bible";
-import { Sun, Moon, Library, BookOpen } from "lucide-react";
+import { Sun, Moon, Library, BookOpen, RotateCcw } from "lucide-react";
 
 export const MainLayout = () => {
   const location = useLocation();
@@ -170,9 +170,21 @@ export const MainLayout = () => {
               <button
                 onClick={() => setTheme(theme === "dark" ? "light" : "dark")}
                 className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-xl text-bible-gold hover:bg-white/5 transition-all"
-                title="Alternar Tema"
+                title={t("common.theme")}
               >
                 {theme === "dark" ? <Sun size={20} /> : <Moon size={20} />}
+              </button>
+
+              <button
+                onClick={() => {
+                  if (confirm(t("confirm.restart_confirm"))) {
+                    useCustomCanonStore.getState().clearStore();
+                  }
+                }}
+                className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-xl text-red-500/70 hover:text-red-500 hover:bg-red-500/5 transition-all"
+                title={t("common.restart_journey")}
+              >
+                <RotateCcw size={20} />
               </button>
             </div>
           </motion.nav>

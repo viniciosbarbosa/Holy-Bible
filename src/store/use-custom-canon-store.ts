@@ -31,6 +31,7 @@ interface CustomCanonState {
   deleteVerse: (phaseId: string, bookId: string, verseId: string) => void;
   
   syncLanguage: (lang: string) => void;
+  clearStore: () => void;
 }
 
 // Exported so tests can import the type without circular deps
@@ -262,6 +263,14 @@ export const useCustomCanonStore = create<CustomCanonState>()(
           }
         }
         return state;
+      }),
+
+      clearStore: () => set({
+        activeProfile: null,
+        personalPhases: [],
+        suggestionPhases: (typeof window !== 'undefined' && (window.navigator.language.startsWith('pt') || i18n.language?.startsWith('pt'))) 
+          ? CANON_DATA 
+          : CANON_DATA_ENGLISH,
       }),
     }),
     {

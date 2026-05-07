@@ -183,7 +183,7 @@ describe("useCustomCanonStore", () => {
     it("addVerse() appends a verse with id and timestamp", () => {
       const { result } = renderHook(() => useCustomCanonStore());
       act(() =>
-        result.current.addVerse(phaseId, bookId, { chapter: 1, verse: 1, text: "No princípio..." })
+        result.current.addVerse(phaseId, bookId, { chapter: "1", verse: "1", text: "No princípio..." })
       );
       const verses = result.current.personalPhases[0].books[0].savedVerses ?? [];
       expect(verses).toHaveLength(1);
@@ -194,10 +194,10 @@ describe("useCustomCanonStore", () => {
     it("deleteVerse() removes only the target verse", () => {
       const { result } = renderHook(() => useCustomCanonStore());
       act(() =>
-        result.current.addVerse(phaseId, bookId, { chapter: 1, verse: 1, text: "V1" })
+        result.current.addVerse(phaseId, bookId, { chapter: "1", verse: "1", text: "V1" })
       );
       act(() =>
-        result.current.addVerse(phaseId, bookId, { chapter: 1, verse: 2, text: "V2" })
+        result.current.addVerse(phaseId, bookId, { chapter: "1", verse: "2", text: "V2" })
       );
       const verseId = result.current.personalPhases[0].books[0].savedVerses![0].id;
       act(() => result.current.deleteVerse(phaseId, bookId, verseId));
@@ -222,8 +222,8 @@ describe("useCustomCanonStore", () => {
                     : {
                         ...b,
                         savedVerses: [
-                          { id: "v1", chapter: 1, verse: 1, text: "First", timestamp: 1000 },
-                          { id: "v2", chapter: 1, verse: 2, text: "Second", timestamp: 2000 },
+                          { id: "v1", chapter: "1", verse: "1", text: "First", timestamp: 1000 },
+                          { id: "v2", chapter: "1", verse: "2", text: "Second", timestamp: 2000 },
                         ],
                       }
                 ),

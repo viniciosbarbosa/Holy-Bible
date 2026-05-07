@@ -66,8 +66,8 @@ describe("useBibleStore", () => {
   const sampleVerse = {
     bookName: "Gênesis",
     bookAbbrev: "gen",
-    chapter: 1,
-    verse: 1,
+    chapter: "1",
+    verse: "1",
     text: "No princípio Deus criou...",
   };
 
@@ -85,7 +85,7 @@ describe("useBibleStore", () => {
     it("accumulates multiple verses", () => {
       const { result } = renderHook(() => useBibleStore());
       act(() => result.current.addFavoriteVerse(sampleVerse));
-      act(() => result.current.addFavoriteVerse({ ...sampleVerse, verse: 2 }));
+      act(() => result.current.addFavoriteVerse({ ...sampleVerse, verse: "2" }));
       expect(result.current.favoriteVerses).toHaveLength(2);
     });
   });
@@ -102,7 +102,7 @@ describe("useBibleStore", () => {
     it("does not remove other verses", () => {
       const { result } = renderHook(() => useBibleStore());
       act(() => result.current.addFavoriteVerse(sampleVerse));
-      act(() => result.current.addFavoriteVerse({ ...sampleVerse, verse: 2 }));
+      act(() => result.current.addFavoriteVerse({ ...sampleVerse, verse: "2" }));
       const id = result.current.favoriteVerses[0].id;
       act(() => result.current.removeFavoriteVerse(id));
       expect(result.current.favoriteVerses).toHaveLength(1);

@@ -61,7 +61,7 @@ export const EditBookModal = () => {
 
   const handleStartEditVerse = (v: SavedVerse) => {
     setEditingVerseId(v.id);
-    setEditVerseText(v.text);
+    setEditVerseText(Array.isArray(v.text) ? v.text.join(" ") : v.text);
     setEditVerseRef(`${v.chapter}:${v.verse}`);
   };
 

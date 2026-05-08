@@ -4,6 +4,7 @@ import tailwindcss from "@tailwindcss/vite"; // <-- Importe aqui
 import path from "path";
 
 export default defineConfig({
+  base: "./",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

@@ -33,7 +33,7 @@ export const ScrollToTop = () => {
           animate={{ opacity: 1, scale: 1, y: 0 }}
           exit={{ opacity: 0, scale: 0.5, y: 20 }}
           onClick={scrollToTop}
-          className="fixed bottom-24 md:bottom-12 right-4 md:right-12 z-[100] w-10 h-10 md:w-14 md:h-14 flex items-center justify-center rounded-2xl bg-bible-card/80 backdrop-blur-xl border border-bible-gold/20 text-bible-gold shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-bible-gold hover:text-white transition-all duration-500 group"
+          className="fixed bottom-12 md:bottom-12 right-4 md:right-12 z-[100] w-12 h-12 md:w-14 md:h-14 flex items-center justify-center rounded-2xl bg-bible-card/80 backdrop-blur-xl border border-bible-gold/20 text-bible-gold shadow-[0_8px_32px_rgba(0,0,0,0.3)] hover:bg-bible-gold hover:text-white transition-all duration-500 group"
           title="Back to Top"
         >
           <ChevronUp size={24} className="group-hover:-translate-y-1 transition-transform" />

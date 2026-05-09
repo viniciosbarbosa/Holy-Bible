@@ -35,7 +35,18 @@ export const MainLayout = () => {
   const navItems = [
     { path: "/my-personal-bible", label: t("nav.my_bible"), icon: Library },
     { path: "/default-bible", label: t("nav.default_bible"), icon: BookOpen },
-  ];
+  ].filter((item) => {
+    // My Own Journey: Ambos
+    if (activeProfile === "personal") return true;
+
+    // My Personal (Sugestão Guiada): Apenas Personal
+    if (activeProfile === "suggestion") return item.path === "/my-personal-bible";
+
+    // Convencional: Apenas Convencional
+    if (activeProfile === "conventional") return item.path === "/default-bible";
+
+    return true;
+  });
 
   useEffect(() => {
     window.scrollTo(0, 0);

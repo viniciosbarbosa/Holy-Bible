@@ -141,7 +141,7 @@ export default function CustomCanon() {
         </div>
       </header>
 
-      <div className="px-4 space-y-6 pb-20">
+      <div className="px-4 space-y-6 pb-1">
         <AnimatePresence mode="wait">
           {activeTab === "favorites" ? (
             <motion.div

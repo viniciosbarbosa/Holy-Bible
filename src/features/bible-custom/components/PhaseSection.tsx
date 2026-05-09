@@ -66,44 +66,44 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
         <motion.header
           layout="position"
           onClick={handleToggle}
-          className="relative z-20 p-5 md:p-6 cursor-pointer flex items-center justify-between group"
+          className="relative z-20 p-4 md:p-6 cursor-pointer flex items-center justify-between group"
         >
-          <div className="flex items-center gap-4 flex-1 min-w-0">
-            <div className="shrink-0 w-12 h-12 flex items-center justify-center bg-bible-gold text-white font-cinzel text-xs font-bold rounded-full shadow-lg shadow-bible-gold/10 border border-bible-gold/20">
+          <div className="flex items-center gap-3 md:gap-4 flex-1 min-w-0">
+            <div className="shrink-0 w-10 h-10 md:w-12 md:h-12 flex items-center justify-center bg-bible-gold text-white font-cinzel text-[10px] md:text-xs font-bold rounded-full shadow-lg shadow-bible-gold/10 border border-bible-gold/20">
               {phase.num.replace('Fase ', '').padStart(2, '0')}
             </div>
             <div className="flex-1 min-w-0 flex flex-col justify-center">
-              <h2 className="font-cinzel text-[15px] md:text-lg tracking-[0.1em] text-bible-gold group-hover:text-bible-gold-light transition-colors leading-tight mb-0.5">
+              <h2 className="font-cinzel text-[13px] md:text-lg tracking-[0.05em] md:tracking-[0.1em] text-bible-gold group-hover:text-bible-gold-light transition-colors leading-tight mb-0.5 truncate">
                 {phase.title}
               </h2>
-              <p className="text-[9px] text-bible-muted font-cinzel uppercase tracking-[0.15em] opacity-60">
+              <p className="text-[8px] md:text-[9px] text-bible-muted font-cinzel uppercase tracking-[0.1em] md:tracking-[0.15em] opacity-60">
                 {t("stats.books_in_journey", { count: phase.books.length })}
               </p>
             </div>
           </div>
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2 md:gap-3">
             <AnimatePresence>
               {isOpen && (
                 <motion.div
-                  initial={{ opacity: 0, x: 20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  exit={{ opacity: 0, x: 20 }}
-                  className="flex items-center gap-2 mr-2"
+                  initial={{ opacity: 0, scale: 0.8 }}
+                  animate={{ opacity: 1, scale: 1 }}
+                  exit={{ opacity: 0, scale: 0.8 }}
+                  className="flex items-center gap-1.5 md:gap-2 mr-1"
                 >
                   <button
                     onClick={handleAddBook}
-                    className="p-2 text-bible-gold hover:bg-bible-gold/10 rounded-xl transition-all border border-bible-gold/20"
+                    className="p-1.5 md:p-2 text-bible-gold hover:bg-bible-gold/10 rounded-xl transition-all border border-bible-gold/20"
                     title={t("common.add_book")}
                   >
-                    <PlusCircle size={16} />
+                    <PlusCircle size={14} md:size={16} />
                   </button>
                   <button
                     onClick={handleDeletePhase}
-                    className="p-2 text-red-500/70 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all border border-red-500/20"
+                    className="p-1.5 md:p-2 text-red-500/70 hover:text-red-500 hover:bg-red-500/10 rounded-xl transition-all border border-red-500/20"
                     title={t("common.delete")}
                   >
-                    <Trash2 size={16} />
+                    <Trash2 size={14} md:size={16} />
                   </button>
                 </motion.div>
               )}
@@ -111,9 +111,9 @@ export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) =
 
             <motion.div
               animate={{ rotate: isOpen ? 180 : 0 }}
-              className="w-8 h-8 rounded-full bg-bible-gold/5 flex items-center justify-center border border-bible-gold/10 group-hover:bg-bible-gold/20 transition-all"
+              className="w-7 h-7 md:w-8 md:h-8 rounded-full bg-bible-gold/5 flex items-center justify-center border border-bible-gold/10 group-hover:bg-bible-gold/20 transition-all"
             >
-              <ChevronDown className="text-bible-gold" size={16} />
+              <ChevronDown className="text-bible-gold" size={14} md:size={16} />
             </motion.div>
           </div>
         </motion.header>

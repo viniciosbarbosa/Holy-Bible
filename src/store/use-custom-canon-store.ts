@@ -159,19 +159,45 @@ export const useCustomCanonStore = create<CustomCanonState>()(
       getAllSavedVerses: () => {
         const state = get();
         const phases = state.activeProfile === "suggestion" ? state.suggestionPhases : state.personalPhases;
-        const all: (SavedVerse & { bookTitle: string; phaseId: string; bookId: string })[] = [];
+        const all: (SavedVerse & { 
+          bookTitle: string; 
+          phaseId: string; 
+          bookId: string;
+          phaseIndex: number;
+          bookIndex: number;
+        })[] = [];
         
-        phases.forEach(p => {
-          p.books.forEach(b => {
+        phases.forEach((p, phaseIdx) => {
+          p.books.forEach((b, bookIdx) => {
             if (b.savedVerses) {
               b.savedVerses.forEach(v => {
-                all.push({ ...v, bookTitle: b.name, phaseId: p.id, bookId: b.id });
+                all.push({ 
+                  ...v, 
+                  bookTitle: b.name, 
+                  phaseId: p.id, 
+                  bookId: b.id,
+                  phaseIndex: phaseIdx,
+                  bookIndex: bookIdx
+                });
               });
             }
           });
         });
         
-        return all.sort((a, b) => b.timestamp - a.timestamp);
+        return all.sort((a, b) => {
+          // 1. Sort by Phase Order (Canonical)
+          if (a.phaseIndex !== b.phaseIndex) return a.phaseIndex - b.phaseIndex;
+
+          // 2. Sort by Book Order within Phase (Canonical)
+          if (a.bookIndex !== b.bookIndex) return a.bookIndex - b.bookIndex;
+
+          // 3. Then by chapter (numeric sort)
+          const chapterCompare = a.chapter.localeCompare(b.chapter, undefined, { numeric: true });
+          if (chapterCompare !== 0) return chapterCompare;
+
+          // 4. Then by verse (numeric sort)
+          return a.verse.localeCompare(b.verse, undefined, { numeric: true });
+        });
       },
       
       addVerse: (phaseId, bookId, verseData) => set((state) => {

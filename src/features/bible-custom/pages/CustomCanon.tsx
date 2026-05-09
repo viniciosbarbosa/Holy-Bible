@@ -88,12 +88,12 @@ export default function CustomCanon() {
       <StatsHeader />
 
       <header className="mb-16">
-        <div className=" mx-auto flex flex-col md:flex-row items-center justify-between gap-8 px-4">
+        <div className="mx-auto flex flex-col md:flex-row md:items-center justify-between gap-6 md:gap-8 px-4">
           {/* Action Tabs */}
-          <div className="flex items-center p-1.5 bg-bible-card/60 backdrop-blur-md border border-bible-border/30 rounded-[1.25rem] shadow-xl">
+          <div className="w-full md:w-auto flex items-center p-1.5 bg-bible-card/60 backdrop-blur-md border border-bible-border/30 rounded-[1.25rem] shadow-xl">
             <button
               onClick={() => setActiveTab("books")}
-              className={`flex items-center gap-2 px-8 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${
                 activeTab === "books"
                   ? "bg-bible-gold text-white shadow-[0_4px_20px_rgba(201,168,76,0.3)]"
                   : "text-bible-muted hover:text-bible-gold"
@@ -103,9 +103,9 @@ export default function CustomCanon() {
             </button>
             <button
               onClick={() => setActiveTab("favorites")}
-              className={`flex items-center gap-2 px-8 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${
+              className={`flex-1 md:flex-none flex items-center justify-center gap-2 px-8 py-3 rounded-xl font-cinzel text-[10px] uppercase tracking-[0.2em] transition-all duration-500 ${
                 activeTab === "favorites"
-                  ? "bg-bible-gold text-white shadow-[0_4px_20px_rgba(201,168,76,0.3)]"
+                  ? "bg-bible-gold text-white shadow-[0_4_20px_rgba(201,168,76,0.3)]"
                   : "text-bible-muted hover:text-bible-gold"
               }`}
             >
@@ -113,30 +113,31 @@ export default function CustomCanon() {
             </button>
           </div>
 
-          {/* Centered Search Bar */}
-          {activeTab === "books" && (
-            <div className="flex-1 max-w-xl w-full">
-              <div className="relative group">
+          {/* Search and Add Action Group */}
+          <div className="flex items-center gap-3 w-full md:flex-1 md:max-w-3xl">
+            {activeTab === "books" && (
+              <div className="flex-1 relative group">
                 <input
                   type="text"
                   value={search}
                   onChange={(e) => setSearch(e.target.value)}
                   placeholder={t("common.search_placeholder")}
-                  className="w-full bg-bible-card/60 backdrop-blur-2xl border border-bible-border/30 rounded-[1.25rem] py-4 px-10 text-bible-text text-sm focus:border-bible-gold/50 outline-none transition-all placeholder:text-bible-muted/40 shadow-2xl"
+                  className="w-full bg-bible-card/60 backdrop-blur-2xl border border-bible-border/30 rounded-[1.25rem] py-4 px-6 md:px-10 text-bible-text text-sm focus:border-bible-gold/50 outline-none transition-all placeholder:text-bible-muted/40 shadow-2xl"
                 />
                 <div className="absolute inset-0 rounded-[1.25rem] bg-bible-gold/5 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none" />
               </div>
-            </div>
-          )}
+            )}
 
-          {/* Add Phase Button */}
-          <button
-            onClick={openAddPhase}
-            data-testid="add-phase-btn"
-            className="flex items-center gap-3 bg-bible-gold text-white px-10 py-4 rounded-[1.25rem] transition-all font-cinzel text-[10px] uppercase tracking-[0.3em] shadow-[0_8px_25px_rgba(201,168,76,0.25)] hover:scale-[1.02] active:scale-95 whitespace-nowrap"
-          >
-            <PlusCircle size={18} /> {t("common.add_phase")}
-          </button>
+            <button
+              onClick={openAddPhase}
+              data-testid="add-phase-btn"
+              className="flex items-center justify-center gap-3 bg-bible-gold text-white h-[52px] md:h-auto px-4 md:px-10 py-4 rounded-[1.25rem] transition-all font-cinzel text-[10px] uppercase tracking-[0.3em] shadow-[0_8px_25px_rgba(201,168,76,0.25)] hover:scale-[1.02] active:scale-95 whitespace-nowrap shrink-0"
+              title={t("common.add_phase")}
+            >
+              <PlusCircle size={20} />
+              <span className="hidden md:inline">{t("common.add_phase")}</span>
+            </button>
+          </div>
         </div>
       </header>
 

@@ -229,8 +229,15 @@ export const EditBookModal = () => {
                     <Quote size={14} /> {t("common.sacred_verses")}
                   </h3>
 
-                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 mb-8 min-h-[300px] scrollbar-thin scrollbar-thumb-bible-gold/20">
-                    {activeBook.savedVerses?.map((v: SavedVerse) => (
+                  <div className="flex-1 overflow-y-auto space-y-6 pr-2 mb-8 max-h-[350px] md:max-h-[450px] scrollbar-thin scrollbar-thumb-bible-gold/20">
+                    {activeBook.savedVerses
+                      ?.slice()
+                      .sort((a, b) => {
+                        const chapterCompare = a.chapter.localeCompare(b.chapter, undefined, { numeric: true });
+                        if (chapterCompare !== 0) return chapterCompare;
+                        return a.verse.localeCompare(b.verse, undefined, { numeric: true });
+                      })
+                      .map((v: SavedVerse) => (
                       <motion.div 
                         layout
                         key={v.id} 
@@ -262,7 +269,7 @@ export const EditBookModal = () => {
                               <input 
                                 type="text"
                                 value={editVerseRef}
-                                onChange={(e) => setEditVerseRef(e.target.value)}
+                                onChange={(e) => setEditVerseRef(e.target.value.replace(/[^0-9:.-]/g, ""))}
                                 className="w-1/3 bg-bible-dark/50 border border-bible-gold/30 rounded-xl p-2 text-[10px] font-cinzel text-bible-gold focus:border-bible-gold outline-none"
                                 placeholder="1:5"
                               />
@@ -304,7 +311,7 @@ export const EditBookModal = () => {
                           type="text"
                           placeholder="1.5"
                           value={newVerseRef}
-                          onChange={(e) => setNewVerseRef(e.target.value)}
+                          onChange={(e) => setNewVerseRef(e.target.value.replace(/[^0-9:.-]/g, ""))}
                           className="w-full bg-bible-dark/50 border border-bible-border rounded-xl px-4 py-3 text-xs font-cinzel outline-none focus:border-bible-gold transition-all"
                         />
                       </div>

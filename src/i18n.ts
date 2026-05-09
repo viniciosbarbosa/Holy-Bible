@@ -50,6 +50,11 @@ const resources = {
         phase_num: "PHASE {{num}}",
         restart_journey: "Restart Journey",
         theme: "Toggle Theme",
+        manage_data: "Sacred Data",
+        export_backup: "Export Backup",
+        export_desc: "Download your entire journey into a JSON file.",
+        import_backup: "Restore Backup",
+        import_desc: "Upload a previously saved backup file.",
       },
       onboarding: {
         title: "Your Sacred Journey",
@@ -180,6 +185,11 @@ const resources = {
         phase_num: "FASE {{num}}",
         restart_journey: "Recomeçar Jornada",
         theme: "Alternar Tema",
+        manage_data: "Dados Sagrados",
+        export_backup: "Exportar Backup",
+        export_desc: "Baixe sua jornada completa em um arquivo JSON.",
+        import_backup: "Restaurar Backup",
+        import_desc: "Suba um arquivo de backup salvo anteriormente.",
       },
       onboarding: {
         title: "Sua Jornada Sagrada",

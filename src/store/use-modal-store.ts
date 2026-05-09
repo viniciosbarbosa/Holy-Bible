@@ -4,6 +4,7 @@ interface ModalState {
   isEditBookOpen: boolean;
   isAddPhaseOpen: boolean;
   isAddBookOpen: boolean;
+  isResetModalOpen: boolean;
   
   activeBookId: string | null;
   activePhaseId: string | null;
@@ -11,6 +12,7 @@ interface ModalState {
   openEditBook: (bookId: string, phaseId: string) => void;
   openAddPhase: () => void;
   openAddBook: (phaseId: string) => void;
+  openResetModal: () => void;
   
   closeAllModals: () => void;
   isAnyModalOpen: () => boolean;
@@ -20,13 +22,14 @@ export const useModalStore = create<ModalState>((set, get) => ({
   isEditBookOpen: false,
   isAddPhaseOpen: false,
   isAddBookOpen: false,
+  isResetModalOpen: false,
   
   activeBookId: null,
   activePhaseId: null,
   
   isAnyModalOpen: () => {
     const state = get();
-    return state.isEditBookOpen || state.isAddPhaseOpen || state.isAddBookOpen;
+    return state.isEditBookOpen || state.isAddPhaseOpen || state.isAddBookOpen || state.isResetModalOpen;
   },
   
   openEditBook: (bookId, phaseId) =>
@@ -35,7 +38,16 @@ export const useModalStore = create<ModalState>((set, get) => ({
     set({ isAddPhaseOpen: true }),
   openAddBook: (phaseId) =>
     set({ isAddBookOpen: true, activePhaseId: phaseId }),
+  openResetModal: () =>
+    set({ isResetModalOpen: true }),
   
   closeAllModals: () =>
-    set({ isEditBookOpen: false, isAddPhaseOpen: false, isAddBookOpen: false, activeBookId: null, activePhaseId: null }),
+    set({ 
+      isEditBookOpen: false, 
+      isAddPhaseOpen: false, 
+      isAddBookOpen: false, 
+      isResetModalOpen: false,
+      activeBookId: null, 
+      activePhaseId: null 
+    }),
 }));

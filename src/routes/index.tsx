@@ -1,6 +1,6 @@
 import { lazy, Suspense } from "react";
 import {
-  createHashRouter,
+  createBrowserRouter,
   RouterProvider,
   Navigate,
 } from "react-router-dom";
@@ -38,7 +38,7 @@ const RootRedirect = () => {
   return <Navigate to="/my-personal-bible" replace />;
 };
 
-const router = createHashRouter([
+const router = createBrowserRouter([
   {
     path: "/",
     element: <MainLayout />,
@@ -105,7 +105,9 @@ const router = createHashRouter([
       },
     ],
   },
-]);
+], {
+  basename: import.meta.env.BASE_URL
+});
 
 /**
  * Provider principal que será injetado no seu main.tsx

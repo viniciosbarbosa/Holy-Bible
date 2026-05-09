@@ -10,6 +10,8 @@ import { useCustomCanonStore } from "../store/use-custom-canon-store";
 import { Onboarding } from "../features/onboarding/Onboarding";
 import { DEFAULT_WALLPAPERS } from "../@types/bible";
 import { Sun, Moon, Library, BookOpen, RotateCcw } from "lucide-react";
+import { ResetJourneyModal } from "../features/bible-custom/components/ResetJourneyModal";
+import { ScrollToTop } from "../components/ScrollToTop";
 
 export const MainLayout = () => {
   const location = useLocation();
@@ -177,9 +179,7 @@ export const MainLayout = () => {
 
               <button
                 onClick={() => {
-                  if (confirm(t("confirm.restart_confirm"))) {
-                    useCustomCanonStore.getState().clearStore();
-                  }
+                  useModalStore.getState().openResetModal();
                 }}
                 className="w-14 h-14 md:w-16 md:h-16 flex items-center justify-center rounded-xl text-red-500/70 hover:text-red-500 hover:bg-red-500/5 transition-all"
                 title={t("common.restart_journey")}
@@ -190,6 +190,9 @@ export const MainLayout = () => {
           </motion.nav>
         )}
       </AnimatePresence>
+
+      <ResetJourneyModal />
+      <ScrollToTop />
     </div>
   );
 };

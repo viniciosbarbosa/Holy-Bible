@@ -1,5 +1,6 @@
 {
   "name": "holy-bible",
+  "homepage": "https://viniciosbarbosa.github.io/holy-bible/",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,7 +8,7 @@
     "predeploy": "npm run build",
     "deploy": "gh-pages -d dist",
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "rm -rf dist && vite build && cp dist/index.html dist/404.html",
     "lint": "eslint .",
     "preview": "vite preview",
     "tailwind-init": "tailwindcss init -p",

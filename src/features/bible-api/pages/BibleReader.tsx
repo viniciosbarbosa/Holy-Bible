@@ -25,7 +25,8 @@ export default function BibleReader() {
   const [showSavedFeedback, setShowSavedFeedback] = useState(false);
 
   const chapterNumber = parseInt(chapter || "1", 10);
-  const translation = "por_onbv";
+  const { i18n } = useTranslation();
+  const translation = i18n.language.startsWith("pt") ? "por_onbv" : "eng_web";
 
   const { data, isLoading, isError } = useBibleChapter(
     translation,
@@ -208,8 +209,17 @@ export default function BibleReader() {
                 </button>
 
                 <p className="selection:bg-bible-gold/30">
-                  {verse.content.join(" ")}
-                  <br />
+                  {verse.content.map((item, i) => {
+                    if (typeof item === "string") return item;
+                    if (typeof item === "object" && item !== null) {
+                      return (
+                        <sup key={i} className="text-[10px] text-bible-gold mx-0.5 opacity-60 font-cinzel">
+                          {item.noteId}
+                        </sup>
+                      );
+                    }
+                    return null;
+                  })}
                 </p>
               </div>
             );

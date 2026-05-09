@@ -11,6 +11,7 @@ import { Onboarding } from "../features/onboarding/Onboarding";
 import { DEFAULT_WALLPAPERS } from "../@types/bible";
 import { Sun, Moon, Library, BookOpen, RotateCcw } from "lucide-react";
 import { ResetJourneyModal } from "../features/bible-custom/components/ResetJourneyModal";
+import { ScrollToTop } from "../components/ScrollToTop";
 
 export const MainLayout = () => {
   const location = useLocation();
@@ -191,6 +192,7 @@ export const MainLayout = () => {
       </AnimatePresence>
 
       <ResetJourneyModal />
+      <ScrollToTop />
     </div>
   );
 };

@@ -1,7 +1,8 @@
 import { motion } from "framer-motion";
 import { useTranslation } from "react-i18next";
 import { useCustomCanonStore } from "../../store/use-custom-canon-store";
-import { User, Sparkles, ArrowRight, Library } from "lucide-react";
+import { User, Sparkles, ArrowRight, Library, RotateCcw } from "lucide-react";
+import { useModalStore } from "../../store/use-modal-store";
 
 export const Onboarding = () => {
   const { t } = useTranslation();
@@ -11,7 +12,7 @@ export const Onboarding = () => {
     <div className="fixed inset-0 z-[2000] bg-bible-dark flex items-center justify-center p-6 overflow-y-auto">
       <div className="max-w-4xl w-full">
         <header className="text-center mb-16">
-          <motion.h1 
+          <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             data-testid="onboarding-title"
@@ -19,7 +20,7 @@ export const Onboarding = () => {
           >
             {t("onboarding.title")}
           </motion.h1>
-          <motion.p 
+          <motion.p
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
@@ -30,29 +31,6 @@ export const Onboarding = () => {
         </header>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {/* Personal Journey */}
-          <motion.button
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            data-testid="profile-personal-btn"
-            onClick={() => setProfile("personal")}
-            className="group relative bg-bible-card border border-bible-border rounded-[2.5rem] p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
-          >
-            <div className="w-12 h-12 rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-6 group-hover:scale-110 transition-transform">
-              <User size={24} />
-            </div>
-            <h2 className="font-cinzel text-xl text-bible-gold mb-3 uppercase tracking-widest leading-tight">
-              {t("onboarding.personal_title")}
-            </h2>
-            <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
-              {t("onboarding.personal_desc")}
-            </p>
-            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
-              {t("onboarding.start")} <ArrowRight size={14} />
-            </div>
-          </motion.button>
-
           {/* Suggestion Journey */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
@@ -70,6 +48,29 @@ export const Onboarding = () => {
             </h2>
             <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
               {t("onboarding.suggestion_desc")}
+            </p>
+            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+              {t("onboarding.start")} <ArrowRight size={14} />
+            </div>
+          </motion.button>
+
+          {/* Personal Journey */}
+          <motion.button
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.3 }}
+            data-testid="profile-personal-btn"
+            onClick={() => setProfile("personal")}
+            className="group relative bg-bible-card border border-bible-border rounded-[2.5rem] p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
+          >
+            <div className="w-12 h-12 rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-6 group-hover:scale-110 transition-transform">
+              <User size={24} />
+            </div>
+            <h2 className="font-cinzel text-xl text-bible-gold mb-3 uppercase tracking-widest leading-tight">
+              {t("onboarding.personal_title")}
+            </h2>
+            <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
+              {t("onboarding.personal_desc")}
             </p>
             <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
               {t("onboarding.start")} <ArrowRight size={14} />
@@ -100,9 +101,24 @@ export const Onboarding = () => {
           </motion.button>
         </div>
 
-        <footer className="mt-20 text-center text-bible-muted/30 font-cinzel text-[10px] tracking-[0.5em] uppercase">
-          Holy Bible Journey Engine v2.0
-        </footer>
+        <div className="mt-20 flex flex-col items-center gap-6">
+          <div className="h-px w-24 bg-bible-gold/20" />
+
+          <button
+            onClick={() => useModalStore.getState().openResetModal()}
+            className="flex items-center gap-3 px-8 py-4 bg-bible-card border border-bible-border rounded-2xl text-bible-gold font-cinzel text-xs tracking-widest hover:border-bible-gold hover:bg-bible-gold/5 transition-all group"
+          >
+            <RotateCcw
+              size={16}
+              className="group-hover:rotate-180 transition-transform duration-500"
+            />
+            {t("common.import_backup")}
+          </button>
+
+          <footer className="text-center text-bible-muted/30 font-cinzel text-[10px] tracking-[0.5em] uppercase">
+            Holy Bible Journey Engine v2.0
+          </footer>
+        </div>
       </div>
     </div>
   );

@@ -74,7 +74,7 @@ export const PersonalFavorites = () => {
                     if (typeof item === "string") {
                       return <span key={index}>{item}</span>;
                     }
-                    if (typeof item === "object" && item?.noteId) {
+                    if (typeof item === "object" && item?.noteId !== undefined) {
                       return (
                         <sup
                           key={index}

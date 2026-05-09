@@ -4,7 +4,7 @@ import tailwindcss from "@tailwindcss/vite"; // <-- Importe aqui
 import path from "path";
 
 export default defineConfig({
-  base: "./holy-Bible",
+  base: "./",
   plugins: [react(), tailwindcss()],
   resolve: {
     alias: {

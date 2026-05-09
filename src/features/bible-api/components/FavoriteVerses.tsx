@@ -9,6 +9,16 @@ export const FavoriteVerses = () => {
   const navigate = useNavigate();
   const { t } = useTranslation();
 
+  const sortedVerses = [...favoriteVerses].sort((a, b) => {
+    const bookCompare = a.bookName.localeCompare(b.bookName);
+    if (bookCompare !== 0) return bookCompare;
+
+    const chapterCompare = a.chapter.localeCompare(b.chapter, undefined, { numeric: true });
+    if (chapterCompare !== 0) return chapterCompare;
+
+    return a.verse.localeCompare(b.verse, undefined, { numeric: true });
+  });
+
   if (favoriteVerses.length === 0) {
     return (
       <div className="py-20 text-center border-2 border-dashed border-bible-border rounded-[2.5rem] bg-bible-card/30">
@@ -23,7 +33,7 @@ export const FavoriteVerses = () => {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       <AnimatePresence mode="popLayout">
-        {favoriteVerses.map((v) => (
+        {sortedVerses.map((v) => (
           <motion.div
             layout
             initial={{ opacity: 0, scale: 0.9 }}
@@ -56,7 +66,7 @@ export const FavoriteVerses = () => {
                     if (typeof item === "string") {
                       return <span key={index}>{item}</span>;
                     }
-                    if (typeof item === "object" && item?.noteId) {
+                    if (typeof item === "object" && item?.noteId !== undefined) {
                       return (
                         <sup
                           key={index}

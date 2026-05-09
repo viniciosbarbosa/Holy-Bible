@@ -11,20 +11,29 @@ import { normalizeString } from "../../../lib/utils";
 interface Props {
   phase: Phase;
   onOpen?: () => void;
-  isOpen: boolean;
-  onToggle: () => void;
+  forceOpen?: boolean;
   searchQuery?: string;
 }
 
-export const PhaseSection = ({ phase, onOpen, isOpen, onToggle, searchQuery }: Props) => {
+export const PhaseSection = ({ phase, onOpen, forceOpen, searchQuery }: Props) => {
+  const [isOpen, setIsOpen] = useState(false);
   const [showConfirmDelete, setShowConfirmDelete] = useState(false);
   const { t } = useTranslation();
   const deletePhase = useCustomCanonStore((state) => state.deletePhase);
   const { openAddBook } = useModalStore();
 
+  useEffect(() => {
+    if (forceOpen) {
+      setIsOpen(true);
+    } else if (!searchQuery) {
+      setIsOpen(false);
+    }
+  }, [forceOpen, searchQuery]);
+
   const handleToggle = () => {
-    onToggle();
-    if (!isOpen && onOpen) {
+    const newState = !isOpen;
+    setIsOpen(newState);
+    if (newState && onOpen) {
       onOpen();
     }
   };

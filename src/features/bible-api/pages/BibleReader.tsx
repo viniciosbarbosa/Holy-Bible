@@ -111,9 +111,7 @@ export default function BibleReader() {
         )}
       </AnimatePresence>
 
-      {/* Immersive Header */}
-      <header className="relative mb-12 p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] bg-bible-card/80 backdrop-blur-2xl border border-bible-border shadow-2xl overflow-hidden text-center">
-        <div className="absolute inset-0 bg-black/40 pointer-events-none" />
+      <header className="relative mb-12 p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] bg-bible-card/80 md:bg-bible-card/90 backdrop-blur-2xl border border-bible-border shadow-2xl overflow-hidden text-center">
         <button
           onClick={() => navigate("/default-bible")}
           className="absolute top-6 left-6 md:top-8 md:left-8 p-3 text-bible-muted hover:text-bible-gold bg-bible-gold/5 rounded-xl border border-bible-gold/10 transition-all"
@@ -152,9 +150,8 @@ export default function BibleReader() {
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-bible-card/60 backdrop-blur-2xl border border-bible-border rounded-[2rem] md:rounded-[3rem] p-6 md:p-16 shadow-inner overflow-hidden mb-16"
+        className="relative bg-bible-card/70 md:bg-bible-card/80 backdrop-blur-2xl border border-bible-border rounded-[2rem] md:rounded-[3rem] p-6 md:p-16 shadow-inner overflow-hidden mb-16"
       >
-        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
         {/* Parchment effect */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/papyros.png')]" />
 

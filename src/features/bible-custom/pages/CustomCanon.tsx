@@ -27,6 +27,7 @@ export default function CustomCanon() {
 
   const [activeTab, setActiveTab] = useState<"books" | "favorites">("books");
   const [search, setSearch] = useState("");
+  const [expandedPhaseId, setExpandedPhaseId] = useState<string | null>(null);
 
   const phasesToExpand = useMemo(() => {
     if (!search) return [];
@@ -182,7 +183,8 @@ export default function CustomCanon() {
                     >
                       <PhaseSection
                         phase={phase}
-                        forceOpen={phasesToExpand.includes(phase.id)}
+                        isOpen={expandedPhaseId === phase.id || phasesToExpand.includes(phase.id)}
+                        onToggle={() => setExpandedPhaseId(expandedPhaseId === phase.id ? null : phase.id)}
                         searchQuery={search}
                         onOpen={() => setBackgroundFromTheme(phase.theme)}
                       />

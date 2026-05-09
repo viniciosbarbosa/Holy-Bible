@@ -128,15 +128,19 @@ export default function CustomCanon() {
               </div>
             )}
 
-            <button
-              onClick={openAddPhase}
-              data-testid="add-phase-btn"
-              className="flex items-center justify-center gap-3 bg-bible-gold text-white h-[52px] md:h-auto px-4 md:px-10 py-4 rounded-[1.25rem] transition-all font-cinzel text-[10px] uppercase tracking-[0.3em] shadow-[0_8px_25px_rgba(201,168,76,0.25)] hover:scale-[1.02] active:scale-95 whitespace-nowrap shrink-0"
-              title={t("common.add_phase")}
-            >
-              <PlusCircle size={20} />
-              <span className="hidden md:inline">{t("common.add_phase")}</span>
-            </button>
+            {activeTab === "books" && (
+              <button
+                onClick={openAddPhase}
+                data-testid="add-phase-btn"
+                className="flex items-center justify-center gap-3 bg-bible-gold text-white h-[52px] md:h-auto px-4 md:px-10 py-4 rounded-[1.25rem] transition-all font-cinzel text-[10px] uppercase tracking-[0.3em] shadow-[0_8px_25px_rgba(201,168,76,0.25)] hover:scale-[1.02] active:scale-95 whitespace-nowrap shrink-0"
+                title={t("common.add_phase")}
+              >
+                <PlusCircle size={20} />
+                <span className="hidden md:inline">
+                  {t("common.add_phase")}
+                </span>
+              </button>
+            )}
           </div>
         </div>
       </header>

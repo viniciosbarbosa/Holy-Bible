@@ -112,10 +112,10 @@ export const BookItem = ({
       </div>
 
       {/* Footer / Settings Button */}
-      <div className="relative z-10 mt-auto pt-4 border-t border-bible-border/30 flex justify-end">
+      <div className="relative z-10 mt-auto pt-4 border-t border-bible-border/30 flex justify-center md:justify-end">
         <button
           onClick={handleEditClick}
-          className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-bible-gold/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold transition-all duration-300 text-[9px] font-cinzel uppercase tracking-widest border border-bible-gold/10 hover:border-bible-gold/30"
+          className="w-full md:w-auto flex items-center justify-center gap-1.5 px-3 py-1.5 rounded-lg bg-bible-gold/5 hover:bg-bible-gold/10 text-bible-muted hover:text-bible-gold transition-all duration-300 text-[9px] font-cinzel uppercase tracking-widest border border-bible-gold/10 hover:border-bible-gold/30"
         >
           <Settings size={12} /> {t("common.edit")}
         </button>

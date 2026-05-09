@@ -112,7 +112,8 @@ export default function BibleReader() {
       </AnimatePresence>
 
       {/* Immersive Header */}
-      <header className="relative mb-12 p-8 md:p-12 rounded-[3rem] bg-bible-card/40 backdrop-blur-xl border border-bible-border shadow-2xl overflow-hidden text-center">
+      <header className="relative mb-12 p-8 md:p-12 rounded-[2rem] md:rounded-[3rem] bg-bible-card/80 backdrop-blur-2xl border border-bible-border shadow-2xl overflow-hidden text-center">
+        <div className="absolute inset-0 bg-black/40 pointer-events-none" />
         <button
           onClick={() => navigate("/default-bible")}
           className="absolute top-6 left-6 md:top-8 md:left-8 p-3 text-bible-muted hover:text-bible-gold bg-bible-gold/5 rounded-xl border border-bible-gold/10 transition-all"
@@ -130,7 +131,7 @@ export default function BibleReader() {
         </div>
 
         {/* Font Controls */}
-        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-3 bg-bible-card/60 p-2 px-3 rounded-xl border border-bible-border">
+        <div className="absolute top-6 right-6 md:top-8 md:right-8 flex items-center gap-3 bg-bible-card/80 backdrop-blur-md p-1.5 md:p-2 px-3 rounded-xl border border-bible-border z-20">
           <button
             onClick={() => setFontSize(Math.max(12, fontSize - 2))}
             className="p-1.5 text-bible-muted hover:text-bible-gold transition-colors"
@@ -151,8 +152,9 @@ export default function BibleReader() {
       <motion.article
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
-        className="relative bg-bible-card/20 backdrop-blur-md border border-bible-border rounded-[3rem] p-8 md:p-16 shadow-inner overflow-hidden mb-16"
+        className="relative bg-bible-card/60 backdrop-blur-2xl border border-bible-border rounded-[2rem] md:rounded-[3rem] p-6 md:p-16 shadow-inner overflow-hidden mb-16"
       >
+        <div className="absolute inset-0 bg-black/20 pointer-events-none" />
         {/* Parchment effect */}
         <div className="absolute inset-0 opacity-[0.03] pointer-events-none mix-blend-overlay bg-[url('https://www.transparenttextures.com/patterns/papyros.png')]" />
 
@@ -228,16 +230,16 @@ export default function BibleReader() {
       </motion.article>
 
       {/* Navigation */}
-      <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-0 px-4">
+      <div className="grid grid-cols-3 items-center gap-4 px-2 md:px-4">
         <button
           disabled={!hasPrevious}
           onClick={handlePrevious}
-          className="w-full md:w-auto flex items-center justify-center gap-3 px-8 py-4 rounded-2xl border border-bible-border text-bible-muted hover:text-bible-gold hover:border-bible-gold/30 transition-all font-cinzel text-xs uppercase tracking-widest disabled:opacity-20"
+          className="flex items-center justify-center gap-2 h-14 rounded-2xl border border-bible-border text-bible-muted hover:text-bible-gold hover:border-bible-gold/30 transition-all font-cinzel text-[10px] md:text-xs uppercase tracking-widest disabled:opacity-20 bg-bible-card/40 backdrop-blur-md"
         >
-          <ChevronLeft size={18} /> {t("common.previous")}
+          <ChevronLeft size={16} /> <span className="hidden md:inline">{t("common.previous")}</span>
         </button>
 
-        <div className="flex gap-4">
+        <div className="flex justify-center">
           <button
             onClick={() => {
               if (navigator.share) {
@@ -249,7 +251,7 @@ export default function BibleReader() {
                 navigator.clipboard.writeText(window.location.href);
               }
             }}
-            className="p-4 rounded-2xl bg-bible-card/50 border border-bible-border text-bible-muted hover:text-bible-gold transition-all"
+            className="w-14 h-14 flex items-center justify-center rounded-2xl bg-bible-card/60 backdrop-blur-md border border-bible-border text-bible-muted hover:text-bible-gold transition-all"
           >
             <Share2 size={20} />
           </button>
@@ -258,9 +260,9 @@ export default function BibleReader() {
         <button
           disabled={!hasNext}
           onClick={handleNext}
-          className="w-full md:w-auto flex items-center justify-center gap-3 px-10 py-4 rounded-2xl bg-bible-gold text-white shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all font-cinzel text-xs uppercase tracking-widest disabled:opacity-20"
+          className="flex items-center justify-center gap-2 h-14 rounded-2xl bg-bible-gold text-white shadow-xl shadow-bible-gold/20 hover:scale-[1.02] active:scale-95 transition-all font-cinzel text-[10px] md:text-xs uppercase tracking-widest disabled:opacity-20"
         >
-          {t("common.next")} <ChevronRight size={18} />
+          <span className="hidden md:inline">{t("common.next")}</span> <ChevronRight size={16} />
         </button>
       </div>
 

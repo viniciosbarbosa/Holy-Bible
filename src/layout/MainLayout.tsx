@@ -106,7 +106,7 @@ export const MainLayout = () => {
       </AnimatePresence>
 
       {/* Main Content Area */}
-      <main className="relative z-10 pb-32 max-w-6xl mx-auto px-4 md:px-8">
+      <main className="relative z-10 pb-32 max-w-6xl mx-auto px-2 md:px-8">
         <AnimatePresence mode="popLayout">
           <motion.div
             key={location.pathname}

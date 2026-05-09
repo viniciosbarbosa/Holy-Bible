@@ -21,7 +21,7 @@ const resources = {
         none: "Acquired",
         missing: "Missing",
         acquired: "Purchased",
-        downloaded: "Downloaded",
+        downloaded: "Got File",
         manuscript: "Manuscript",
         sacred_verses: "Sacred Verses",
         tags: "Tags & Collections",
@@ -123,7 +123,8 @@ const resources = {
         delete_phase: "Delete Phase?",
         delete_phase_warning:
           'This will permanently remove "{{title}}" and all its books.',
-        restart_confirm: "Are you sure you want to restart your journey? All your personal phases and saved verses will be lost.",
+        restart_confirm:
+          "Are you sure you want to restart your journey? All your personal phases and saved verses will be lost.",
       },
       legend: {
         missing_label: "MISSING",
@@ -260,7 +261,8 @@ const resources = {
         delete_phase: "Excluir Fase?",
         delete_phase_warning:
           'Isso removerá permanentemente "{{title}}" e todos os seus livros.',
-        restart_confirm: "Tem certeza que deseja recomeçar sua jornada? Todas as suas fases personalizadas e versículos salvos serão perdidos.",
+        restart_confirm:
+          "Tem certeza que deseja recomeçar sua jornada? Todas as suas fases personalizadas e versículos salvos serão perdidos.",
       },
       legend: {
         missing_label: "FALTANDO",

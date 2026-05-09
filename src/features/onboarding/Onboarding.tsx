@@ -9,14 +9,14 @@ export const Onboarding = () => {
   const setProfile = useCustomCanonStore((state) => state.setProfile);
 
   return (
-    <div className="fixed inset-0 z-[2000] bg-bible-dark flex items-center justify-center p-6 overflow-y-auto">
+    <div className="fixed inset-0 z-[2000] bg-bible-dark flex items-start md:items-center justify-center p-4 md:p-6 overflow-y-auto pt-20 md:pt-6">
       <div className="max-w-4xl w-full">
-        <header className="text-center mb-16">
+        <header className="text-center mb-10 md:mb-16">
           <motion.h1
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             data-testid="onboarding-title"
-            className="font-cinzel text-4xl md:text-6xl text-bible-gold tracking-[0.2em] mb-4 uppercase"
+            className="font-cinzel text-3xl md:text-6xl text-bible-gold tracking-[0.1em] md:tracking-[0.2em] mb-3 md:mb-4 uppercase"
           >
             {t("onboarding.title")}
           </motion.h1>
@@ -24,13 +24,13 @@ export const Onboarding = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-bible-muted font-serif italic text-lg"
+            className="text-bible-muted font-serif italic text-base md:text-lg"
           >
             {t("onboarding.subtitle")}
           </motion.p>
         </header>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
           {/* Suggestion Journey */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
@@ -77,25 +77,24 @@ export const Onboarding = () => {
             </div>
           </motion.button>
 
-          {/* Conventional Journey */}
           <motion.button
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5 }}
             data-testid="profile-conventional-btn"
             onClick={() => setProfile("conventional")}
-            className="group relative bg-bible-card border border-bible-border rounded-[2.5rem] p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
+            className="group relative bg-bible-card border border-bible-border rounded-[2rem] md:rounded-[2.5rem] p-6 md:p-8 text-left hover:border-bible-gold transition-all duration-500 hover:shadow-[0_0_50px_rgba(201,168,76,0.05)]"
           >
-            <div className="w-12 h-12 rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-6 group-hover:scale-110 transition-transform">
-              <Library size={24} />
+            <div className="w-10 h-10 md:w-12 md:h-12 rounded-xl md:rounded-2xl bg-bible-gold/10 flex items-center justify-center text-bible-gold mb-4 md:mb-6 group-hover:scale-110 transition-transform">
+              <Library size={20} md:size={24} />
             </div>
-            <h2 className="font-cinzel text-xl text-bible-gold mb-3 uppercase tracking-widest leading-tight">
+            <h2 className="font-cinzel text-lg md:text-xl text-bible-gold mb-2 md:mb-3 uppercase tracking-widest leading-tight">
               {t("onboarding.conventional_title")}
             </h2>
-            <p className="text-bible-muted font-serif text-sm leading-relaxed mb-8 opacity-70">
+            <p className="text-bible-muted font-serif text-[13px] md:text-sm leading-relaxed mb-6 md:mb-8 opacity-70">
               {t("onboarding.conventional_desc")}
             </p>
-            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest opacity-0 group-hover:opacity-100 transition-opacity">
+            <div className="flex items-center gap-2 text-bible-gold font-cinzel text-[10px] uppercase tracking-widest md:opacity-0 group-hover:opacity-100 transition-opacity">
               {t("onboarding.start")} <ArrowRight size={14} />
             </div>
           </motion.button>

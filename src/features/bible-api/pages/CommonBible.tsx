@@ -120,17 +120,17 @@ export default function CommonBible() {
                 key={book.abbrev}
                 data-testid="book-card"
                 onClick={() => navigate(`/chapters/${book.abbrev}`)}
-                className="group cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-white/5 p-6 shadow-xl backdrop-blur-sm transition-all duration-300 hover:-translate-y-1 hover:border-bible-gold/50 hover:bg-white/10 hover:shadow-[0_0_25px_rgba(201,168,76,0.2)]"
+                className="group cursor-pointer relative overflow-hidden rounded-2xl border border-white/10 bg-bible-card/60 p-6 shadow-xl backdrop-blur-md transition-all duration-300 hover:-translate-y-1 hover:border-bible-gold/50 hover:bg-bible-card/80 hover:shadow-[0_0_25px_rgba(201,168,76,0.2)]"
               >
                 {/* Efeito de hover */}
                 <div className="absolute -right-12 -top-12 h-32 w-32 rounded-full bg-bible-gold/10 blur-3xl transition-all duration-500 group-hover:bg-bible-gold/30 pointer-events-none" />
-
+ 
                 <div className="relative z-10">
                   <div className="mb-4 flex items-start justify-between">
                     <span className="font-cinzel text-[9px] bg-bible-gold/10 px-2 py-0.5 rounded-md text-bible-gold uppercase tracking-widest border border-bible-gold/20">
                       {book.abbrev}
                     </span>
-                    <span className="font-cinzel text-[10px] uppercase text-bible-muted bg-white/5 px-2 py-1 rounded border border-white/5">
+                    <span className="font-cinzel text-[10px] uppercase text-bible-gold bg-bible-gold/15 backdrop-blur-md px-2 py-1 rounded border border-bible-gold/40 shadow-[0_0_10px_rgba(201,168,76,0.1)]">
                       {book.testament === "VT"
                         ? t("common.old_testament")
                         : t("common.new_testament")}

@@ -30,43 +30,39 @@ export const DEFAULT_WALLPAPERS = {
   patriarchs:
     "https://www.fulcrum-anglican.org.uk/wp-content/uploads/2013/11/patriarchs.jpg",
   exodus:
-    "https://images.unsplash.com/photo-1678038592672-e63442537f52?q=80&w=2070&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+    "https://assets-us-01.kc-usercontent.com/c7bb3f89-eb78-007e-971a-d5864cf7a236/4548d78e-7734-464d-8bae-72dfedc6d812/Exodus_thumbnail.jpg",
   conquest_and_judges:
-    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?w=1600&auto=format&fit=crop&q=80",
+    "https://media.bible.art/7a319da8-b013-4937-aead-c65c6058148c-compressed.jpg",
   kingdom:
-    "https://images.unsplash.com/photo-1533154683836-84ea7a0bc310?w=1600&auto=format&fit=crop&q=80",
+    "https://wp.en.aleteia.org/wp-content/uploads/sites/2/2019/08/web3-biblical-war-spoils-moabite-israel-gerbrand-van-den-eeckhout-pd.png",
   exile:
-    "https://images.unsplash.com/photo-1494200488721-f3e2d2356533?w=1600&auto=format&fit=crop&q=80",
+    "https://upload.wikimedia.org/wikipedia/commons/8/8f/Tissot_The_Flight_of_the_Prisoners.jpg",
   wisdom:
-    "https://images.unsplash.com/photo-1519681393784-d120267933ba?w=1600&auto=format&fit=crop&q=80",
-  prophets:
-    "https://images.unsplash.com/photo-1466781923890-d36036a96739?w=1600&auto=format&fit=crop&q=80",
+    "https://seeinggodinart.wordpress.com/wp-content/uploads/2015/09/jacob_de_wit_-_moses_elects_the_council_of_seventy_elders_-_google_art_project-1.jpg",
+  prophets: "https://thumbs.dreamstime.com/b/biblical-prophets-10061822.jpg",
   minor_prophets:
-    "https://images.unsplash.com/photo-1433086177607-6420be5803d0?w=1600&auto=format&fit=crop&q=80",
-  intertestamental:
-    "https://images.unsplash.com/photo-1550424564-9be8f941f173?w=1600&auto=format&fit=crop&q=80",
+    "https://www.ultimato.com.br/image/atualiza_home/principal/ultimas/opiniao/2021/08_ago/022-jtjm-minor-prophets.jpg",
+  intertestamental: "https://cdn.wallpapersafari.com/73/14/4l7NDL.jpg",
   infancy:
-    "https://images.unsplash.com/photo-1512101176959-c557f3516787?w=1600&auto=format&fit=crop&q=80",
-  gospels:
-    "https://images.unsplash.com/photo-1490730141103-6cac27aaab94?w=1600&auto=format&fit=crop&q=80",
+    "https://wallpapers.com/images/hd/jesus-loves-children-8hing55wvgzh8ua4.jpg",
+  gospels: "https://images8.alphacoders.com/469/thumb-1920-469840.jpg",
   passion:
-    "https://images.unsplash.com/photo-1596704017354-935171e2e4f0?w=1600&auto=format&fit=crop&q=80",
-  acts: "https://images.unsplash.com/photo-1532356884227-6ecdf7b3ee57?w=1600&auto=format&fit=crop&q=80",
+    "https://miro.medium.com/v2/resize:fit:1400/1*rOVtRzOQOjhiUF5M7lZh2Q.jpeg",
+  acts: "https://cdn.magicdecor.in/com/2024/06/11162616/Christian-Mythology-Twelve-Apostles-Painting-Wallpaper-Mural-for-Wall.jpg",
   epistles:
-    "https://images.unsplash.com/photo-1612860128461-5a30d5f2e83e?w=1600&auto=format&fit=crop&q=80",
+    "https://www.learnreligions.com/thmb/EqM-Ow6ZCM48qqeH1uSu-Tapxm4=/1500x0/filters:no_upscale():max_bytes(150000):strip_icc()/Epistles-GettyImages-91725848-583b536e3df78c6f6a10da1f.jpg",
   apocalypse:
-    "https://images.unsplash.com/photo-1534438327276-14e5300c3a48?w=1600&auto=format&fit=crop&q=80",
+    "https://static01.nyt.com/images/2020/03/27/us/00VIRUS-APOCALYPSE-palehorse/00VIRUS-APOCALYPSE-palehorse-videoSixteenByNineJumbo1600.jpg",
   fathers:
-    "https://images.unsplash.com/photo-1507842217343-583bb7270b66?w=1600&auto=format&fit=crop&q=80",
-  gnosis:
-    "https://images.unsplash.com/photo-1601666874632-159620b75a1c?w=1600&auto=format&fit=crop&q=80",
-  bridge:
-    "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
+    "https://hdwallpaperim.com/wp-content/uploads/2017/08/25/451814-Holy_Trinity-Christianity.jpg",
+  gnosis: "https://escolagnostica.org.br/wp-content/uploads/2022/05/Gnose.webp",
+  bridge: "https://images.sympla.com.br/5b72f316bb5b2-lg.jpg",
   islam:
-    "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
+    "https://images.squarespace-cdn.com/content/v1/6027387fa69d7d4425a64dbf/11228a3e-d423-4dd1-8ea5-bdf894562de0/Mohammed_kaaba_1315_wide.jpeg",
   koran:
-    "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
-  qumran: "/wallpapers/qumran.png",
+    "https://images.squarespace-cdn.com/content/v1/6027387fa69d7d4425a64dbf/11228a3e-d423-4dd1-8ea5-bdf894562de0/Mohammed_kaaba_1315_wide.jpeg",
+  qumran:
+    "https://res.cloudinary.com/aenetworks/image/upload/c_fill,ar_2,w_3840,h_1920,g_auto/dpr_auto/f_auto/q_auto:eco/v1/gettyimages-544273540?_a=BAVMn6DY0",
 } as const;
 
 export type BibleTheme = keyof typeof DEFAULT_WALLPAPERS | string;

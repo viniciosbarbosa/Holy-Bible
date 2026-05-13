@@ -52,6 +52,20 @@ export const CANON_DATA: Phase[] = [
       {
         id: "b7",
         num: "7",
+        name: "Livro de Adão",
+        sub: "O Conflito de Adão e Eva com Satã (V1)",
+        tags: ["v3"],
+      },
+      {
+        id: "b7b",
+        num: "7b",
+        name: "Testamento de Adão",
+        sub: "(V1)",
+        tags: ["v3"],
+      },
+      {
+        id: "b7c",
+        num: "7c",
         name: "Apocalipse de Adão",
         sub: "",
         tags: ["b201", "v1"],
@@ -544,8 +558,15 @@ export const CANON_DATA: Phase[] = [
       {
         id: "b71",
         num: "71",
-        name: "4 Esdras (Revelação)",
-        sub: "Palavras e revelações de Esdras o santo profeta (V3)",
+        name: "4 Esdras",
+        sub: "(Revelação)",
+        tags: ["v3"],
+      },
+      {
+        id: "b71b",
+        num: "71b",
+        name: "Palavra e Revelação de Esdras",
+        sub: "O Santo Profeta e Amado de Deus (V3)",
         tags: ["v3"],
       },
       {
@@ -779,8 +800,15 @@ export const CANON_DATA: Phase[] = [
         id: "b103",
         num: "103",
         name: "Ascensão de Isaías",
-        sub: "Inclui o Martírio de Isaías (V1)",
+        sub: "(V1)",
         tags: ["b201", "v1"],
+      },
+      {
+        id: "b103b",
+        num: "103b",
+        name: "Martírio de Isaías",
+        sub: "(V1)",
+        tags: ["v1"],
       },
       {
         id: "b104",
@@ -851,7 +879,7 @@ export const CANON_DATA: Phase[] = [
     id: "f10",
     num: "10",
     title: "PROFETAS MENORES & ORÁCULOS",
-    theme: "prophets",
+    theme: "minor_prophets",
     books: [
       {
         id: "b113",
@@ -1430,8 +1458,8 @@ export const CANON_DATA: Phase[] = [
       {
         id: "b189",
         num: "189",
-        name: "Vida das Santas Mulheres",
-        sub: "",
+        name: "Xantipe, Polixena e Rebeca",
+        sub: "Vida das Santas Mulheres",
         tags: ["v3"],
       },
       {
@@ -1870,8 +1898,15 @@ export const CANON_DATA: Phase[] = [
       {
         id: "b248",
         num: "248",
-        name: "Maria Madalena",
-        sub: "Excertos do Evangelho de Maria (V1)",
+        name: "Evangelho de Maria Madalena",
+        sub: "(V1)",
+        tags: ["v1", "gnose"],
+      },
+      {
+        id: "b248b",
+        num: "248b",
+        name: "Excertos do Evangelho de Maria",
+        sub: "(V1)",
         tags: ["v1", "gnose"],
       },
       {
@@ -2143,6 +2178,20 @@ export const CANON_DATA_ENGLISH: Phase[] = [
       {
         id: "b7",
         num: "7",
+        name: "Book of Adam",
+        sub: "The Conflict of Adam and Eve with Satan (V1)",
+        tags: ["v3"],
+      },
+      {
+        id: "b7b",
+        num: "7b",
+        name: "Testament of Adam",
+        sub: "(V1)",
+        tags: ["v3"],
+      },
+      {
+        id: "b7c",
+        num: "7c",
         name: "Apocalypse of Adam",
         sub: "",
         tags: ["b201", "v1"],
@@ -2634,8 +2683,15 @@ export const CANON_DATA_ENGLISH: Phase[] = [
       {
         id: "b71",
         num: "71",
-        name: "4 Esdras (Revelation)",
-        sub: "Words and revelations of Ezra the holy prophet (V3)",
+        name: "4 Ezra",
+        sub: "(Revelation)",
+        tags: ["v3"],
+      },
+      {
+        id: "b71b",
+        num: "71b",
+        name: "Word and Revelation of Ezra",
+        sub: "The Holy Prophet and Beloved of God (V3)",
         tags: ["v3"],
       },
       {
@@ -2869,8 +2925,15 @@ export const CANON_DATA_ENGLISH: Phase[] = [
         id: "b103",
         num: "103",
         name: "Ascension of Isaiah",
-        sub: "Includes the Martyrdom of Isaiah (V1)",
+        sub: "(V1)",
         tags: ["b201", "v1"],
+      },
+      {
+        id: "b103b",
+        num: "103b",
+        name: "Martyrdom of Isaiah",
+        sub: "(V1)",
+        tags: ["v1"],
       },
       {
         id: "b104",
@@ -2941,7 +3004,7 @@ export const CANON_DATA_ENGLISH: Phase[] = [
     id: "f10",
     num: "10",
     title: "MINOR PROPHETS & ORACLES",
-    theme: "prophets",
+    theme: "minor_prophets",
     books: [
       {
         id: "b113",
@@ -3520,8 +3583,8 @@ export const CANON_DATA_ENGLISH: Phase[] = [
       {
         id: "b189",
         num: "189",
-        name: "Life of the Holy Women",
-        sub: "",
+        name: "Xanthippe, Polyxena and Rebecca",
+        sub: "Life of the Holy Women",
         tags: ["v3"],
       },
       {
@@ -3960,8 +4023,15 @@ export const CANON_DATA_ENGLISH: Phase[] = [
       {
         id: "b248",
         num: "248",
-        name: "Mary Magdalene",
-        sub: "Excerpts from the Gospel of Mary (V1)",
+        name: "Gospel of Mary Magdalene",
+        sub: "(V1)",
+        tags: ["v1", "gnose"],
+      },
+      {
+        id: "b248b",
+        num: "248b",
+        name: "Excerpts from the Gospel of Mary",
+        sub: "(V1)",
         tags: ["v1", "gnose"],
       },
       {

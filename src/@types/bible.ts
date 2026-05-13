@@ -66,6 +66,7 @@ export const DEFAULT_WALLPAPERS = {
     "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
   koran:
     "https://images.unsplash.com/photo-1519794206461-ccfcaa8fa5b6?w=1600&auto=format&fit=crop&q=80",
+  qumran: "/wallpapers/qumran.png",
 } as const;
 
 export type BibleTheme = keyof typeof DEFAULT_WALLPAPERS | string;

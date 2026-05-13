@@ -54,4 +54,11 @@ export const BUILT_IN_TAGS: Record<string, Tag> = {
     border: "#3a6020",
     desc: "Ponte para o Islã",
   },
+  qumran: {
+    lbl: "QUMRAN",
+    bg: "#1a1a0a",
+    color: "#d4c58a",
+    border: "#8a7a4a",
+    desc: "Manuscritos do Mar Morto",
+  },
 };

@@ -42,3 +42,13 @@
     -webkit-font-smoothing: antialiased;
   }
 }
+
+/* Hide scrollbar globally for all browsers (keeps scrolling functional) */
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;  /* IE and Edge */
+  scrollbar-width: none;     /* Firefox */
+}

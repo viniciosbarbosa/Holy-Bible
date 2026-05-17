@@ -206,10 +206,10 @@ describe("useCustomCanonStore", () => {
       expect(verses[0].text).toBe("V2");
     });
 
-    it("getAllSavedVerses() returns all verses sorted by timestamp desc", () => {
+    it("getAllSavedVerses() returns all verses sorted by canonical order (phase, book, chapter, verse)", () => {
       const { result } = renderHook(() => useCustomCanonStore());
 
-      // Manually inject verses with distinct timestamps to guarantee ordering
+      // Manually inject verses
       useCustomCanonStore.setState((s) => ({
         personalPhases: s.personalPhases.map((p) =>
           p.id !== phaseId
@@ -233,8 +233,8 @@ describe("useCustomCanonStore", () => {
 
       const all = result.current.getAllSavedVerses();
       expect(all).toHaveLength(2);
-      // Most recent (timestamp 2000) should be first
-      expect(all[0].text).toBe("Second");
+      // Canonical sorting (chapter 1, verse 1 comes before chapter 1, verse 2)
+      expect(all[0].text).toBe("First");
     });
   });
 
